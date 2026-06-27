@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "_comment": "各動畫狀態時長與轉場時間（秒）。與 battle_sequences.json 互補：此檔定義單一動畫片段長度，battle_sequences 定義流程節奏。",
+  "_comment": "各動畫狀態時長與轉場時間（秒）。例外：以 _offset 結尾的欄位為像素位移量（非秒）。與 battle_sequences.json 互補：此檔定義單一動畫片段長度，battle_sequences 定義流程節奏。",
   "hero": {
     "idle_loop": 1.00,
     "attack": 0.30,
@@ -23,6 +23,11 @@
     "panel_slide": 0.25,
     "button_feedback": 0.12,
     "payout_count_up": 0.40,
-    "settlement_appear": 0.45
+    "settlement_appear": 0.45,
+    "panel_fade": 0.20,
+    "panel_slide_offset": 24.0,
+    "entrance_stagger": 0.05,
+    "message_appear": 0.18,
+    "message_hold": 0.60
   }
 }

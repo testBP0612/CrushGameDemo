@@ -39,7 +39,8 @@
 5. `05_SETTLEMENT_AND_LOCAL_SCORE`
 6. `06_FEEL_AND_EFFECTS`
 7. `07_DATA_BALANCE_TUNING`
-8. `08_ASSET_REPLACEMENT_GUIDE`
+8. `09_UI_FEEL_AND_PACING`（UI 進場微動畫 + 提示文字節奏；排在 07 之後、與 08 獨立）
+9. `08_ASSET_REPLACEMENT_GUIDE`（最後做，需 `Assets/final/` 美術就緒）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
