@@ -4,6 +4,7 @@ const EventBusScript := preload("res://Scripts/core/event_bus.gd")
 const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.gd")
 const LocalScoreServiceScript := preload("res://Scripts/services/local_score_service.gd")
 const PlayerProfileServiceScript := preload("res://Scripts/services/player_profile_service.gd")
+const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
@@ -17,10 +18,12 @@ var event_bus := EventBusScript.new()
 var state_machine := GameStateMachineScript.new()
 var score_service := LocalScoreServiceScript.new()
 var player_profile_service := PlayerProfileServiceScript.new()
+var audio_service := AudioServiceScript.new()
 
 
 func _ready() -> void:
 	add_child(event_bus)
+	add_child(audio_service)
 	state_machine.setup(event_bus, score_service)
 	_connect_events()
 	_connect_buttons()
@@ -62,6 +65,7 @@ func _connect_battle_presenter() -> void:
 	battle_presenter.transition_finished.connect(_on_transition_finished)
 	battle_presenter.monster_counter_finished.connect(_on_monster_counter_finished)
 	battle_presenter.player_hurt_finished.connect(_on_player_hurt_finished)
+	battle_presenter.hit_landed.connect(_on_hit_landed)
 
 
 func _apply_static_text() -> void:
@@ -72,46 +76,55 @@ func _apply_static_text() -> void:
 
 
 func _on_start_pressed() -> void:
+	audio_service.play_sfx("button_click")
 	state_machine.start_from_title()
 	_update_view()
 
 
 func _on_decrease_pressed() -> void:
+	audio_service.play_sfx("button_click")
 	state_machine.change_bet_steps(-1)
 	_update_view()
 
 
 func _on_increase_pressed() -> void:
+	audio_service.play_sfx("button_click")
 	state_machine.change_bet_steps(1)
 	_update_view()
 
 
 func _on_quick_bet_requested(amount: int) -> void:
+	audio_service.play_sfx("button_click")
 	state_machine.set_bet(amount)
 	_update_view()
 
 
 func _on_confirm_bet_pressed() -> void:
+	audio_service.play_sfx("bet_confirm")
 	state_machine.confirm_bet()
 	_update_view()
 
 
 func _on_cashout_pressed() -> void:
+	audio_service.play_sfx("button_click")
 	state_machine.cash_out()
 	_update_view()
 
 
 func _on_advance_pressed() -> void:
+	audio_service.play_sfx("advance")
 	state_machine.advance()
 	_update_view()
 
 
 func _on_settle_pressed() -> void:
+	audio_service.play_sfx("button_click")
 	state_machine.acknowledge_settle()
 	_update_view()
 
 
 func _on_balance_reset_pressed() -> void:
+	audio_service.play_sfx("balance_reset")
 	state_machine.reset_balance_to_starting()
 	_update_view()
 
@@ -141,6 +154,7 @@ func _on_result_resolved(is_win: bool) -> void:
 
 func _on_settled(result: String) -> void:
 	print("Settled: %s balance=%d" % [result, state_machine.balance])
+	_play_settlement_sfx(result)
 	_update_best_record_text()
 	_update_view()
 
@@ -150,11 +164,16 @@ func _on_attack_sequence_finished(hit_count: int) -> void:
 	state_machine.finish_attack()
 
 
+func _on_hit_landed() -> void:
+	audio_service.play_sfx("attack_hit")
+
+
 func _on_monster_hurt_finished() -> void:
 	state_machine.finish_monster_hurt()
 
 
 func _on_monster_death_finished() -> void:
+	audio_service.play_sfx("monster_death")
 	state_machine.finish_monster_death()
 
 
@@ -192,6 +211,16 @@ func _play_presentation_for_state(state_name: String) -> void:
 			battle_presenter.play_monster_counter()
 		"PLAYER_HURT":
 			battle_presenter.play_player_hurt()
+
+
+func _play_settlement_sfx(result: String) -> void:
+	match result:
+		"cash_out":
+			audio_service.play_sfx("cashout")
+		"defeat":
+			audio_service.play_sfx("defeat")
+		"clear":
+			audio_service.play_sfx("clear")
 
 
 func _update_view() -> void:

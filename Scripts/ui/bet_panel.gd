@@ -1,6 +1,8 @@
 class_name BetPanel
 extends Control
 
+const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
+
 signal decrease_requested
 signal increase_requested
 signal confirm_requested
@@ -26,6 +28,9 @@ func _ready() -> void:
 	confirm_button.text = Data.text("bet_confirm")
 	insufficient_label.text = Data.text("bet_insufficient")
 	_apply_button_style(confirm_button, Color(0.18, 0.58, 0.27, 1.0))
+	_install_button_feedback(decrease_button)
+	_install_button_feedback(increase_button)
+	_install_button_feedback(confirm_button)
 	decrease_button.pressed.connect(func() -> void: decrease_requested.emit())
 	increase_button.pressed.connect(func() -> void: increase_requested.emit())
 	confirm_button.pressed.connect(_on_confirm_button_pressed)
@@ -71,6 +76,7 @@ func _build_quick_buttons() -> void:
 		button.custom_minimum_size = Vector2(138.0, 72.0)
 		button.text = str(amount)
 		button.set_meta("amount", amount)
+		_install_button_feedback(button)
 		button.pressed.connect(_on_quick_button_pressed.bind(amount))
 		quick_chip_row.add_child(button)
 		_quick_buttons.append(button)
@@ -103,3 +109,8 @@ func _apply_button_style(button: Button, color: Color) -> void:
 	var pressed := normal.duplicate()
 	pressed.bg_color = color.darkened(0.14)
 	button.add_theme_stylebox_override("pressed", pressed)
+
+
+func _install_button_feedback(button: Button) -> void:
+	var duration := float(Data.animation_timing_config().get("ui", {}).get("button_feedback", 0.0))
+	ButtonFeedback.install(button, duration)

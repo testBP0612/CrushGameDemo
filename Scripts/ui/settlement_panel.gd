@@ -1,15 +1,22 @@
 class_name SettlementPanel
 extends Control
 
+const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
+const SettlementEffect := preload("res://Scripts/effects/settlement_effect.gd")
+
 signal acknowledge_requested
 
 @onready var title_label: Label = $Panel/Margin/Layout/TitleLabel
 @onready var body_label: Label = $Panel/Margin/Layout/BodyLabel
 @onready var play_again_button: Button = $Panel/Margin/Layout/PlayAgainButton
+@onready var panel: PanelContainer = $Panel
+
+var _last_settle_state := ""
 
 
 func _ready() -> void:
 	play_again_button.text = Data.text("settle_play_again")
+	_install_button_feedback(play_again_button)
 	play_again_button.pressed.connect(func() -> void: acknowledge_requested.emit())
 
 
@@ -33,3 +40,24 @@ func update_snapshot(snapshot: Dictionary) -> void:
 			body_label.text = Data.text("settle_clear_body", {
 				"payout": int(snapshot.get("current_payout", 0))
 			})
+
+	if bool(snapshot.get("is_settle", false)) and state_name != _last_settle_state:
+		_last_settle_state = state_name
+		_play_settlement_effect(state_name)
+	elif not bool(snapshot.get("is_settle", false)):
+		_last_settle_state = ""
+
+
+func _play_settlement_effect(state_name: String) -> void:
+	var duration := float(Data.animation_timing_config().get("ui", {}).get("settlement_appear", 0.0))
+	var result := "cash_out"
+	if state_name == "DEFEAT_SETTLE":
+		result = "defeat"
+	elif state_name == "CLEAR_SETTLE":
+		result = "clear"
+	SettlementEffect.play(panel, result, duration)
+
+
+func _install_button_feedback(button: Button) -> void:
+	var duration := float(Data.animation_timing_config().get("ui", {}).get("button_feedback", 0.0))
+	ButtonFeedback.install(button, duration)

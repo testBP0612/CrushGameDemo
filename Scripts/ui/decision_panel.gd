@@ -1,6 +1,8 @@
 class_name DecisionPanel
 extends Control
 
+const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
+
 signal cashout_requested
 signal advance_requested
 
@@ -12,6 +14,8 @@ func _ready() -> void:
 	advance_button.text = Data.text("decision_advance")
 	_apply_button_style(cashout_button, Color(0.87, 0.43, 0.18, 1.0))
 	_apply_button_style(advance_button, Color(0.18, 0.58, 0.27, 1.0))
+	_install_button_feedback(cashout_button)
+	_install_button_feedback(advance_button)
 	cashout_button.pressed.connect(func() -> void: cashout_requested.emit())
 	advance_button.pressed.connect(func() -> void: advance_requested.emit())
 
@@ -42,3 +46,8 @@ func _apply_button_style(button: Button, color: Color) -> void:
 	var pressed := normal.duplicate()
 	pressed.bg_color = color.darkened(0.14)
 	button.add_theme_stylebox_override("pressed", pressed)
+
+
+func _install_button_feedback(button: Button) -> void:
+	var duration := float(Data.animation_timing_config().get("ui", {}).get("button_feedback", 0.0))
+	ButtonFeedback.install(button, duration)

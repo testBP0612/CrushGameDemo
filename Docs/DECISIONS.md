@@ -68,3 +68,13 @@
 - **人類決策**：先不實作音效；**列出音效空缺並預留接口**即可。
 - **原因**：避免 H5 音訊解鎖與素材成本拖慢 MVP；保留未來擴充點。
 - **影響**：task 06（手感）只預留一個音效播放抽象接口（如 `AudioService` 空殼）與「待補音效清單」，不接實際音檔；`07_H5_EXPORT_SPEC` 的音訊解鎖列為 Future。
+
+## D-009：H5 字型改用 OFL 開源字型（取代專有 kaiu.ttf）
+- **問題**：task 06 的 H5 export 為解決中文豆腐字，引入了 `kaiu.ttf`（標楷體 / DFKai-SB），屬 Windows 專有字型；commit 到公開 repo 並打包散布有授權風險，且 5.1MB 拖慢載入。
+- **人類決策**：
+  - **中文**：`jf-openhuninn-2.1.ttf`（粉圓，SIL OFL 1.1）。
+  - **英數**：`Baloo2-Medium.ttf`（SIL OFL 1.1）。
+  - 移除 `kaiu.ttf`，不得 commit 進 repo。
+- **原因**：兩者皆 OFL，可商用/嵌入/隨 H5 散布，無授權風險；圓潤風格契合可愛 RPG 調性。
+- **實作要點**：Godot 字型查找為「主字型 → fallback」。**主字型設 Baloo 2（英數先命中），openhuninn 設為 fallback（補中文）**；切勿反向。建議對中文字型做 subset 子集化以縮小 H5 載入。
+- **影響**：`Assets/placeholders/fonts/ui_theme.tres`、`project.godot`（[gui] theme/custom）、H5 export 體積；交由 Codex 在 Godot 編輯器完成匯入/fallback/重新 export 驗證。

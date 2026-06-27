@@ -8,8 +8,11 @@ signal advance_walk_finished
 signal transition_finished
 signal monster_counter_finished
 signal player_hurt_finished
+signal hit_landed
 
 const DamageNumberScript := preload("res://Scripts/effects/damage_number.gd")
+const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
+const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
 
 @onready var hero = $Hero
 @onready var monster = $Monster
@@ -65,6 +68,8 @@ func play_attack_sequence(stage_to_challenge: int) -> void:
 		await hero.play_attack(monster.global_position)
 		_apply_hit_damage(damage_per_hit)
 		_spawn_damage_number(damage_per_hit, hit_index)
+		hit_landed.emit()
+		_play_hit_feel()
 
 	attack_sequence_finished.emit(hit_count)
 
@@ -127,3 +132,9 @@ func _spawn_damage_number(damage: int, hit_index: int) -> void:
 	number.add_theme_font_size_override("font_size", 42)
 	damage_number_layer.add_child(number)
 	number.play(damage, float(hit_index) * stagger, monster.position + Vector2(0.0, -180.0))
+
+
+func _play_hit_feel() -> void:
+	var duration := float(Data.animation_timing_config().get("monster", {}).get("hurt", 0.0))
+	HitFlash.play(monster.body, duration)
+	ScreenShake.play(self, duration, 14.0)

@@ -26,6 +26,10 @@ window/size/viewport_height=1920
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 
+[gui]
+
+theme/custom="res://Assets/placeholders/fonts/ui_theme.tres"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
