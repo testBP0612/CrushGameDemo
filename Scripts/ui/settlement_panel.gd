@@ -61,3 +61,7 @@ func _play_settlement_effect(state_name: String) -> void:
 func _install_button_feedback(button: Button) -> void:
 	var duration := float(Data.animation_timing_config().get("ui", {}).get("button_feedback", 0.0))
 	ButtonFeedback.install(button, duration)
+
+
+func entrance_targets() -> Array[Control]:
+	return [title_label, body_label, play_again_button]

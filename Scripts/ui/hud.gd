@@ -3,6 +3,9 @@ extends Control
 
 const PayoutCountUp := preload("res://Scripts/effects/payout_count_up.gd")
 
+@onready var stage_card: PanelContainer = $Columns/StageCard
+@onready var multiplier_card: PanelContainer = $Columns/MultiplierCard
+@onready var payout_card: PanelContainer = $Columns/PayoutCard
 @onready var stage_label: Label = $Columns/StageCard/StageLabel
 @onready var multiplier_label: Label = $Columns/MultiplierCard/MultiplierLabel
 @onready var payout_label: Label = $Columns/PayoutCard/PayoutLabel
@@ -45,3 +48,7 @@ func _update_payout_label(next_payout: int) -> void:
 
 func _format_payout_text(value: int) -> String:
 	return Data.text("hud_current_payout", {"payout": value})
+
+
+func entrance_targets() -> Array[Control]:
+	return [stage_card, multiplier_card, payout_card]
