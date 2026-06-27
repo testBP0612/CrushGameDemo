@@ -1,7 +1,7 @@
-# 04 — Art Direction Notes（美術風格筆記）
+# Art Direction Notes（美術風格筆記）
 
 > **狀態：可變，美術同事主筆。** 本檔是**風格探索區**，不是合約。
-> 接入規格（檔名/尺寸/透明/面向…）一律以 `03_ART_CONTRACT_FOR_MAGNIFIC.md`（v1.0 locked）為準。
+> 接入規格（檔名/尺寸/透明/面向…）一律以 `ART_CONTRACT.md`（v1.0 locked）為準。
 > Claude 在此只提供**起手範本**，美術同事可自由覆寫、增刪、推翻。
 
 ## 美術同事可自由決定（不受 Claude 限制）

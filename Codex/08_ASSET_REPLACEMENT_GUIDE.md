@@ -4,7 +4,7 @@
 把 `Assets/final/` 中**已符合 manifest** 的正式素材接入 Godot，取代對應 placeholder。缺檔者保持 placeholder。
 
 ## 必讀文件
-`Assets/ART_ASSET_MANIFEST.md`、`Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`（v1.0 locked）、`Docs/05_ANIMATION_SPEC.md`。
+`Assets/ART_ASSET_MANIFEST.md`、`Art/ART_CONTRACT.md`（v1.0 locked）、`Docs/05_ANIMATION_SPEC.md`。
 
 ## 範圍
 - 依 manifest 的 `asset_id` / `file_name` / `target_path` / `used_by_scene`，把 `Assets/final/` 的素材接到對應節點。
@@ -13,7 +13,7 @@
 
 ## 不做（鐵則）
 - **不得自行生成美術**。
-- **不得修改 `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`**（要改走 `OPEN_QUESTIONS.md` 的 `Q-ART-XXX`）。
+- **不得修改 `Art/ART_CONTRACT.md`**（要改走 `OPEN_QUESTIONS.md` 的 `Q-ART-XXX`）。
 - **不得自行更改檔名 / 路徑規則 / manifest 結構**。
 - **不得改核心玩法或數值**。
 - **不得依賴 `Assets/generated/`**。

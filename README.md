@@ -18,7 +18,8 @@
 ## 資料夾地圖
 | 路徑 | 責任 |
 |---|---|
-| `Planning/` | 企劃、AI 工作流策略、人類決策格式、美術規格、簡報、Git 協作（人類決策區） |
+| `Planning/` | 企劃、AI 工作流策略、人類決策格式、簡報、Git 協作（人類決策區） |
+| `Art/` | **美術同事入口**：Art Contract、Direction、Quickstart、Magnific prompt 樣板、mockup 參考圖 |
 | `Docs/` | Codex 必讀規格（設計/系統/狀態機/UI/動畫/資料/H5）+ `OPEN_QUESTIONS` + `DECISIONS` |
 | `Codex/` | Codex 主提示 + 8 張任務卡 + 驗收清單（Codex 工作區） |
 | `Data/` | 數值與設定的**單一真實來源**（JSON，禁止寫死於程式） |
@@ -32,13 +33,13 @@
 1. [`AGENTS.md`](AGENTS.md)（代理協作鐵則**單一正本**；`Codex/00_MASTER_PROMPT.md` 為其轉介）
 2. `Docs/01`→`07`（設計/系統/狀態機/UI/動畫/資料/H5）
 3. 當前任務卡 `Codex/01`→`08`（依序，一次一張）
-4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`
+4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
 
 ## 治理機制（本專案重點）
 - **`Docs/OPEN_QUESTIONS.md`**：AI 不確定**不猜**，先登記等人類回答。
 - **`Docs/DECISIONS.md`**：人類拍板的權威紀錄，可追溯。
 - **`Codex/VALIDATION_CHECKLIST.md`**：每張任務卡過驗收才往下。
-- **Art Contract Freeze** 🔒：`Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md` 標 `v1.0 locked` 後，
+- **Art Contract Freeze** 🔒：`Art/ART_CONTRACT.md` 標 `v1.0 locked` 後，
   必要素材清單/檔名/路徑/透明/面向/匯入方式等**不得直接改檔**；變更須走
   `OPEN_QUESTIONS`(Q-ART-XXX) → `DECISIONS` → 人類同意 → 升 `v1.1`。詳見 `DECISIONS.md` D-002。
 
@@ -59,6 +60,6 @@ Godot 4.6 · GL Compatibility（Web 相容）· GDScript 分層（core/battle/ac
 
 ## 給評審 / 同事的快速路徑
 想看**工作流**：`Planning/01` → `Codex/00` → 任一張任務卡 → `VALIDATION_CHECKLIST`。
-想看**治理**：`Docs/OPEN_QUESTIONS` + `Docs/DECISIONS` + `Planning/03`(Freeze)。
+想看**治理**：`Docs/OPEN_QUESTIONS` + `Docs/DECISIONS` + `Art/ART_CONTRACT.md`(Freeze)。
 想**試玩**：依 `Docs/07_H5_EXPORT_SPEC.md` 匯出 Web 後開瀏覽器。
 簡報故事線：`Planning/05_PRESENTATION_STORYLINE.md`。

@@ -17,7 +17,7 @@
 ```
 
 ## 美術規格變更專用格式（Art Contract 已 `v1.0 locked` 時必用）
-> 任何想改動 `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md` 鎖定內容者（含 AI），**禁止直接改檔**，先在此登記：
+> 任何想改動 `Art/ART_CONTRACT.md` 鎖定內容者（含 AI），**禁止直接改檔**，先在此登記：
 ```md
 ### Q-ART-XXX：<想改的合約項目>
 - 狀態：OPEN
@@ -53,11 +53,11 @@
 - 人類回答：先列出音效空缺就好，把接口預留
 
 ### Q-003：缺少正式 UI mockup 圖檔
-- 狀態：ANSWERED（採 A：已補上 `Planning/ui_mockup_battle.png`）
+- 狀態：ANSWERED（採 A：已補上 `Art/references/ui_mockup_battle.png`）
 - 提出者：Codex
-- 背景：任務 04 指定必讀 `Planning/ui_mockup_battle.png`，但工作區 `Planning/` 內沒有該檔案；本次只能依 `Docs/04_UI_SPEC.md` 的座標契約與版面不變量實作。
+- 背景：任務 04 指定必讀 `Art/references/ui_mockup_battle.png`，但工作區 `Planning/` 內沒有該檔案；本次只能依 `Docs/04_UI_SPEC.md` 的座標契約與版面不變量實作。
 - 選項：
-  - A. 補上 `Planning/ui_mockup_battle.png`，後續 UI 微調以該圖為目標。
+  - A. 補上 `Art/references/ui_mockup_battle.png`，後續 UI 微調以該圖為目標。
   - B. 將 `Docs/04_UI_SPEC.md` 改為不再引用該圖片，只保留座標契約。
 - AI 建議：A（保留視覺目標，方便 task 04/後續 review 精準對齊）。
 - 影響範圍：`04_H5_VERTICAL_UI`、後續 UI/美術檢查。

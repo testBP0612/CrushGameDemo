@@ -21,15 +21,15 @@
 6. **不得把數值/文案寫死**：倍率、成功率、下注上下限、快捷籌碼、怪物、時長、UI 文字一律讀 `Data/*.json`。
 7. **不得把所有邏輯塞進單一巨大 script**，依 `Scripts/` 分層（core/battle/actors/ui/effects/services）。
 8. **版面（直式 9:16）**：遵守 `Docs/04` §二之一座標契約與§二之二版面不變量（角色與操作 UI 不得重疊；操作 UI 落在 y≥1300）。**任何版面調整必須在 Godot 內目視確認**，不可只靠座標算術盲改（見 `DECISIONS.md` D-006）。
-9. **美術**：只讀 `Assets/final/` 與 `Assets/placeholders/`，不得依賴 `Assets/generated/`；不得自行生成正式美術；缺檔必須 **fallback placeholder，不可讓遊戲壞掉**；不得修改 `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`（`v1.0 locked`，要改走 `OPEN_QUESTIONS` 的 `Q-ART-XXX`）。
+9. **美術**：只讀 `Assets/final/` 與 `Assets/placeholders/`，不得依賴 `Assets/generated/`；不得自行生成正式美術；缺檔必須 **fallback placeholder，不可讓遊戲壞掉**；不得修改 `Art/ART_CONTRACT.md`（`v1.0 locked`，要改走 `OPEN_QUESTIONS` 的 `Q-ART-XXX`）。
 10. **Git/協作邊界**：不要動 `Planning/`（除非任務卡明確要求）。
 
 ## 必讀順序
 1. 本檔 `AGENTS.md`
 2. `Docs/01`→`07`（設計／系統／狀態機／UI／動畫／資料／H5）
 3. 當前任務卡 `Codex/01`→`08`（依序）
-4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`
-5. 視覺目標：`Planning/ui_mockup_battle.png`
+4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
+5. 視覺目標：`Art/references/ui_mockup_battle.png`
 
 ## 任務卡執行順序（先閉環，後效果與美術）
 1. `01_PROJECT_SCAFFOLD_AND_DATA_LOAD` ✅

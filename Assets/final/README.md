@@ -2,7 +2,7 @@
 
 **唯一正式素材入口。**
 
-只要素材進入本資料夾，即代表它**已符合 Art Contract**（`Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`）、
+只要素材進入本資料夾，即代表它**已符合 Art Contract**（`Art/ART_CONTRACT.md`）、
 已完成命名 / 裁切 / 透明背景 / 格式整理，**可被 Codex 接入**。
 
 ## 流程

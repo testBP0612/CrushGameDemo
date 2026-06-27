@@ -23,7 +23,7 @@
 - `Assets/generated/` 可空著；**Codex 不得依賴**。`.gitignore` 已忽略其內容（保留 README）。
 - **Codex 只讀** `Assets/final/` 與 `Assets/placeholders/`。
 - **美術同事不要動** `Scripts/`、`Scenes/`、`Data/`（除非有明確任務）。
-- **Codex 不要動** `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`（除非任務卡要求）。
+- **Codex 不要動** `Art/ART_CONTRACT.md`（除非任務卡要求）。
 
 ## 三、`.gitignore` 重點（已設定）
 - 忽略 `.godot/`、`.import/`（Godot 匯入快取）。

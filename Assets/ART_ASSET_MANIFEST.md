@@ -1,7 +1,7 @@
 # ART ASSET MANIFEST — 素材合約清單
 
 > Godot / Codex / 美術同事三方的**素材合約**。檔名與路徑**以本清單為準**。
-> 接入規格細節見 `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`（v1.0 locked）。
+> 接入規格細節見 `Art/ART_CONTRACT.md`（v1.0 locked）。
 > 變更必要素材清單/檔名/路徑屬 Contract 鎖定項目 → 走 `Docs/OPEN_QUESTIONS.md` 的 `Q-ART-XXX` + `Docs/DECISIONS.md`。
 > 例外：`status` 欄是**資料欄位**，Codex 接入後可更新為 `imported`，不算改 Contract。
 

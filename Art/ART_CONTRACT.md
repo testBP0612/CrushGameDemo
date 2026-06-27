@@ -1,8 +1,8 @@
-# 03 — Art Contract（給 Magnific / 美術同事）
+# Art Contract（給 Magnific / 美術同事）
 
 > **狀態：v1.0 locked** 🔒
 > 本檔是**不可變規格合約**。美術同事與 Codex **都必須遵守**。
-> 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `04_ART_DIRECTION_NOTES.md`。
+> 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `ART_DIRECTION_NOTES.md`。
 >
 > **變更程序（任何人含 AI）**：禁止直接改本檔鎖定項目。先到 `Docs/OPEN_QUESTIONS.md` 開 `Q-ART-XXX`
 > → `Docs/DECISIONS.md` 新增決策 → 評估影響 → 人類同意後升 `v1.1`。詳見 `Docs/DECISIONS.md` D-002。
@@ -75,7 +75,7 @@
 4. `Assets/generated/` 為可選暫存，Codex 不依賴。
 
 ## 十、給美術同事的 Magnific 使用建議（指引，非鎖定）
-- 可把 `04_ART_DIRECTION_NOTES.md` 的風格描述丟給 Magnific / AI 產圖。
+- 可把 `ART_DIRECTION_NOTES.md` 的風格描述丟給 Magnific / AI 產圖。
 - Prompt 建議帶：主體、視角（橫向 2D 側視）、面向、**透明背景**、單一角色置中、無地面陰影外溢。
 - 產圖後務必：去背確認、裁切到建議尺寸、命名符合第三節、放入 `Assets/final/`。
 - 風格自由，但**面向、透明、檔名、尺寸**必須符合本合約。
