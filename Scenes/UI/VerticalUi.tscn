@@ -1,0 +1,309 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://Scripts/ui/vertical_ui.gd" id="1_vertical_ui"]
+[ext_resource type="Script" path="res://Scripts/ui/hud.gd" id="2_hud"]
+[ext_resource type="Script" path="res://Scripts/ui/battle_message.gd" id="3_battle_message"]
+[ext_resource type="Script" path="res://Scripts/ui/bet_panel.gd" id="4_bet_panel"]
+[ext_resource type="Script" path="res://Scripts/ui/decision_panel.gd" id="5_decision_panel"]
+[ext_resource type="Script" path="res://Scripts/ui/settlement_panel.gd" id="6_settlement_panel"]
+
+[node name="VerticalUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_vertical_ui")
+
+[node name="TopBar" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 200.0
+grow_horizontal = 2
+
+[node name="ProfileFrame" type="PanelContainer" parent="TopBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.24
+anchor_right = 0.28
+anchor_bottom = 0.76
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProfileLabel" type="Label" parent="TopBar/ProfileFrame"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LogoLabel" type="Label" parent="TopBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.32
+anchor_top = 0.16
+anchor_right = 0.68
+anchor_bottom = 0.84
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 52
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hud" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 210.0
+offset_bottom = 390.0
+grow_horizontal = 2
+script = ExtResource("2_hud")
+
+[node name="Columns" type="HBoxContainer" parent="Hud"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 64.0
+offset_top = 0.0
+offset_right = -64.0
+offset_bottom = 108.0
+grow_horizontal = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="StageCard" type="PanelContainer" parent="Hud/Columns"]
+custom_minimum_size = Vector2(292, 108)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StageLabel" type="Label" parent="Hud/Columns/StageCard"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MultiplierCard" type="PanelContainer" parent="Hud/Columns"]
+custom_minimum_size = Vector2(292, 108)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MultiplierLabel" type="Label" parent="Hud/Columns/MultiplierCard"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PayoutCard" type="PanelContainer" parent="Hud/Columns"]
+custom_minimum_size = Vector2(292, 108)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PayoutLabel" type="Label" parent="Hud/Columns/PayoutCard"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BalanceLabel" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 64.0
+offset_top = 116.0
+offset_right = -64.0
+offset_bottom = 176.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BattleMessage" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 1180.0
+offset_bottom = 1290.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("3_battle_message")
+
+[node name="MessageLabel" type="Label" parent="BattleMessage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_right = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 38
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ActionArea" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 64.0
+offset_top = 1300.0
+offset_right = -64.0
+offset_bottom = 1920.0
+grow_horizontal = 2
+
+[node name="BetPanel" type="Control" parent="ActionArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_bet_panel")
+
+[node name="Panel" type="PanelContainer" parent="ActionArea/BetPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 600.0
+grow_horizontal = 2
+
+[node name="Margin" type="MarginContainer" parent="ActionArea/BetPanel/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="Layout" type="VBoxContainer" parent="ActionArea/BetPanel/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="TitleLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+
+[node name="BetRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="DecreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
+custom_minimum_size = Vector2(148, 112)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+
+[node name="BetLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
+custom_minimum_size = Vector2(464, 112)
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IncreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
+custom_minimum_size = Vector2(148, 112)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+
+[node name="QuickChipRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="InsufficientLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.45, 0.35, 1)
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+
+[node name="DecisionPanel" type="Control" parent="ActionArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_decision_panel")
+
+[node name="Buttons" type="HBoxContainer" parent="ActionArea/DecisionPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -184.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="CashoutButton" type="Button" parent="ActionArea/DecisionPanel/Buttons"]
+custom_minimum_size = Vector2(464, 144)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+
+[node name="AdvanceButton" type="Button" parent="ActionArea/DecisionPanel/Buttons"]
+custom_minimum_size = Vector2(464, 144)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+
+[node name="SettlementPanel" type="Control" parent="ActionArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_settlement_panel")
+
+[node name="Panel" type="PanelContainer" parent="ActionArea/SettlementPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -200.0
+offset_right = 420.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="ActionArea/SettlementPanel/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 36
+
+[node name="Layout" type="VBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+
+[node name="BodyLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_font_sizes/font_size = 38

@@ -33,7 +33,7 @@
 ## 現有問題
 
 ### Q-001：餘額不足時的處理
-- 狀態：OPEN
+- 狀態：ANSWERED → 見 DECISIONS D-007
 - 提出者：Claude
 - 背景：當 `balance < min_bet`，玩家無法下注，需要復原機制（`02_SYSTEM_SPEC.md` 第四節）。
 - 選項：
@@ -42,12 +42,23 @@
   - C. 顯示「遊戲結束」並只能重整。
 - AI 建議：A（內部試玩 demo 體驗最順）。
 - 影響範圍：`05_SETTLEMENT_AND_LOCAL_SCORE` 任務卡、`ui_text.json`、`LocalScoreService`。
-- 人類回答：_（待填）_
+- 人類回答：A
 
 ### Q-002：是否需要音效 / 音樂
-- 狀態：OPEN
+- 狀態：ANSWERED → 見 DECISIONS D-008
 - 提出者：Claude
 - 背景：MVP 是否納入基本音效會影響任務卡範圍與 H5 音訊解鎖處理（`07`）。
 - AI 建議：MVP 先不做音效，列 Future；若有空檔在 `06_FEEL_AND_EFFECTS` 末段加無關鍵成敗的點擊音。
 - 影響範圍：`06_FEEL_AND_EFFECTS`、`07_H5_EXPORT_SPEC`。
-- 人類回答：_（待填）_
+- 人類回答：先列出音效空缺就好，把接口預留
+
+### Q-003：缺少正式 UI mockup 圖檔
+- 狀態：ANSWERED（採 A：已補上 `Planning/ui_mockup_battle.png`）
+- 提出者：Codex
+- 背景：任務 04 指定必讀 `Planning/ui_mockup_battle.png`，但工作區 `Planning/` 內沒有該檔案；本次只能依 `Docs/04_UI_SPEC.md` 的座標契約與版面不變量實作。
+- 選項：
+  - A. 補上 `Planning/ui_mockup_battle.png`，後續 UI 微調以該圖為目標。
+  - B. 將 `Docs/04_UI_SPEC.md` 改為不再引用該圖片，只保留座標契約。
+- AI 建議：A（保留視覺目標，方便 task 04/後續 review 精準對齊）。
+- 影響範圍：`04_H5_VERTICAL_UI`、後續 UI/美術檢查。
+- 人類回答：已填入

@@ -37,5 +37,7 @@ AI 提問（OPEN_QUESTIONS / 對話）
 | D-004 | placeholder-first + art-parallel（輕量素材流程） | 定案 |
 | D-005 | DataLoader 改為 autoload 單例 `Data` | 定案 |
 | D-006 | 畫面分區改用具體座標契約 + 版面不變量 | 定案 |
+| D-007 | 餘額不足時重置為起始餘額（Q-001） | 定案 |
+| D-008 | MVP 不做音效，只預留接口與空缺清單（Q-002） | 定案 |
 
 > 新決策請同步更新本表與 `Docs/DECISIONS.md`。

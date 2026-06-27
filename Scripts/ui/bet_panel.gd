@@ -1,0 +1,98 @@
+class_name BetPanel
+extends Control
+
+signal decrease_requested
+signal increase_requested
+signal confirm_requested
+signal quick_bet_requested(amount: int)
+
+@onready var title_label: Label = $Panel/Margin/Layout/TitleLabel
+@onready var decrease_button: Button = $Panel/Margin/Layout/BetRow/DecreaseButton
+@onready var bet_label: Label = $Panel/Margin/Layout/BetRow/BetLabel
+@onready var increase_button: Button = $Panel/Margin/Layout/BetRow/IncreaseButton
+@onready var quick_chip_row: HBoxContainer = $Panel/Margin/Layout/QuickChipRow
+@onready var insufficient_label: Label = $Panel/Margin/Layout/InsufficientLabel
+@onready var confirm_button: Button = $Panel/Margin/Layout/ConfirmButton
+
+var _quick_buttons: Array[Button] = []
+
+
+func _ready() -> void:
+	title_label.text = Data.text("bet_panel_title")
+	decrease_button.text = Data.text("bet_decrease")
+	increase_button.text = Data.text("bet_increase")
+	confirm_button.text = Data.text("bet_confirm")
+	insufficient_label.text = Data.text("bet_insufficient")
+	_apply_button_style(confirm_button, Color(0.18, 0.58, 0.27, 1.0))
+	decrease_button.pressed.connect(func() -> void: decrease_requested.emit())
+	increase_button.pressed.connect(func() -> void: increase_requested.emit())
+	confirm_button.pressed.connect(func() -> void: confirm_requested.emit())
+	_build_quick_buttons()
+
+
+func update_snapshot(snapshot: Dictionary) -> void:
+	var bet := int(snapshot.get("bet", 0))
+	var min_bet := int(snapshot.get("min_bet", 0))
+	var max_bet := int(snapshot.get("max_bet", min_bet))
+	var is_betting := bool(snapshot.get("is_betting", false))
+	var is_affordable := bool(snapshot.get("is_bet_affordable", false))
+
+	bet_label.text = str(bet)
+	decrease_button.disabled = not is_betting or bet <= min_bet
+	increase_button.disabled = not is_betting or bet >= max_bet
+	confirm_button.disabled = not is_betting or not is_affordable
+	insufficient_label.visible = is_betting and not is_affordable
+
+	for button in _quick_buttons:
+		var amount := int(button.get_meta("amount", 0))
+		button.disabled = not is_betting or amount < min_bet or amount > max_bet
+
+
+func _build_quick_buttons() -> void:
+	for child in quick_chip_row.get_children():
+		child.queue_free()
+	_quick_buttons.clear()
+
+	var balance_config := Data.balance_config()
+	var min_bet := int(balance_config.get("min_bet", 0))
+	var default_bet := int(balance_config.get("default_bet", min_bet))
+	var bet_step := int(balance_config.get("bet_step", 1))
+	var max_bet := int(balance_config.get("max_bet", default_bet))
+	var starting_balance := int(balance_config.get("starting_balance", max_bet))
+	var amounts := [min_bet, default_bet, default_bet * 2, max_bet, starting_balance]
+	var seen := {}
+
+	for raw_amount in amounts:
+		var amount := int(raw_amount)
+		if seen.has(amount):
+			continue
+		seen[amount] = true
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(138.0, 72.0)
+		button.text = str(amount)
+		button.set_meta("amount", amount)
+		button.pressed.connect(_on_quick_button_pressed.bind(amount))
+		quick_chip_row.add_child(button)
+		_quick_buttons.append(button)
+
+
+func _on_quick_button_pressed(amount: int) -> void:
+	quick_bet_requested.emit(amount)
+
+
+func _apply_button_style(button: Button, color: Color) -> void:
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = color
+	normal.corner_radius_top_left = 8
+	normal.corner_radius_top_right = 8
+	normal.corner_radius_bottom_left = 8
+	normal.corner_radius_bottom_right = 8
+	button.add_theme_stylebox_override("normal", normal)
+
+	var hover := normal.duplicate()
+	hover.bg_color = color.lightened(0.12)
+	button.add_theme_stylebox_override("hover", hover)
+
+	var pressed := normal.duplicate()
+	pressed.bg_color = color.darkened(0.14)
+	button.add_theme_stylebox_override("pressed", pressed)

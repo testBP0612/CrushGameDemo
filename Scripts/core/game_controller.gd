@@ -8,16 +8,7 @@ const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.g
 @onready var title_label: Label = $UILayer/TitleScreen/TitleLayout/TitleLabel
 @onready var best_record_label: Label = $UILayer/TitleScreen/TitleLayout/BestRecordLabel
 @onready var start_button: Button = $UILayer/TitleScreen/TitleLayout/StartButton
-@onready var debug_panel: Control = $UILayer/DebugPanel
-@onready var status_label: Label = $UILayer/DebugPanel/DebugLayout/StatusLabel
-@onready var decrease_button: Button = $UILayer/DebugPanel/DebugLayout/BetRow/DecreaseButton
-@onready var bet_label: Label = $UILayer/DebugPanel/DebugLayout/BetRow/BetLabel
-@onready var increase_button: Button = $UILayer/DebugPanel/DebugLayout/BetRow/IncreaseButton
-@onready var confirm_bet_button: Button = $UILayer/DebugPanel/DebugLayout/ConfirmBetButton
-@onready var decision_row: HBoxContainer = $UILayer/DebugPanel/DebugLayout/DecisionRow
-@onready var cashout_button: Button = $UILayer/DebugPanel/DebugLayout/DecisionRow/CashoutButton
-@onready var advance_button: Button = $UILayer/DebugPanel/DebugLayout/DecisionRow/AdvanceButton
-@onready var settle_button: Button = $UILayer/DebugPanel/DebugLayout/SettleButton
+@onready var vertical_ui: VerticalUi = $UILayer/VerticalUi
 
 var event_bus := EventBusScript.new()
 var state_machine := GameStateMachineScript.new()
@@ -30,7 +21,6 @@ func _ready() -> void:
 	_connect_buttons()
 	_connect_battle_presenter()
 	_apply_static_text()
-	debug_panel.visible = false
 
 	if not state_machine.start():
 		return
@@ -49,12 +39,13 @@ func _connect_events() -> void:
 
 func _connect_buttons() -> void:
 	start_button.pressed.connect(_on_start_pressed)
-	decrease_button.pressed.connect(_on_decrease_pressed)
-	increase_button.pressed.connect(_on_increase_pressed)
-	confirm_bet_button.pressed.connect(_on_confirm_bet_pressed)
-	cashout_button.pressed.connect(_on_cashout_pressed)
-	advance_button.pressed.connect(_on_advance_pressed)
-	settle_button.pressed.connect(_on_settle_pressed)
+	vertical_ui.bet_decrease_requested.connect(_on_decrease_pressed)
+	vertical_ui.bet_increase_requested.connect(_on_increase_pressed)
+	vertical_ui.bet_confirm_requested.connect(_on_confirm_bet_pressed)
+	vertical_ui.quick_bet_requested.connect(_on_quick_bet_requested)
+	vertical_ui.cashout_requested.connect(_on_cashout_pressed)
+	vertical_ui.advance_requested.connect(_on_advance_pressed)
+	vertical_ui.settle_acknowledged.connect(_on_settle_pressed)
 
 
 func _connect_battle_presenter() -> void:
@@ -71,11 +62,6 @@ func _apply_static_text() -> void:
 	title_label.text = Data.text("title_game_name")
 	best_record_label.text = Data.text("best_record", {"payout": 0})
 	start_button.text = Data.text("title_tap_to_start")
-	decrease_button.text = Data.text("bet_decrease")
-	increase_button.text = Data.text("bet_increase")
-	confirm_bet_button.text = Data.text("bet_confirm")
-	advance_button.text = Data.text("decision_advance")
-	settle_button.text = Data.text("settle_play_again")
 
 
 func _on_start_pressed() -> void:
@@ -90,6 +76,11 @@ func _on_decrease_pressed() -> void:
 
 func _on_increase_pressed() -> void:
 	state_machine.change_bet_steps(1)
+	_update_view()
+
+
+func _on_quick_bet_requested(amount: int) -> void:
+	state_machine.set_bet(amount)
 	_update_view()
 
 
@@ -196,25 +187,28 @@ func _update_view() -> void:
 
 	var state_name := state_machine.state_name()
 	title_screen.visible = state_machine.is_title()
-	debug_panel.visible = not state_machine.is_title()
+	vertical_ui.visible = not state_machine.is_title()
+	vertical_ui.update_snapshot(_ui_snapshot(state_name))
 
-	var stage_text := Data.text("hud_stage", {"stage": state_machine.stage, "max": state_machine.max_stage()})
-	var multiplier_text := Data.text("hud_multiplier", {"multiplier": state_machine.current_multiplier})
-	var payout_text := Data.text("hud_current_payout", {"payout": state_machine.current_payout})
-	var balance_text := Data.text("hud_balance", {"balance": state_machine.balance})
-	status_label.text = "%s\n%s\n%s\n%s\n%s" % [state_name, stage_text, multiplier_text, payout_text, balance_text]
 
-	bet_label.text = str(state_machine.bet)
-	var input_locked := state_machine.is_input_locked()
-	confirm_bet_button.disabled = input_locked or not state_machine.is_betting() or not state_machine.is_bet_affordable()
-	decrease_button.disabled = input_locked or not state_machine.is_betting()
-	increase_button.disabled = input_locked or not state_machine.is_betting()
-
-	decision_row.visible = state_machine.is_reward_decision()
-	cashout_button.text = Data.text("decision_cashout", {"payout": state_machine.current_payout})
-	cashout_button.disabled = input_locked
-	advance_button.visible = state_machine.can_advance()
-	advance_button.disabled = input_locked
-
-	settle_button.visible = state_machine.is_settle()
-	settle_button.disabled = input_locked
+func _ui_snapshot(state_name: String) -> Dictionary:
+	var balance_config := Data.balance_config()
+	return {
+		"state_name": state_name,
+		"balance": state_machine.balance,
+		"bet": state_machine.bet,
+		"stage": state_machine.stage,
+		"stage_to_challenge": state_machine.stage_to_challenge(),
+		"active_monster_stage": state_machine.active_monster_stage,
+		"max_stage": state_machine.max_stage(),
+		"current_multiplier": state_machine.current_multiplier,
+		"current_payout": state_machine.current_payout,
+		"min_bet": int(balance_config.get("min_bet", 0)),
+		"max_bet": int(balance_config.get("max_bet", 0)),
+		"bet_step": int(balance_config.get("bet_step", 0)),
+		"is_betting": state_machine.is_betting(),
+		"is_reward_decision": state_machine.is_reward_decision(),
+		"is_settle": state_machine.is_settle(),
+		"is_bet_affordable": state_machine.is_bet_affordable(),
+		"can_advance": state_machine.can_advance()
+	}

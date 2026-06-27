@@ -48,6 +48,7 @@ var stage := 0
 var current_payout := 0
 var current_multiplier := 1.0
 var last_result := ""
+var active_monster_stage := 1
 
 var _payout_calculator := PayoutCalculatorScript.new()
 var _risk_resolver := RiskResolverScript.new()
@@ -87,6 +88,14 @@ func change_bet_steps(step_count: int) -> void:
 	var balance_config := Data.balance_config()
 	var step := int(balance_config.get("bet_step", 0))
 	bet = _clamp_bet(bet + step * step_count)
+	_emit_bet_changed()
+
+
+func set_bet(value: int) -> void:
+	if state != State.BETTING:
+		return
+
+	bet = _clamp_bet(value)
 	_emit_bet_changed()
 
 
@@ -265,6 +274,10 @@ func _enter_betting() -> void:
 
 
 func _enter_challenge_start() -> void:
+	# 鎖定本回合挑戰的怪物（= 目前已擊敗數 + 1）；整個回合不隨 stage 增減而改變，
+	# 避免勝利訊息在 MONSTER_DEATH 增加 stage 後顯示成下一隻怪物的名字。
+	active_monster_stage = stage + 1
+
 	if _bet_charged_this_round:
 		return
 
