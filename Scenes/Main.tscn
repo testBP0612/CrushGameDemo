@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/core/game_controller.gd" id="1_game_controller"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_game_controller")
+
+[node name="BattleScene" type="Node2D" parent="."]
+
+[node name="Background" type="ColorRect" parent="BattleScene"]
+offset_right = 1080.0
+offset_bottom = 1920.0
+color = Color(0.105882, 0.137255, 0.180392, 1)
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="TitleScreen" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleBackground" type="ColorRect" parent="UILayer/TitleScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.137255, 0.180392, 1)
+
+[node name="TitleLayout" type="VBoxContainer" parent="UILayer/TitleScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -440.0
+offset_top = -180.0
+offset_right = 440.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="UILayer/TitleScreen/TitleLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 88
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BestRecordLabel" type="Label" parent="UILayer/TitleScreen/TitleLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+horizontal_alignment = 1
+vertical_alignment = 1

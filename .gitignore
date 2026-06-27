@@ -8,6 +8,7 @@ export_credentials.cfg
 
 # Android exports
 /android/
+/export/web/
 
 # Imported translations (automatically generated from CSV files)
 *.translation
