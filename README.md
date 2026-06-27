@@ -29,7 +29,7 @@
 > 企劃範本中的 `GameProject/` 為概念分區，實體即 repo root。理由見 `Docs/DECISIONS.md` D-001。
 
 ## Codex 必讀順序
-1. `Codex/00_MASTER_PROMPT.md`（鐵則！）
+1. [`AGENTS.md`](AGENTS.md)（代理協作鐵則**單一正本**；`Codex/00_MASTER_PROMPT.md` 為其轉介）
 2. `Docs/01`→`07`（設計/系統/狀態機/UI/動畫/資料/H5）
 3. 當前任務卡 `Codex/01`→`08`（依序，一次一張）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Planning/03_ART_CONTRACT_FOR_MAGNIFIC.md`

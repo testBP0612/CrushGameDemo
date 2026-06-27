@@ -54,12 +54,7 @@ func _build_quick_buttons() -> void:
 	_quick_buttons.clear()
 
 	var balance_config := Data.balance_config()
-	var min_bet := int(balance_config.get("min_bet", 0))
-	var default_bet := int(balance_config.get("default_bet", min_bet))
-	var bet_step := int(balance_config.get("bet_step", 1))
-	var max_bet := int(balance_config.get("max_bet", default_bet))
-	var starting_balance := int(balance_config.get("starting_balance", max_bet))
-	var amounts := [min_bet, default_bet, default_bet * 2, max_bet, starting_balance]
+	var amounts: Array = balance_config.get("quick_bet_options", [])
 	var seen := {}
 
 	for raw_amount in amounts:

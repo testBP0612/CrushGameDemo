@@ -220,19 +220,6 @@ func is_settle() -> bool:
 	return state in [State.CASH_OUT_SETTLE, State.DEFEAT_SETTLE, State.CLEAR_SETTLE]
 
 
-func is_input_locked() -> bool:
-	return state in [
-		State.CHALLENGE_START,
-		State.BATTLE_ATTACK,
-		State.MONSTER_HURT,
-		State.MONSTER_DEATH,
-		State.ADVANCE_WALK,
-		State.TRANSITION,
-		State.MONSTER_COUNTER,
-		State.PLAYER_HURT
-	]
-
-
 func is_bet_affordable() -> bool:
 	return balance >= bet
 

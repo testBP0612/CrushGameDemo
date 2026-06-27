@@ -14,6 +14,7 @@
 | `currency.id` | string | 貨幣代號（`coins`）。 |
 | `currency.starting_balance` | int | 初始餘額。 |
 | `currency.min_bet` / `max_bet` / `bet_step` / `default_bet` | int | 下注上下限、步進、預設值。 |
+| `currency.quick_bet_options` | int[] | 下注面板快捷籌碼金額（資料驅動，禁止程式硬湊）。每個值必須落在 `[min_bet, max_bet]` 內。 |
 | `payout.rounding` | string | `floor`（收益取整方式）。 |
 | `payout.base_multiplier_at_stage_0` | float | stage 0 的倍率（1.0）。 |
 | `multiplier_curve[]` | array | `{ stage:int, multiplier:float }`，stage 從 1 起。 |

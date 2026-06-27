@@ -6,9 +6,10 @@
     "display_name_key": "currency_coins",
     "starting_balance": 1000,
     "min_bet": 10,
-    "max_bet": 500,
+    "max_bet": 1000,
     "bet_step": 10,
-    "default_bet": 50
+    "default_bet": 50,
+    "quick_bet_options": [10, 50, 100, 500, 1000]
   },
   "payout": {
     "_comment": "current_payout = bet * multiplier_at_stage(stage_cleared)。stage 從 1 起算，代表已擊敗的怪物數。",
