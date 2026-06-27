@@ -41,6 +41,7 @@ const STATE_NAMES := {
 }
 
 var event_bus: EventBus
+var score_service
 var state: State = State.BOOT
 var balance := 0
 var bet := 0
@@ -56,8 +57,9 @@ var _bet_charged_this_round := false
 var _settled_this_round := false
 
 
-func setup(bus: EventBus) -> void:
+func setup(bus: EventBus, score) -> void:
 	event_bus = bus
+	score_service = score
 	randomize()
 
 
@@ -66,9 +68,13 @@ func start() -> bool:
 	if not Data.is_loaded():
 		push_error("GameStateMachine BOOT failed: Data autoload is not loaded.")
 		return false
+	if score_service == null:
+		push_error("GameStateMachine BOOT failed: ScoreService is not injected.")
+		return false
 
 	var balance_config := Data.balance_config()
-	balance = int(balance_config.get("starting_balance", 0))
+	score_service.load_save()
+	balance = score_service.get_balance()
 	bet = _clamp_bet(int(balance_config.get("default_bet", 0)))
 	_emit_data_loaded()
 	_set_state(State.TITLE)
@@ -224,6 +230,17 @@ func is_bet_affordable() -> bool:
 	return balance >= bet
 
 
+func is_balance_below_min_bet() -> bool:
+	return balance < int(Data.balance_config().get("min_bet", 0))
+
+
+func reset_balance_to_starting() -> void:
+	if state != State.BETTING or score_service == null:
+		return
+	balance = score_service.reset_balance()
+	_emit_balance_changed()
+
+
 func stage_to_challenge() -> int:
 	return stage + 1
 
@@ -269,6 +286,7 @@ func _enter_challenge_start() -> void:
 		return
 
 	balance = max(0, balance - bet)
+	score_service.set_balance(balance)
 	_bet_charged_this_round = true
 	_emit_balance_changed()
 
@@ -286,6 +304,8 @@ func _enter_reward_decision() -> void:
 func _enter_cash_out_settle() -> void:
 	if not _settled_this_round:
 		balance += current_payout
+		score_service.set_balance(balance)
+		score_service.submit_payout(current_payout)
 		_settled_this_round = true
 		last_result = "cash_out"
 		_emit_balance_changed()
@@ -294,6 +314,7 @@ func _enter_cash_out_settle() -> void:
 
 func _enter_defeat_settle() -> void:
 	current_payout = 0
+	score_service.set_balance(balance)
 	_settled_this_round = true
 	last_result = "defeat"
 	event_bus.settled.emit(last_result)
@@ -302,6 +323,8 @@ func _enter_defeat_settle() -> void:
 func _enter_clear_settle() -> void:
 	if not _settled_this_round:
 		balance += current_payout
+		score_service.set_balance(balance)
+		score_service.submit_payout(current_payout)
 		_settled_this_round = true
 		last_result = "clear"
 		_emit_balance_changed()

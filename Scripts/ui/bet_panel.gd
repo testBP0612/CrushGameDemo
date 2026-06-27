@@ -5,6 +5,7 @@ signal decrease_requested
 signal increase_requested
 signal confirm_requested
 signal quick_bet_requested(amount: int)
+signal balance_reset_requested
 
 @onready var title_label: Label = $Panel/Margin/Layout/TitleLabel
 @onready var decrease_button: Button = $Panel/Margin/Layout/BetRow/DecreaseButton
@@ -15,6 +16,7 @@ signal quick_bet_requested(amount: int)
 @onready var confirm_button: Button = $Panel/Margin/Layout/ConfirmButton
 
 var _quick_buttons: Array[Button] = []
+var _is_reset_mode := false
 
 
 func _ready() -> void:
@@ -26,7 +28,7 @@ func _ready() -> void:
 	_apply_button_style(confirm_button, Color(0.18, 0.58, 0.27, 1.0))
 	decrease_button.pressed.connect(func() -> void: decrease_requested.emit())
 	increase_button.pressed.connect(func() -> void: increase_requested.emit())
-	confirm_button.pressed.connect(func() -> void: confirm_requested.emit())
+	confirm_button.pressed.connect(_on_confirm_button_pressed)
 	_build_quick_buttons()
 
 
@@ -36,11 +38,14 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	var max_bet := int(snapshot.get("max_bet", min_bet))
 	var is_betting := bool(snapshot.get("is_betting", false))
 	var is_affordable := bool(snapshot.get("is_bet_affordable", false))
+	var is_balance_below_min_bet := bool(snapshot.get("is_balance_below_min_bet", false))
 
 	bet_label.text = str(bet)
+	_is_reset_mode = is_betting and is_balance_below_min_bet
 	decrease_button.disabled = not is_betting or bet <= min_bet
 	increase_button.disabled = not is_betting or bet >= max_bet
-	confirm_button.disabled = not is_betting or not is_affordable
+	confirm_button.text = Data.text("bet_reset_balance" if _is_reset_mode else "bet_confirm")
+	confirm_button.disabled = not is_betting or (not is_affordable and not _is_reset_mode)
 	insufficient_label.visible = is_betting and not is_affordable
 
 	for button in _quick_buttons:
@@ -73,6 +78,13 @@ func _build_quick_buttons() -> void:
 
 func _on_quick_button_pressed(amount: int) -> void:
 	quick_bet_requested.emit(amount)
+
+
+func _on_confirm_button_pressed() -> void:
+	if _is_reset_mode:
+		balance_reset_requested.emit()
+	else:
+		confirm_requested.emit()
 
 
 func _apply_button_style(button: Button, color: Color) -> void:

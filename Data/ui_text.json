@@ -7,6 +7,7 @@
 
     "title_game_name": "勇者撤離戰",
     "title_tap_to_start": "點擊開始",
+    "profile_mock_display_name": "試玩勇者",
 
     "hud_stage": "關卡 {stage}/{max}",
     "hud_multiplier": "倍率 x{multiplier}",
@@ -18,6 +19,7 @@
     "bet_increase": "＋",
     "bet_confirm": "開始挑戰",
     "bet_insufficient": "金幣不足",
+    "bet_reset_balance": "重置金幣",
 
     "battle_msg_challenging": "正在挑戰 {monster}…",
     "battle_msg_victory": "擊敗 {monster}！",

@@ -8,6 +8,7 @@ signal quick_bet_requested(amount: int)
 signal cashout_requested
 signal advance_requested
 signal settle_acknowledged
+signal balance_reset_requested
 
 @onready var hud: Hud = $Hud
 @onready var top_bar: Control = $TopBar
@@ -24,6 +25,7 @@ func _ready() -> void:
 	bet_panel.increase_requested.connect(func() -> void: bet_increase_requested.emit())
 	bet_panel.confirm_requested.connect(func() -> void: bet_confirm_requested.emit())
 	bet_panel.quick_bet_requested.connect(func(amount: int) -> void: quick_bet_requested.emit(amount))
+	bet_panel.balance_reset_requested.connect(func() -> void: balance_reset_requested.emit())
 	decision_panel.cashout_requested.connect(func() -> void: cashout_requested.emit())
 	decision_panel.advance_requested.connect(func() -> void: advance_requested.emit())
 	settlement_panel.acknowledge_requested.connect(func() -> void: settle_acknowledged.emit())

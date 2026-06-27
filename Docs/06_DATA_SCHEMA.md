@@ -59,6 +59,8 @@
 |---|---|---|
 | `locale` | string | `zh-TW`。 |
 | `text.<key>` | string | 文案；`{x}` 為執行期變數。Codex 以 key 取值。 |
+| `text.bet_reset_balance` | string | 餘額低於 `min_bet` 時的一鍵重置按鈕文案（D-007）。 |
+| `text.profile_mock_display_name` | string | MVP mock profile 顯示名稱。 |
 
 > 缺 key 時的 fallback：建議回傳 `[key]` 字串以利除錯，並寫入 `OPEN_QUESTIONS.md`。
 

@@ -2,6 +2,8 @@ extends Node2D
 
 const EventBusScript := preload("res://Scripts/core/event_bus.gd")
 const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.gd")
+const LocalScoreServiceScript := preload("res://Scripts/services/local_score_service.gd")
+const PlayerProfileServiceScript := preload("res://Scripts/services/player_profile_service.gd")
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
@@ -9,14 +11,17 @@ const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.g
 @onready var best_record_label: Label = $UILayer/TitleScreen/TitleLayout/BestRecordLabel
 @onready var start_button: Button = $UILayer/TitleScreen/TitleLayout/StartButton
 @onready var vertical_ui: VerticalUi = $UILayer/VerticalUi
+@onready var profile_label: Label = $UILayer/VerticalUi/TopBar/ProfileFrame/ProfileLabel
 
 var event_bus := EventBusScript.new()
 var state_machine := GameStateMachineScript.new()
+var score_service := LocalScoreServiceScript.new()
+var player_profile_service := PlayerProfileServiceScript.new()
 
 
 func _ready() -> void:
 	add_child(event_bus)
-	state_machine.setup(event_bus)
+	state_machine.setup(event_bus, score_service)
 	_connect_events()
 	_connect_buttons()
 	_connect_battle_presenter()
@@ -46,6 +51,7 @@ func _connect_buttons() -> void:
 	vertical_ui.cashout_requested.connect(_on_cashout_pressed)
 	vertical_ui.advance_requested.connect(_on_advance_pressed)
 	vertical_ui.settle_acknowledged.connect(_on_settle_pressed)
+	vertical_ui.balance_reset_requested.connect(_on_balance_reset_pressed)
 
 
 func _connect_battle_presenter() -> void:
@@ -60,8 +66,9 @@ func _connect_battle_presenter() -> void:
 
 func _apply_static_text() -> void:
 	title_label.text = Data.text("title_game_name")
-	best_record_label.text = Data.text("best_record", {"payout": 0})
+	_update_best_record_text()
 	start_button.text = Data.text("title_tap_to_start")
+	profile_label.text = str(player_profile_service.get_profile().get("display_name", ""))
 
 
 func _on_start_pressed() -> void:
@@ -104,6 +111,11 @@ func _on_settle_pressed() -> void:
 	_update_view()
 
 
+func _on_balance_reset_pressed() -> void:
+	state_machine.reset_balance_to_starting()
+	_update_view()
+
+
 func _on_state_changed(state_name: String) -> void:
 	_update_view()
 	_play_presentation_for_state(state_name)
@@ -129,6 +141,7 @@ func _on_result_resolved(is_win: bool) -> void:
 
 func _on_settled(result: String) -> void:
 	print("Settled: %s balance=%d" % [result, state_machine.balance])
+	_update_best_record_text()
 	_update_view()
 
 
@@ -189,6 +202,15 @@ func _update_view() -> void:
 	title_screen.visible = state_machine.is_title()
 	vertical_ui.visible = not state_machine.is_title()
 	vertical_ui.update_snapshot(_ui_snapshot(state_name))
+	_update_best_record_text()
+
+
+func _update_best_record_text() -> void:
+	if not is_node_ready():
+		return
+	best_record_label.text = Data.text("best_record", {
+		"payout": score_service.get_best_payout()
+	})
 
 
 func _ui_snapshot(state_name: String) -> Dictionary:
@@ -210,5 +232,7 @@ func _ui_snapshot(state_name: String) -> Dictionary:
 		"is_reward_decision": state_machine.is_reward_decision(),
 		"is_settle": state_machine.is_settle(),
 		"is_bet_affordable": state_machine.is_bet_affordable(),
+		"is_balance_below_min_bet": state_machine.is_balance_below_min_bet(),
+		"best_payout": score_service.get_best_payout(),
 		"can_advance": state_machine.can_advance()
 	}
