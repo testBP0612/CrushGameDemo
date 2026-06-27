@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "_comment": "各動畫狀態時長與轉場時間（秒）。與 battle_sequences.json 互補：此檔定義單一動畫片段長度，battle_sequences 定義流程節奏。",
+  "hero": {
+    "idle_loop": 1.00,
+    "attack": 0.30,
+    "hurt": 0.35,
+    "defeat": 0.80,
+    "walk_loop": 0.60
+  },
+  "monster": {
+    "idle_loop": 1.00,
+    "hurt": 0.25,
+    "death": 0.60,
+    "enter": 0.40
+  },
+  "transition": {
+    "fade_in": 0.30,
+    "fade_out": 0.30,
+    "scene_shift": 0.50
+  },
+  "ui": {
+    "panel_slide": 0.25,
+    "button_feedback": 0.12,
+    "payout_count_up": 0.40,
+    "settlement_appear": 0.45
+  }
+}

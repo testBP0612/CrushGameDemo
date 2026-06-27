@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "_comment": "所有 UI / 結算 / 按鈕文案的單一真實來源（繁體中文）。Codex 禁止把字串寫死在 script，一律以 key 取用。{x} 為執行期代入變數。",
+  "locale": "zh-TW",
+  "text": {
+    "currency_coins": "金幣",
+
+    "title_game_name": "勇者撤離戰",
+    "title_tap_to_start": "點擊開始",
+
+    "hud_stage": "關卡 {stage}/{max}",
+    "hud_multiplier": "倍率 x{multiplier}",
+    "hud_current_payout": "目前收益 {payout}",
+    "hud_balance": "金幣 {balance}",
+
+    "bet_panel_title": "下注金額",
+    "bet_decrease": "−",
+    "bet_increase": "＋",
+    "bet_confirm": "開始挑戰",
+    "bet_insufficient": "金幣不足",
+
+    "battle_msg_challenging": "正在挑戰 {monster}…",
+    "battle_msg_victory": "擊敗 {monster}！",
+    "battle_msg_defeat": "你被 {monster} 擊倒了…",
+    "battle_msg_max_clear": "全數通關！強制結算",
+
+    "decision_advance": "挑戰下一隻",
+    "decision_cashout": "撤退領取 {payout}",
+
+    "settle_cashout_title": "撤退成功",
+    "settle_cashout_body": "你帶著 {payout} 金幣安全撤離！",
+    "settle_defeat_title": "挑戰失敗",
+    "settle_defeat_body": "本局損失 {bet} 金幣。",
+    "settle_clear_title": "完美通關",
+    "settle_clear_body": "獲得 {payout} 金幣！",
+    "settle_play_again": "再來一局",
+
+    "best_record": "最佳紀錄 {payout}",
+
+    "monster_001_name": "史萊姆",
+    "monster_002_name": "水靈獸",
+    "monster_003_name": "魅影蝠",
+    "monster_004_name": "炎角獸",
+    "monster_005_name": "血牙狼",
+    "monster_006_name": "黃金石像",
+    "monster_007_name": "深海巨蟹",
+    "monster_008_name": "暗影法師",
+    "monster_009_name": "緋紅妖姬",
+    "monster_010_name": "熔岩魔王"
+  }
+}

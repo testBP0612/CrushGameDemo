@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "_comment": "數值單一真實來源。Codex 禁止把這些數字寫死在 script。欄位定義見 Docs/06_DATA_SCHEMA.md。",
+  "currency": {
+    "id": "coins",
+    "display_name_key": "currency_coins",
+    "starting_balance": 1000,
+    "min_bet": 10,
+    "max_bet": 500,
+    "bet_step": 10,
+    "default_bet": 50
+  },
+  "payout": {
+    "_comment": "current_payout = bet * multiplier_at_stage(stage_cleared)。stage 從 1 起算，代表已擊敗的怪物數。",
+    "rounding": "floor",
+    "base_multiplier_at_stage_0": 1.0
+  },
+  "multiplier_curve": [
+    { "stage": 1, "multiplier": 1.30 },
+    { "stage": 2, "multiplier": 1.75 },
+    { "stage": 3, "multiplier": 2.40 },
+    { "stage": 4, "multiplier": 3.40 },
+    { "stage": 5, "multiplier": 5.00 },
+    { "stage": 6, "multiplier": 7.50 },
+    { "stage": 7, "multiplier": 11.50 },
+    { "stage": 8, "multiplier": 18.00 },
+    { "stage": 9, "multiplier": 30.00 },
+    { "stage": 10, "multiplier": 50.00 }
+  ],
+  "success_rate_curve": [
+    { "stage": 1, "success_rate": 0.92 },
+    { "stage": 2, "success_rate": 0.86 },
+    { "stage": 3, "success_rate": 0.80 },
+    { "stage": 4, "success_rate": 0.72 },
+    { "stage": 5, "success_rate": 0.64 },
+    { "stage": 6, "success_rate": 0.56 },
+    { "stage": 7, "success_rate": 0.48 },
+    { "stage": 8, "success_rate": 0.40 },
+    { "stage": 9, "success_rate": 0.32 },
+    { "stage": 10, "success_rate": 0.25 }
+  ],
+  "cashout_rules": {
+    "_comment": "撤退領取目前收益（current_payout）；戰敗則失去本局所有（含已累積收益），僅扣初始下注的損益依 loss_mode。",
+    "can_cashout_after_stage": 1,
+    "loss_mode": "lose_current_payout_and_bet",
+    "cashout_returns": "current_payout"
+  },
+  "stage_progression": {
+    "max_stage": 10,
+    "loop_after_max": false,
+    "_comment": "MVP 最多 10 關；到第 10 關清空後視為通關，強制結算。loop_after_max 為 Future 擴充點。"
+  }
+}

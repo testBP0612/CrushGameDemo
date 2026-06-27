@@ -16,3 +16,15 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# H5 / Web export 輸出
+/export/
+/build/
+*.wasm
+*.pck
+
+# 美術候選稿不進 repo（只保留 Assets/final 與 placeholders）
+# generated/ 為可選暫存區，請勿提交大量探索稿
+Assets/generated/*
+!Assets/generated/README.md
+!Assets/generated/.gdkeep

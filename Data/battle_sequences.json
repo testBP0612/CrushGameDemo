@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "_comment": "戰鬥演出節奏。時間單位為秒。所有節奏由此控制，Codex 禁止寫死。與 Docs/05_ANIMATION_SPEC.md 對應。",
+  "attack_sequence": {
+    "_comment": "主角對怪物連擊。實際擊數取 monsters.json 的 attack_hits_range 隨機。",
+    "hit_interval": 0.35,
+    "first_hit_delay": 0.20,
+    "damage_per_hit_ratio": 0.34,
+    "_damage_comment": "每擊扣怪物 display_hp 的比例（演出用，非真實數值，最後一擊保證歸零）。"
+  },
+  "result_resolution": {
+    "_comment": "成功/失敗在連擊播完後依 game_balance.success_rate_curve 判定。",
+    "resolve_after_attack": true,
+    "win_branch": {
+      "monster_hurt_duration": 0.25,
+      "monster_death_duration": 0.60,
+      "payout_update_delay": 0.20
+    },
+    "lose_branch": {
+      "monster_counter_duration": 0.40,
+      "player_hurt_duration": 0.35,
+      "defeat_settle_delay": 0.50
+    }
+  },
+  "advance_sequence": {
+    "_comment": "玩家選擇挑戰下一隻時的轉場。",
+    "hero_walk_duration": 0.80,
+    "transition_duration": 0.50,
+    "next_monster_enter_duration": 0.40
+  },
+  "damage_number": {
+    "rise_distance": 60,
+    "rise_duration": 0.50,
+    "fade_duration": 0.30,
+    "stagger_between_hits": 0.05
+  }
+}
