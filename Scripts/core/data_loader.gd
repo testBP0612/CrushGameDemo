@@ -1,5 +1,5 @@
 class_name DataLoader
-extends RefCounted
+extends Node
 
 const DATA_PATHS := {
 	"game_balance": "res://Data/game_balance.json",
@@ -10,10 +10,17 @@ const DATA_PATHS := {
 }
 
 var _data: Dictionary = {}
+var _loaded := false
+
+
+func _ready() -> void:
+	if not load_all():
+		push_error("DataLoader autoload failed to load Data/*.json.")
 
 
 func load_all() -> bool:
 	_data.clear()
+	_loaded = false
 
 	for key: String in DATA_PATHS:
 		var path: String = DATA_PATHS[key]
@@ -29,7 +36,12 @@ func load_all() -> bool:
 
 		_data[key] = parsed
 
+	_loaded = true
 	return true
+
+
+func is_loaded() -> bool:
+	return _loaded
 
 
 func text(key: String, vars: Dictionary = {}) -> String:
@@ -46,6 +58,14 @@ func text(key: String, vars: Dictionary = {}) -> String:
 
 func balance_config() -> Dictionary:
 	return _data.get("game_balance", {}).get("currency", {})
+
+
+func payout_config() -> Dictionary:
+	return _data.get("game_balance", {}).get("payout", {})
+
+
+func stage_progression_config() -> Dictionary:
+	return _data.get("game_balance", {}).get("stage_progression", {})
 
 
 func multiplier_at(stage: int) -> float:

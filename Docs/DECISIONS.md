@@ -39,3 +39,12 @@
   6. 素材缺失時 Codex 必須 fallback placeholder，不可讓遊戲壞掉。
 - **原因**：縮短工期、降低 Git 體積與流程負擔，且不讓美術阻塞遊戲本體。
 - **影響**：`Planning/03`、`Planning/06`、`Codex/00`、`Codex/08`、`Assets/*/README.md`、`.gitignore`。
+
+## D-005：DataLoader 改為 autoload 單例 `Data`
+- **問題**：任務 01 的 `DataLoader` 是 `game_controller` 的私有成員，但任務 02 起的狀態機/收益/判定都需要同一份資料，放著會各自重複載入或互相耦合。
+- **選項**：A. autoload 單例 `Data`；B. game_controller 持有並注入傳遞。
+- **AI 建議**：A。
+- **人類決策**：採 A，已於任務 02 落實並驗證。
+- **原因**：資料是全專案共用的單一真實來源，autoload 最乾淨、避免重複載入。
+- **實作**：`data_loader.gd` 改 `extends Node`、`_ready()` 自動 `load_all()`、新增 `is_loaded()`；`project.godot` 註冊 `Data="*res://Scripts/core/data_loader.gd"`。
+- **影響**：所有系統透過全域 `Data` 取值，不得各自重新載入。

@@ -57,3 +57,77 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 44
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="UILayer/TitleScreen/TitleLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+
+[node name="DebugPanel" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DebugLayout" type="VBoxContainer" parent="UILayer/DebugPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -430.0
+offset_top = -300.0
+offset_right = 430.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="StatusLabel" type="Label" parent="UILayer/DebugPanel/DebugLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BetRow" type="HBoxContainer" parent="UILayer/DebugPanel/DebugLayout"]
+layout_mode = 2
+alignment = 1
+
+[node name="DecreaseButton" type="Button" parent="UILayer/DebugPanel/DebugLayout/BetRow"]
+custom_minimum_size = Vector2(120, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+
+[node name="BetLabel" type="Label" parent="UILayer/DebugPanel/DebugLayout/BetRow"]
+custom_minimum_size = Vector2(240, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IncreaseButton" type="Button" parent="UILayer/DebugPanel/DebugLayout/BetRow"]
+custom_minimum_size = Vector2(120, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+
+[node name="ConfirmBetButton" type="Button" parent="UILayer/DebugPanel/DebugLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+
+[node name="DecisionRow" type="HBoxContainer" parent="UILayer/DebugPanel/DebugLayout"]
+layout_mode = 2
+alignment = 1
+
+[node name="CashoutButton" type="Button" parent="UILayer/DebugPanel/DebugLayout/DecisionRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+
+[node name="AdvanceButton" type="Button" parent="UILayer/DebugPanel/DebugLayout/DecisionRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+
+[node name="SettleButton" type="Button" parent="UILayer/DebugPanel/DebugLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44

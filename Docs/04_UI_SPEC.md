@@ -51,12 +51,12 @@ Main (Node2D)  [Scripts/core/game_controller.gd]
 │   ├─ MonsterHpBar (ProgressBar/TextureProgressBar)
 │   └─ DamageNumberLayer (Node2D)
 └─ UILayer (CanvasLayer)
-    ├─ TitleScreen (Control)
-    ├─ Hud (Control)            # 關卡/倍率/收益/餘額
-    ├─ BattleMessage (Label)
-    ├─ BetPanel (Control)       # − 金額 ＋ / 開始挑戰
-    ├─ DecisionPanel (Control)  # 撤退領取 / 挑戰下一隻
-    └─ SettlementPanel (Control)
+	├─ TitleScreen (Control)
+	├─ Hud (Control)            # 關卡/倍率/收益/餘額
+	├─ BattleMessage (Label)
+	├─ BetPanel (Control)       # − 金額 ＋ / 開始挑戰
+	├─ DecisionPanel (Control)  # 撤退領取 / 挑戰下一隻
+	└─ SettlementPanel (Control)
 ```
 
 ## 五、互動狀態
