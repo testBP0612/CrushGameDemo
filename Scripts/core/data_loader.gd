@@ -68,6 +68,14 @@ func stage_progression_config() -> Dictionary:
 	return _data.get("game_balance", {}).get("stage_progression", {})
 
 
+func battle_sequence_config() -> Dictionary:
+	return _data.get("battle_sequences", {})
+
+
+func animation_timing_config() -> Dictionary:
+	return _data.get("animation_timing", {})
+
+
 func multiplier_at(stage: int) -> float:
 	var balance_data: Dictionary = _data.get("game_balance", {})
 	if stage == 0:

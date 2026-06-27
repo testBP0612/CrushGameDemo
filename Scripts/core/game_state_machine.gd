@@ -100,7 +100,6 @@ func confirm_bet() -> bool:
 	event_bus.bet_confirmed.emit(bet)
 	_set_state(State.CHALLENGE_START)
 	_set_state(State.BATTLE_ATTACK)
-	finish_attack()
 	return true
 
 
@@ -115,11 +114,35 @@ func finish_attack() -> void:
 
 	if is_win:
 		_set_state(State.MONSTER_HURT)
-		_set_state(State.MONSTER_DEATH)
 	else:
 		_set_state(State.MONSTER_COUNTER)
-		_set_state(State.PLAYER_HURT)
-		_set_state(State.DEFEAT_SETTLE)
+
+
+func finish_monster_hurt() -> void:
+	if state != State.MONSTER_HURT:
+		return
+	_set_state(State.MONSTER_DEATH)
+
+
+func finish_monster_death() -> void:
+	if state != State.MONSTER_DEATH:
+		return
+	if stage >= max_stage():
+		_set_state(State.CLEAR_SETTLE)
+	else:
+		_set_state(State.REWARD_DECISION)
+
+
+func finish_monster_counter() -> void:
+	if state != State.MONSTER_COUNTER:
+		return
+	_set_state(State.PLAYER_HURT)
+
+
+func finish_player_hurt() -> void:
+	if state != State.PLAYER_HURT:
+		return
+	_set_state(State.DEFEAT_SETTLE)
 
 
 func cash_out() -> void:
@@ -139,10 +162,19 @@ func advance() -> void:
 
 	event_bus.advance_requested.emit()
 	_set_state(State.ADVANCE_WALK)
+
+
+func finish_advance_walk() -> void:
+	if state != State.ADVANCE_WALK:
+		return
 	_set_state(State.TRANSITION)
+
+
+func finish_transition() -> void:
+	if state != State.TRANSITION:
+		return
 	_set_state(State.CHALLENGE_START)
 	_set_state(State.BATTLE_ATTACK)
-	finish_attack()
 
 
 func acknowledge_settle() -> void:
@@ -177,6 +209,19 @@ func is_reward_decision() -> bool:
 
 func is_settle() -> bool:
 	return state in [State.CASH_OUT_SETTLE, State.DEFEAT_SETTLE, State.CLEAR_SETTLE]
+
+
+func is_input_locked() -> bool:
+	return state in [
+		State.CHALLENGE_START,
+		State.BATTLE_ATTACK,
+		State.MONSTER_HURT,
+		State.MONSTER_DEATH,
+		State.ADVANCE_WALK,
+		State.TRANSITION,
+		State.MONSTER_COUNTER,
+		State.PLAYER_HURT
+	]
 
 
 func is_bet_affordable() -> bool:
@@ -232,11 +277,6 @@ func _enter_monster_death() -> void:
 	stage += 1
 	_update_payout()
 	event_bus.stage_advanced.emit(stage, current_multiplier, current_payout)
-
-	if stage >= max_stage():
-		_set_state(State.CLEAR_SETTLE)
-	else:
-		_set_state(State.REWARD_DECISION)
 
 
 func _enter_reward_decision() -> void:

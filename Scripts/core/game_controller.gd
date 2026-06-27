@@ -4,6 +4,7 @@ const EventBusScript := preload("res://Scripts/core/event_bus.gd")
 const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.gd")
 
 @onready var title_screen: Control = $UILayer/TitleScreen
+@onready var battle_presenter = $BattleScene
 @onready var title_label: Label = $UILayer/TitleScreen/TitleLayout/TitleLabel
 @onready var best_record_label: Label = $UILayer/TitleScreen/TitleLayout/BestRecordLabel
 @onready var start_button: Button = $UILayer/TitleScreen/TitleLayout/StartButton
@@ -27,6 +28,7 @@ func _ready() -> void:
 	state_machine.setup(event_bus)
 	_connect_events()
 	_connect_buttons()
+	_connect_battle_presenter()
 	_apply_static_text()
 	debug_panel.visible = false
 
@@ -53,6 +55,16 @@ func _connect_buttons() -> void:
 	cashout_button.pressed.connect(_on_cashout_pressed)
 	advance_button.pressed.connect(_on_advance_pressed)
 	settle_button.pressed.connect(_on_settle_pressed)
+
+
+func _connect_battle_presenter() -> void:
+	battle_presenter.attack_sequence_finished.connect(_on_attack_sequence_finished)
+	battle_presenter.monster_hurt_finished.connect(_on_monster_hurt_finished)
+	battle_presenter.monster_death_finished.connect(_on_monster_death_finished)
+	battle_presenter.advance_walk_finished.connect(_on_advance_walk_finished)
+	battle_presenter.transition_finished.connect(_on_transition_finished)
+	battle_presenter.monster_counter_finished.connect(_on_monster_counter_finished)
+	battle_presenter.player_hurt_finished.connect(_on_player_hurt_finished)
 
 
 func _apply_static_text() -> void:
@@ -101,8 +113,9 @@ func _on_settle_pressed() -> void:
 	_update_view()
 
 
-func _on_state_changed(_state_name: String) -> void:
+func _on_state_changed(state_name: String) -> void:
 	_update_view()
+	_play_presentation_for_state(state_name)
 
 
 func _on_balance_changed(_balance: int) -> void:
@@ -128,6 +141,55 @@ func _on_settled(result: String) -> void:
 	_update_view()
 
 
+func _on_attack_sequence_finished(hit_count: int) -> void:
+	print("Attack sequence finished: hit_count=%d" % hit_count)
+	state_machine.finish_attack()
+
+
+func _on_monster_hurt_finished() -> void:
+	state_machine.finish_monster_hurt()
+
+
+func _on_monster_death_finished() -> void:
+	state_machine.finish_monster_death()
+
+
+func _on_advance_walk_finished() -> void:
+	state_machine.finish_advance_walk()
+
+
+func _on_transition_finished() -> void:
+	state_machine.finish_transition()
+
+
+func _on_monster_counter_finished() -> void:
+	state_machine.finish_monster_counter()
+
+
+func _on_player_hurt_finished() -> void:
+	state_machine.finish_player_hurt()
+
+
+func _play_presentation_for_state(state_name: String) -> void:
+	match state_name:
+		"BETTING":
+			battle_presenter.reset_for_betting()
+		"BATTLE_ATTACK":
+			battle_presenter.play_attack_sequence(state_machine.stage_to_challenge())
+		"MONSTER_HURT":
+			battle_presenter.play_monster_hurt()
+		"MONSTER_DEATH":
+			battle_presenter.play_monster_death()
+		"ADVANCE_WALK":
+			battle_presenter.play_advance_walk()
+		"TRANSITION":
+			battle_presenter.play_transition(state_machine.stage_to_challenge())
+		"MONSTER_COUNTER":
+			battle_presenter.play_monster_counter()
+		"PLAYER_HURT":
+			battle_presenter.play_player_hurt()
+
+
 func _update_view() -> void:
 	if not is_node_ready():
 		return
@@ -143,12 +205,16 @@ func _update_view() -> void:
 	status_label.text = "%s\n%s\n%s\n%s\n%s" % [state_name, stage_text, multiplier_text, payout_text, balance_text]
 
 	bet_label.text = str(state_machine.bet)
-	confirm_bet_button.disabled = not state_machine.is_betting() or not state_machine.is_bet_affordable()
-	decrease_button.disabled = not state_machine.is_betting()
-	increase_button.disabled = not state_machine.is_betting()
+	var input_locked := state_machine.is_input_locked()
+	confirm_bet_button.disabled = input_locked or not state_machine.is_betting() or not state_machine.is_bet_affordable()
+	decrease_button.disabled = input_locked or not state_machine.is_betting()
+	increase_button.disabled = input_locked or not state_machine.is_betting()
 
 	decision_row.visible = state_machine.is_reward_decision()
 	cashout_button.text = Data.text("decision_cashout", {"payout": state_machine.current_payout})
+	cashout_button.disabled = input_locked
 	advance_button.visible = state_machine.can_advance()
+	advance_button.disabled = input_locked
 
 	settle_button.visible = state_machine.is_settle()
+	settle_button.disabled = input_locked

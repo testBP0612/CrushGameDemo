@@ -36,5 +36,6 @@ AI 提問（OPEN_QUESTIONS / 對話）
 | D-003 | 美術風格由美術同事決定，Claude 只定規格 | 定案 |
 | D-004 | placeholder-first + art-parallel（輕量素材流程） | 定案 |
 | D-005 | DataLoader 改為 autoload 單例 `Data` | 定案 |
+| D-006 | 畫面分區改用具體座標契約 + 版面不變量 | 定案 |
 
 > 新決策請同步更新本表與 `Docs/DECISIONS.md`。
