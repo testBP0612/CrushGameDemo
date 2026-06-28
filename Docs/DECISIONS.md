@@ -86,3 +86,14 @@
 - **保留**：`Assets/ART_ASSET_MANIFEST.md` 留在 `Assets/`（與實體素材 locality；Codex/08 在該處讀），由 `Art/README` 連過去。
 - **原因**：給美術同事一個清楚入口；同時遵守「會被機器讀的路徑不可亂搬」(D-006 教訓)。
 - **影響**：全 repo 對上述三檔的引用已同步更新（AGENTS/README/Codex/08/Docs/04/OPEN_QUESTIONS/manifest/Assets READMEs/Planning/01/06 等），無斷連。`ART_CONTRACT.md` 為路徑搬遷非內容變更，不觸發 Freeze 變更程序。
+
+## D-011：背景改為分區（資料驅動，Contract 升 v1.1）
+- **問題**：要支援多張背景做「分區」變化，但素材清單屬 Contract 鎖定項。
+- **流程**：經 `Q-ART-001` 提出 → 人類核准 → Art Contract `v1.0 → v1.1`（正規 Freeze 變更示範）。
+- **人類決策**：3 張背景、分區制——關 1–3 用 `background_battle_001`、4–6 用 `002`、7–10 用 `003`。
+- **實作（資料驅動 + 可擴充）**：
+  - `Data/game_balance.json > background_zones`：`zones[]`（from_stage/to_stage/background_id）+ `default_background_id` + `fallback_background_id`。要加場景只要加 zone/檔，命名續用 `background_battle_004…`。
+  - manifest 新增 `002/003`（recommended）；`001` 仍 required。
+  - **缺檔不崩**：某 zone 背景缺 → 退 `fallback_background_id`（001）→ 再退漸層 placeholder。
+- **接入**：Codex 在 `task 08` 讀 `background_zones`、依「即將挑戰的關卡」切換 `BattleScene` 背景；需在 Godot 目視確認。
+- **影響**：`Art/ART_CONTRACT.md`(v1.1)、`Assets/ART_ASSET_MANIFEST.md`、`Data/game_balance.json`、`Docs/06`、`Codex/08`。

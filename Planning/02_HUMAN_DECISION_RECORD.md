@@ -41,5 +41,6 @@ AI 提問（OPEN_QUESTIONS / 對話）
 | D-008 | MVP 不做音效，只預留接口與空缺清單（Q-002） | 定案 |
 | D-009 | H5 字型改用 OFL 開源字型（粉圓 + Baloo 2），移除 kaiu.ttf | 定案 |
 | D-010 | 美術文件集中到 `Art/` 文件中心（Assets 二進位不動） | 定案 |
+| D-011 | 背景改為分區（3 張、資料驅動、Contract 升 v1.1） | 定案 |
 
 > 新決策請同步更新本表與 `Docs/DECISIONS.md`。

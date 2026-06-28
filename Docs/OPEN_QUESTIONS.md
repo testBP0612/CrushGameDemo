@@ -62,3 +62,11 @@
 - AI 建議：A（保留視覺目標，方便 task 04/後續 review 精準對齊）。
 - 影響範圍：`04_H5_VERTICAL_UI`、後續 UI/美術檢查。
 - 人類回答：已填入
+
+### Q-ART-001：背景改為分區（新增 background_battle_002/003）
+- 狀態：ANSWERED（核准 → 見 DECISIONS D-011，Contract 升 v1.1）
+- 想改什麼：必要素材清單（新增 recommended 背景 `background_battle_002`、`background_battle_003`）+ 新增資料驅動的背景選用機制。
+- 原因：讓整局有「越闖越深」的分區層次（關 1–3 / 4–6 / 7–10 各一張背景）。
+- 影響：`Art/ART_CONTRACT.md`（v1.0→v1.1）、`Assets/ART_ASSET_MANIFEST.md`（+2 背景）、`Data/game_balance.json`（+`background_zones`）、`Docs/06`、`Codex/08`（接入需依 zone 選圖 + fallback）。
+- 建議新版本號：v1.1
+- 人類裁示：同意升版（規格沿用 001：1080×1920、不透明；缺檔 fallback 不阻塞）。

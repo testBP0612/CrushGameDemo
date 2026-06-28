@@ -23,6 +23,9 @@
 | `cashout_rules.cashout_returns` | string | 撤退返還對象（`current_payout`）。 |
 | `stage_progression.max_stage` | int | MVP 最多 10 關。 |
 | `stage_progression.loop_after_max` | bool | Future 擴充點，MVP 為 false。 |
+| `background_zones.default_background_id` | string | 預設背景（如 BETTING/未涵蓋關卡）。 |
+| `background_zones.fallback_background_id` | string | 某 zone 背景缺檔時優先退用的背景；仍缺則退漸層 placeholder。 |
+| `background_zones.zones[]` | array | `{ from_stage:int, to_stage:int, background_id:string }`，依「即將挑戰的關卡」選背景。可擴充更多 zone。 |
 
 ## monsters.json
 | 路徑 | 型別 | 說明 |

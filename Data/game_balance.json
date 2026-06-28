@@ -50,5 +50,15 @@
     "max_stage": 10,
     "loop_after_max": false,
     "_comment": "MVP 最多 10 關；到第 10 關清空後視為通關，強制結算。loop_after_max 為 Future 擴充點。"
+  },
+  "background_zones": {
+    "_comment": "分區背景（資料驅動，可擴充）。依『即將挑戰的關卡』落在哪個 zone 選背景。zones 須涵蓋 1~max_stage；缺圖時 Codex 依 fallback_background_id 再退到漸層 placeholder，不可崩。",
+    "default_background_id": "background_battle_001",
+    "fallback_background_id": "background_battle_001",
+    "zones": [
+      { "from_stage": 1, "to_stage": 3, "background_id": "background_battle_001" },
+      { "from_stage": 4, "to_stage": 6, "background_id": "background_battle_002" },
+      { "from_stage": 7, "to_stage": 10, "background_id": "background_battle_003" }
+    ]
   }
 }

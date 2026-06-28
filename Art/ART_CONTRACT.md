@@ -1,6 +1,6 @@
 # Art Contract（給 Magnific / 美術同事）
 
-> **狀態：v1.0 locked** 🔒
+> **狀態：v1.1 locked** 🔒（v1.1 變更見文末 changelog / `DECISIONS.md` D-011）
 > 本檔是**不可變規格合約**。美術同事與 Codex **都必須遵守**。
 > 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `ART_DIRECTION_NOTES.md`。
 >
@@ -24,7 +24,8 @@
 ## 二、必要素材清單（MVP）
 完整逐項清單見 `Assets/ART_ASSET_MANIFEST.md`（含每項 file_name / path / 是否必要）。摘要：
 - **MVP Required**：主角 `hero_idle / hero_attack / hero_hurt / hero_defeat`；怪物 `monster_001_idle`~`monster_005_idle`；背景 `background_battle_001`。
-- **Optional**：`game_logo`、`ui_panel_style_reference`、`hero_walk`、怪物 hurt/death、各式特效、6~10 隻怪物。
+- **Recommended（v1.1 新增）**：分區背景 `background_battle_002`、`background_battle_003`（依 `Data/game_balance.json > background_zones` 選用；缺檔可 fallback，不阻塞）。
+- **Optional**：`game_logo`、`ui_panel_style_reference`、`hero_walk`、怪物 hurt/death、各式特效、6~10 隻怪物、更多分區背景 `background_battle_004…`。
 
 > Data JSON 已寫 10 隻怪物，但 **MVP 美術只需前 5 隻**；6~10 隻缺圖時遊戲以 placeholder 呈現。
 
@@ -81,4 +82,8 @@
 - 風格自由，但**面向、透明、檔名、尺寸**必須符合本合約。
 
 ---
-**版本**：v1.0 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。
+## Changelog
+- **v1.1**（`Q-ART-001` / `DECISIONS.md` D-011）：背景改為**分區**，新增 recommended `background_battle_002`、`background_battle_003`（規格同 001：1080×1920、不透明）；實際選用由 `Data/game_balance.json > background_zones` 資料驅動，命名可續擴 `004…`。其餘規格不變。
+- **v1.0**：初版鎖定。
+
+**版本**：v1.1 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。

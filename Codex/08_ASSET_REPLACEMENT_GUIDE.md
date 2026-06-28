@@ -19,6 +19,7 @@
 - **不得依賴 `Assets/generated/`**。
 
 ## 實作要求
+0. **分區背景（D-011）**：背景改為依 `Data/game_balance.json > background_zones` 選用——依「即將挑戰的關卡」落在哪個 zone，載入對應 `background_<id>.png` 到 `BattleScene` 背景；切換關卡/轉場時更新。缺某 zone 背景 → 退 `fallback_background_id`（001）→ 再退漸層 placeholder，**不可崩**。時長/節奏仍讀 JSON。實作後在 Godot 目視確認分區切換正確。
 1. 對每個 manifest 條目：`Assets/final/` 有檔 → 接入正式素材；無檔 → 保留 `fallback_placeholder`，**遊戲不可崩**。
 2. 接入後更新 manifest 的 `status` 為 `imported`（這是 manifest 的資料欄位，非 Contract 規格，允許更新）。
 3. 若某素材不符合 Contract（尺寸/透明/面向錯誤），**不要硬接**，登記 `Q-ART-XXX` 並維持 placeholder。
