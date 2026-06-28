@@ -40,7 +40,8 @@
 6. `06_FEEL_AND_EFFECTS`
 7. `07_DATA_BALANCE_TUNING`
 8. `09_UI_FEEL_AND_PACING`（UI 進場微動畫 + 提示文字節奏；排在 07 之後、與 08 獨立）
-9. `08_ASSET_REPLACEMENT_GUIDE`（最後做，需 `Assets/final/` 美術就緒）
+9. `10_UI_SKIN_ALIGNMENT`（UI 視覺貼齊參考圖；只動視覺不動功能；用 agent-sprite-forge 生 UI 圖）
+10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
