@@ -46,9 +46,9 @@
 ### 背景（分區，依 game_balance.json `background_zones` 選用）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| background_battle_001 | background_battle_001.png | Assets/final/ | required | PNG24/32 | no | n/a | 戰鬥背景 zone 1（關 1–3） | Scenes/BattleScene | 漸層底色 | final | 美術 | 1080×1920滿版；目前交付 941×1672（比例正確、解析略低，task 08 接入無礙） |
-| background_battle_002 | background_battle_002.png | Assets/final/ | recommended | PNG24/32 | no | n/a | 戰鬥背景 zone 2（關 4–6） | Scenes/BattleScene | 退 background_battle_001→漸層 | planned | 美術 | 1080×1920滿版 |
-| background_battle_003 | background_battle_003.png | Assets/final/ | recommended | PNG24/32 | no | n/a | 戰鬥背景 zone 3（關 7–10） | Scenes/BattleScene | 退 background_battle_001→漸層 | planned | 美術 | 1080×1920滿版 |
+| background_battle_001 | background_battle_001.png | Assets/final/ | required | PNG24/32 | no | n/a | 戰鬥背景 zone 1（關 1–3） | Scenes/BattleScene | 漸層底色 | imported | 美術 | 1080×1920滿版；目前交付 941×1672（比例正確、解析略低，task 08 接入無礙） |
+| background_battle_002 | background_battle_002.png | Assets/final/ | recommended | PNG24/32 | no | n/a | 戰鬥背景 zone 2（關 4–6） | Scenes/BattleScene | 退 background_battle_001→漸層 | imported | 美術 | 1080×1920滿版 |
+| background_battle_003 | background_battle_003.png | Assets/final/ | recommended | PNG24/32 | no | n/a | 戰鬥背景 zone 3（關 7–10） | Scenes/BattleScene | 退 background_battle_001→漸層 | imported | 美術 | 1080×1920滿版 |
 
 > 背景採**分區**：實際用哪張由 `Data/game_balance.json > background_zones` 決定（可擴充更多 zone/背景）。
 > `001` 為 required（至少要有一張）；`002/003` recommended，缺檔時依 `fallback_background_id` 退 `001`、再退漸層 placeholder，遊戲不崩。命名沿用 `background_battle_<序號>` 可繼續往後加（004…）。

@@ -68,6 +68,22 @@ func stage_progression_config() -> Dictionary:
 	return _data.get("game_balance", {}).get("stage_progression", {})
 
 
+func background_zones_config() -> Dictionary:
+	return _data.get("game_balance", {}).get("background_zones", {})
+
+
+func background_id_for_stage(stage: int) -> String:
+	var background_config := background_zones_config()
+	var default_background_id := str(background_config.get("default_background_id", ""))
+	for zone: Dictionary in background_config.get("zones", []):
+		var from_stage := int(zone.get("from_stage", -1))
+		var to_stage := int(zone.get("to_stage", -1))
+		if stage >= from_stage and stage <= to_stage:
+			return str(zone.get("background_id", default_background_id))
+
+	return default_background_id
+
+
 func battle_sequence_config() -> Dictionary:
 	return _data.get("battle_sequences", {})
 

@@ -13,7 +13,11 @@ signal hit_landed
 const DamageNumberScript := preload("res://Scripts/effects/damage_number.gd")
 const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
 const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
+const BACKGROUND_ASSET_DIR := "res://Assets/final/"
+const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
 
+@onready var background_fallback: ColorRect = $Background
+@onready var background_image: TextureRect = $BackgroundImage
 @onready var hero = $Hero
 @onready var monster = $Monster
 @onready var monster_name_label: Label = $MonsterNameLabel
@@ -22,14 +26,19 @@ const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
 @onready var transition_overlay: ColorRect = $TransitionOverlay
 
 var _current_monster: Dictionary = {}
+var _current_background_path := ""
 
 
 func _ready() -> void:
+	_configure_background_image()
 	transition_overlay.modulate.a = 0.0
 	show_monster_for_stage(1)
 
 
-func show_monster_for_stage(stage_to_challenge: int) -> void:
+func show_monster_for_stage(stage_to_challenge: int, update_background := true) -> void:
+	if update_background:
+		_show_background_for_stage(stage_to_challenge)
+
 	_current_monster = Data.monster_for_stage(stage_to_challenge)
 	if _current_monster.is_empty():
 		return
@@ -117,7 +126,8 @@ func play_player_hurt() -> void:
 
 func reset_for_betting() -> void:
 	hero.reset_pose()
-	show_monster_for_stage(1)
+	_show_default_background()
+	show_monster_for_stage(1, false)
 
 
 func _apply_hit_damage(damage: int) -> void:
@@ -138,3 +148,72 @@ func _play_hit_feel() -> void:
 	var duration := float(Data.animation_timing_config().get("monster", {}).get("hurt", 0.0))
 	HitFlash.play(monster.body, duration)
 	ScreenShake.play(self, duration, 14.0)
+
+
+func _configure_background_image() -> void:
+	background_image.position = Vector2.ZERO
+	background_image.size = BATTLE_CANVAS_SIZE
+	background_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	background_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background_image.visible = false
+
+
+func _show_background_for_stage(stage_to_challenge: int) -> void:
+	_apply_background_id(Data.background_id_for_stage(stage_to_challenge))
+
+
+func _show_default_background() -> void:
+	var background_config := Data.background_zones_config()
+	var default_background_id := str(background_config.get("default_background_id", ""))
+	if default_background_id.is_empty():
+		default_background_id = Data.background_id_for_stage(1)
+	_apply_background_id(default_background_id)
+
+
+func _apply_background_id(background_id: String) -> void:
+	var resolved_path := _resolve_background_path(background_id)
+	if resolved_path.is_empty():
+		_current_background_path = ""
+		background_image.texture = null
+		background_image.visible = false
+		background_fallback.visible = true
+		return
+
+	if resolved_path == _current_background_path:
+		return
+
+	var texture := load(resolved_path) as Texture2D
+	if texture == null:
+		push_error("BattlePresenter failed to load background texture: %s" % resolved_path)
+		_current_background_path = ""
+		background_image.texture = null
+		background_image.visible = false
+		background_fallback.visible = true
+		return
+
+	_current_background_path = resolved_path
+	background_image.texture = texture
+	background_image.visible = true
+	background_fallback.visible = false
+
+
+func _resolve_background_path(background_id: String) -> String:
+	if _background_asset_exists(background_id):
+		return _background_path(background_id)
+
+	var background_config := Data.background_zones_config()
+	var fallback_background_id := str(background_config.get("fallback_background_id", ""))
+	if fallback_background_id != background_id and _background_asset_exists(fallback_background_id):
+		return _background_path(fallback_background_id)
+
+	return ""
+
+
+func _background_asset_exists(background_id: String) -> bool:
+	var path := _background_path(background_id)
+	return not background_id.is_empty() and FileAccess.file_exists(path) and ResourceLoader.exists(path, "Texture2D")
+
+
+func _background_path(background_id: String) -> String:
+	return "%s%s.png" % [BACKGROUND_ASSET_DIR, background_id]

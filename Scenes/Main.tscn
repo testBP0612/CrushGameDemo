@@ -17,6 +17,14 @@ offset_right = 1080.0
 offset_bottom = 1920.0
 color = Color(0.105882, 0.137255, 0.180392, 1)
 
+[node name="BackgroundImage" type="TextureRect" parent="BattleScene"]
+texture_filter = 2
+offset_right = 1080.0
+offset_bottom = 1920.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
 [node name="Hero" type="Node2D" parent="BattleScene" unique_id=81658566]
 position = Vector2(250, 1060)
 script = ExtResource("3_hero_actor")
