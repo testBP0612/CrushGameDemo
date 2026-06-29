@@ -70,3 +70,11 @@
 - 影響：`Art/ART_CONTRACT.md`（v1.0→v1.1）、`Assets/ART_ASSET_MANIFEST.md`（+2 背景）、`Data/game_balance.json`（+`background_zones`）、`Docs/06`、`Codex/08`（接入需依 zone 選圖 + fallback）。
 - 建議新版本號：v1.1
 - 人類裁示：同意升版（規格沿用 001：1080×1920、不透明；缺檔 fallback 不阻塞）。
+
+### Q-ART-002：新增 UI 素材類別（icon 貼紙；面板/按鈕改程式皮膚）
+- 狀態：ANSWERED（核准 → 見 DECISIONS D-012，Contract 升 v1.2）
+- 想改什麼：manifest 新增「UI 素材」類別（icon 貼紙）；面板/按鈕外框改由程式 StyleBoxFlat 畫，不走美術框貼圖。
+- 原因：UI 視覺貼齊貓咪參考圖；粗描邊/份量用程式參數最可控（task 10 Round 2.1）。
+- 影響：`Art/ART_CONTRACT.md`（v1.1→v1.2，補 UI 類別與「外框程式畫」原則）、`Assets/ART_ASSET_MANIFEST.md`（+UI icon 區段）、`Scripts/ui/ui_skin.gd`、`Codex/10`。
+- 建議新版本號：v1.2
+- 人類裁示：同意（icon 用生成貼紙；框/按鈕程式畫；移除未使用的框貼圖）。

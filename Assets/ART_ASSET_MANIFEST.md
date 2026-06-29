@@ -61,6 +61,27 @@
 
 ---
 
+## UI 素材（程式皮膚 + icon 貼紙；見 DECISIONS D-012 / Q-ART-002）
+> 面板/按鈕/chip 的**外框與底色由程式 StyleBoxFlat 畫**（`Scripts/ui/ui_skin.gd`，深藍 8px 描邊），**不使用框貼圖**。
+> UI 只需 **icon 貼紙**。實際載入 `runtime/<id>_48.png`（48px）；`Assets/final/ui/<id>.png` 為全尺寸母檔（供重出）。
+> 風格：流浪貓街頭、美式 cartoon、厚描邊、貼紙感（同背景家族）。
+
+| asset_id | file_name（母檔 / 載入） | target_path | required | transparent | status | notes |
+|---|---|---|---|---|---|---|
+| icon_stage | icon_stage.png / runtime/icon_stage_48.png | Assets/final/ui/ | imported | yes | imported | HUD 關卡（貓爪） |
+| icon_multiplier | icon_multiplier.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | HUD 倍率（閃電） |
+| icon_payout | icon_payout.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | HUD 收益（魚乾/魚骨） |
+| icon_coin | icon_coin.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 金幣膠囊 |
+| icon_paw | icon_paw.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 開始挑戰/挑戰下一隻 |
+| icon_backpack | icon_backpack.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 撤退領取 |
+| icon_plus / icon_minus | icon_plus.png / icon_minus.png（+ _48） | Assets/final/ui/ | imported | yes | imported | 下注 ＋／− |
+| icon_cat_can | icon_cat_can.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 結算裝飾 |
+| icon_warning | icon_warning.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 金幣不足提示 |
+
+> 已移除：原生成的 9-slice 框/chip 貼圖（`ui_panel_*`、`ui_btn_*`、`ui_chip*`）——改程式畫後未使用故刪除。
+
+---
+
 ## Optional / Future（缺圖以 placeholder 呈現，不阻塞 MVP）
 | asset_id | required | fallback | notes |
 |---|---|---|---|

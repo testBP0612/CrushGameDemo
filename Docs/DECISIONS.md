@@ -97,3 +97,14 @@
   - **缺檔不崩**：某 zone 背景缺 → 退 `fallback_background_id`（001）→ 再退漸層 placeholder。
 - **接入**：Codex 在 `task 08` 讀 `background_zones`、依「即將挑戰的關卡」切換 `BattleScene` 背景；需在 Godot 目視確認。
 - **影響**：`Art/ART_CONTRACT.md`(v1.1)、`Assets/ART_ASSET_MANIFEST.md`、`Data/game_balance.json`、`Docs/06`、`Codex/08`。
+
+## D-012：UI 採「程式皮膚 + icon 貼紙」（Contract 升 v1.2）
+- **問題**：UI 要貼齊貓咪參考圖；agent-sprite-forge 生成的框貼圖描邊太細、無法控制粗細/顏色。
+- **流程**：經 `Q-ART-002` 提出 → 人類核准 → Art Contract `v1.1 → v1.2`。
+- **人類決策**：
+  - 面板/按鈕/chip 的**外框與底色由程式 `StyleBoxFlat` 畫**（深藍 8px 描邊、圓角 32/28、柔和陰影），不使用美術框貼圖。
+  - 數字/標題份量用 `Label outline_size`（深藍）補。
+  - UI 美術只需 **icon 貼紙**（生成）；實際載入 `runtime/<id>_48.png`，全尺寸為母檔。
+- **原因**：粗描邊/份量用程式參數最可控、可量化、確定性命中（task 10 Round 2/2.1 的教訓：別把結構性描邊交給生成圖）。
+- **實作**：`Scripts/ui/ui_skin.gd`（`_flat_box`/`_sticker_box`）；移除未使用的框/chip 貼圖與其 const。
+- **影響**：`Art/ART_CONTRACT.md`(v1.2)、`Assets/ART_ASSET_MANIFEST.md`（新增 UI icon 區段）、`Scripts/ui/ui_skin.gd`、`Codex/10`。

@@ -1,6 +1,7 @@
 # Art Contract（給 Magnific / 美術同事）
 
-> **狀態：v1.1 locked** 🔒（v1.1 變更見文末 changelog / `DECISIONS.md` D-011）
+> **狀態：v1.2 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012）
+> **UI 原則（v1.2）**：面板/按鈕/chip 的外框與底色由程式 `StyleBoxFlat` 畫（深藍 8px 描邊），**不需美術框貼圖**；UI 美術只需 **icon 貼紙**。
 > 本檔是**不可變規格合約**。美術同事與 Codex **都必須遵守**。
 > 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `ART_DIRECTION_NOTES.md`。
 >
@@ -83,7 +84,8 @@
 
 ---
 ## Changelog
+- **v1.2**（`Q-ART-002` / `DECISIONS.md` D-012）：新增「UI 素材」類別——面板/按鈕/chip 外框改程式 `StyleBoxFlat` 畫（深藍 8px 描邊），UI 美術只需 **icon 貼紙**（`Assets/final/ui/`，載入 `runtime/<id>_48.png`）；移除未使用的框貼圖。其餘規格不變。
 - **v1.1**（`Q-ART-001` / `DECISIONS.md` D-011）：背景改為**分區**，新增 recommended `background_battle_002`、`background_battle_003`（規格同 001：1080×1920、不透明）；實際選用由 `Data/game_balance.json > background_zones` 資料驅動，命名可續擴 `004…`。其餘規格不變。
 - **v1.0**：初版鎖定。
 
-**版本**：v1.1 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。
+**版本**：v1.2 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。
