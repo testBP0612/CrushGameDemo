@@ -3,6 +3,7 @@ extends Control
 
 const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
 const SettlementEffect := preload("res://Scripts/effects/settlement_effect.gd")
+const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
 signal acknowledge_requested
 
@@ -10,11 +11,17 @@ signal acknowledge_requested
 @onready var body_label: Label = $Panel/Margin/Layout/BodyLabel
 @onready var play_again_button: Button = $Panel/Margin/Layout/PlayAgainButton
 @onready var panel: PanelContainer = $Panel
+@onready var reward_icon: TextureRect = $Panel/Margin/Layout/RewardIcon
 
 var _last_settle_state := ""
 
 
 func _ready() -> void:
+	UiSkin.apply_panel(panel, "large")
+	UiSkin.apply_button(play_again_button, "primary_plain")
+	UiSkin.apply_modal_title(title_label)
+	UiSkin.apply_light_panel_label(body_label)
+	UiSkin.apply_icon(reward_icon, "cat_can")
 	play_again_button.text = Data.text("settle_play_again")
 	_install_button_feedback(play_again_button)
 	play_again_button.pressed.connect(func() -> void: acknowledge_requested.emit())
@@ -64,4 +71,4 @@ func _install_button_feedback(button: Button) -> void:
 
 
 func entrance_targets() -> Array[Control]:
-	return [title_label, body_label, play_again_button]
+	return [reward_icon, title_label, body_label, play_again_button]

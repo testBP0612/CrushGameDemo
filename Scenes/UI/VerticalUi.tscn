@@ -44,12 +44,12 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.32
-anchor_top = 0.16
+anchor_top = 0.12
 anchor_right = 0.68
-anchor_bottom = 0.84
+anchor_bottom = 0.88
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -58,7 +58,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 210.0
-offset_bottom = 390.0
+offset_bottom = 460.0
 grow_horizontal = 2
 script = ExtResource("2_hud")
 
@@ -66,44 +66,107 @@ script = ExtResource("2_hud")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 64.0
+offset_left = 40.0
 offset_top = 0.0
-offset_right = -64.0
-offset_bottom = 108.0
+offset_right = -40.0
+offset_bottom = 164.0
 grow_horizontal = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 28
 alignment = 1
 
 [node name="StageCard" type="PanelContainer" parent="Hud/Columns"]
-custom_minimum_size = Vector2(292, 108)
+custom_minimum_size = Vector2(300, 164)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="StageLabel" type="Label" parent="Hud/Columns/StageCard"]
+[node name="StageContent" type="VBoxContainer" parent="Hud/Columns/StageCard"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="StageHeader" type="HBoxContainer" parent="Hud/Columns/StageCard/StageContent"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="StageIcon" type="TextureRect" parent="Hud/Columns/StageCard/StageContent/StageHeader"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="StageCaption" type="Label" parent="Hud/Columns/StageCard/StageContent/StageHeader"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StageValue" type="Label" parent="Hud/Columns/StageCard/StageContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MultiplierCard" type="PanelContainer" parent="Hud/Columns"]
-custom_minimum_size = Vector2(292, 108)
+custom_minimum_size = Vector2(300, 164)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MultiplierLabel" type="Label" parent="Hud/Columns/MultiplierCard"]
+[node name="MultiplierContent" type="VBoxContainer" parent="Hud/Columns/MultiplierCard"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="MultiplierHeader" type="HBoxContainer" parent="Hud/Columns/MultiplierCard/MultiplierContent"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="MultiplierIcon" type="TextureRect" parent="Hud/Columns/MultiplierCard/MultiplierContent/MultiplierHeader"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="MultiplierCaption" type="Label" parent="Hud/Columns/MultiplierCard/MultiplierContent/MultiplierHeader"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MultiplierValue" type="Label" parent="Hud/Columns/MultiplierCard/MultiplierContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PayoutCard" type="PanelContainer" parent="Hud/Columns"]
-custom_minimum_size = Vector2(292, 108)
+custom_minimum_size = Vector2(300, 164)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PayoutLabel" type="Label" parent="Hud/Columns/PayoutCard"]
+[node name="PayoutContent" type="VBoxContainer" parent="Hud/Columns/PayoutCard"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="PayoutHeader" type="HBoxContainer" parent="Hud/Columns/PayoutCard/PayoutContent"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="PayoutIcon" type="TextureRect" parent="Hud/Columns/PayoutCard/PayoutContent/PayoutHeader"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="PayoutCaption" type="Label" parent="Hud/Columns/PayoutCard/PayoutContent/PayoutHeader"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PayoutValue" type="Label" parent="Hud/Columns/PayoutCard/PayoutContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -111,14 +174,24 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 64.0
-offset_top = 116.0
+offset_left = 666.0
+offset_top = 184.0
 offset_right = -64.0
-offset_bottom = 176.0
+offset_bottom = 250.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 34
-horizontal_alignment = 2
+theme_override_font_sizes/font_size = 38
+horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BalanceIcon" type="TextureRect" parent="Hud"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 690.0
+offset_top = 193.0
+offset_right = -342.0
+offset_bottom = 241.0
+grow_horizontal = 2
 
 [node name="BattleMessage" type="Control" parent="."]
 layout_mode = 1
@@ -148,9 +221,9 @@ autowrap_mode = 3
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 64.0
+offset_left = 48.0
 offset_top = 1300.0
-offset_right = -64.0
+offset_right = -48.0
 offset_bottom = 1920.0
 grow_horizontal = 2
 
@@ -167,28 +240,30 @@ script = ExtResource("4_bet_panel")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 600.0
+offset_bottom = 470.0
 grow_horizontal = 2
 
 [node name="Margin" type="MarginContainer" parent="ActionArea/BetPanel/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 28
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 34
 
 [node name="Layout" type="VBoxContainer" parent="ActionArea/BetPanel/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 22
+theme_override_constants/separation = 18
 
 [node name="TitleLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 38
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BetRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 24
 alignment = 1
 
 [node name="DecreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
@@ -199,7 +274,7 @@ theme_override_font_sizes/font_size = 48
 [node name="BetLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
 custom_minimum_size = Vector2(464, 112)
 layout_mode = 2
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -210,7 +285,7 @@ theme_override_font_sizes/font_size = 48
 
 [node name="QuickChipRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="InsufficientLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
@@ -218,6 +293,10 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.45, 0.35, 1)
 theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
+
+[node name="InsufficientIcon" type="TextureRect" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
 
 [node name="ConfirmButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
 custom_minimum_size = Vector2(0, 116)
@@ -240,6 +319,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -184.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 24
@@ -249,13 +329,13 @@ alignment = 1
 custom_minimum_size = Vector2(464, 144)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 42
 
 [node name="AdvanceButton" type="Button" parent="ActionArea/DecisionPanel/Buttons"]
 custom_minimum_size = Vector2(464, 144)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 42
 
 [node name="SettlementPanel" type="Control" parent="ActionArea"]
 layout_mode = 1
@@ -292,18 +372,23 @@ layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
+[node name="RewardIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+
 [node name="TitleLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BodyLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 42

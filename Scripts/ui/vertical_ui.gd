@@ -2,6 +2,7 @@ class_name VerticalUi
 extends Control
 
 const UiEntrance := preload("res://Scripts/effects/ui_entrance.gd")
+const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
 signal bet_decrease_requested
 signal bet_increase_requested
@@ -14,6 +15,8 @@ signal balance_reset_requested
 
 @onready var hud: Hud = $Hud
 @onready var top_bar: Control = $TopBar
+@onready var profile_frame: PanelContainer = $TopBar/ProfileFrame
+@onready var profile_label: Label = $TopBar/ProfileFrame/ProfileLabel
 @onready var logo_label: Label = $TopBar/LogoLabel
 @onready var battle_message: BattleMessage = $BattleMessage
 @onready var bet_panel: BetPanel = $ActionArea/BetPanel
@@ -30,6 +33,8 @@ var _visible_state := {
 
 
 func _ready() -> void:
+	UiSkin.apply_panel(profile_frame, "card")
+	UiSkin.apply_light_panel_label(profile_label)
 	logo_label.text = Data.text("title_game_name")
 	bet_panel.decrease_requested.connect(func() -> void: bet_decrease_requested.emit())
 	bet_panel.increase_requested.connect(func() -> void: bet_increase_requested.emit())

@@ -2,6 +2,7 @@ class_name BetPanel
 extends Control
 
 const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
+const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
 signal decrease_requested
 signal increase_requested
@@ -10,11 +11,13 @@ signal quick_bet_requested(amount: int)
 signal balance_reset_requested
 
 @onready var title_label: Label = $Panel/Margin/Layout/TitleLabel
+@onready var panel: PanelContainer = $Panel
 @onready var decrease_button: Button = $Panel/Margin/Layout/BetRow/DecreaseButton
 @onready var bet_label: Label = $Panel/Margin/Layout/BetRow/BetLabel
 @onready var increase_button: Button = $Panel/Margin/Layout/BetRow/IncreaseButton
 @onready var quick_chip_row: HBoxContainer = $Panel/Margin/Layout/QuickChipRow
 @onready var insufficient_label: Label = $Panel/Margin/Layout/InsufficientLabel
+@onready var insufficient_icon: TextureRect = $Panel/Margin/Layout/InsufficientIcon
 @onready var confirm_button: Button = $Panel/Margin/Layout/ConfirmButton
 
 var _quick_buttons: Array[Button] = []
@@ -22,12 +25,19 @@ var _is_reset_mode := false
 
 
 func _ready() -> void:
+	UiSkin.apply_panel(panel, "large")
 	title_label.text = Data.text("bet_panel_title")
-	decrease_button.text = Data.text("bet_decrease")
-	increase_button.text = Data.text("bet_increase")
+	decrease_button.text = ""
+	increase_button.text = ""
 	confirm_button.text = Data.text("bet_confirm")
 	insufficient_label.text = Data.text("bet_insufficient")
-	_apply_button_style(confirm_button, Color(0.18, 0.58, 0.27, 1.0))
+	UiSkin.apply_button(decrease_button, "step_decrease")
+	UiSkin.apply_button(increase_button, "step_increase")
+	UiSkin.apply_button(confirm_button, "primary")
+	UiSkin.apply_ribbon_label(title_label)
+	UiSkin.apply_number_display(bet_label)
+	UiSkin.apply_icon(insufficient_icon, "warning")
+	insufficient_icon.visible = false
 	_install_button_feedback(decrease_button)
 	_install_button_feedback(increase_button)
 	_install_button_feedback(confirm_button)
@@ -52,10 +62,12 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	confirm_button.text = Data.text("bet_reset_balance" if _is_reset_mode else "bet_confirm")
 	confirm_button.disabled = not is_betting or (not is_affordable and not _is_reset_mode)
 	insufficient_label.visible = is_betting and not is_affordable
+	insufficient_icon.visible = insufficient_label.visible
 
 	for button in _quick_buttons:
 		var amount := int(button.get_meta("amount", 0))
 		button.disabled = not is_betting or amount < min_bet or amount > max_bet
+		UiSkin.apply_button(button, "chip_selected" if amount == bet else "chip")
 
 
 func _build_quick_buttons() -> void:
@@ -73,9 +85,11 @@ func _build_quick_buttons() -> void:
 			continue
 		seen[amount] = true
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(138.0, 72.0)
+		button.custom_minimum_size = Vector2(158.0, 64.0)
 		button.text = str(amount)
+		button.add_theme_font_size_override("font_size", 24)
 		button.set_meta("amount", amount)
+		UiSkin.apply_button(button, "chip")
 		_install_button_feedback(button)
 		button.pressed.connect(_on_quick_button_pressed.bind(amount))
 		quick_chip_row.add_child(button)
@@ -91,24 +105,6 @@ func _on_confirm_button_pressed() -> void:
 		balance_reset_requested.emit()
 	else:
 		confirm_requested.emit()
-
-
-func _apply_button_style(button: Button, color: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = color
-	normal.corner_radius_top_left = 8
-	normal.corner_radius_top_right = 8
-	normal.corner_radius_bottom_left = 8
-	normal.corner_radius_bottom_right = 8
-	button.add_theme_stylebox_override("normal", normal)
-
-	var hover := normal.duplicate()
-	hover.bg_color = color.lightened(0.12)
-	button.add_theme_stylebox_override("hover", hover)
-
-	var pressed := normal.duplicate()
-	pressed.bg_color = color.darkened(0.14)
-	button.add_theme_stylebox_override("pressed", pressed)
 
 
 func _install_button_feedback(button: Button) -> void:

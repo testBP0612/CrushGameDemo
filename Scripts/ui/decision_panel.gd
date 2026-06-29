@@ -2,6 +2,7 @@ class_name DecisionPanel
 extends Control
 
 const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
+const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
 signal cashout_requested
 signal advance_requested
@@ -12,8 +13,8 @@ signal advance_requested
 
 func _ready() -> void:
 	advance_button.text = Data.text("decision_advance")
-	_apply_button_style(cashout_button, Color(0.87, 0.43, 0.18, 1.0))
-	_apply_button_style(advance_button, Color(0.18, 0.58, 0.27, 1.0))
+	UiSkin.apply_button(cashout_button, "secondary")
+	UiSkin.apply_button(advance_button, "primary")
 	_install_button_feedback(cashout_button)
 	_install_button_feedback(advance_button)
 	cashout_button.pressed.connect(func() -> void: cashout_requested.emit())
@@ -28,24 +29,6 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	cashout_button.disabled = not is_reward_decision
 	advance_button.visible = bool(snapshot.get("can_advance", false))
 	advance_button.disabled = not is_reward_decision
-
-
-func _apply_button_style(button: Button, color: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = color
-	normal.corner_radius_top_left = 8
-	normal.corner_radius_top_right = 8
-	normal.corner_radius_bottom_left = 8
-	normal.corner_radius_bottom_right = 8
-	button.add_theme_stylebox_override("normal", normal)
-
-	var hover := normal.duplicate()
-	hover.bg_color = color.lightened(0.12)
-	button.add_theme_stylebox_override("hover", hover)
-
-	var pressed := normal.duplicate()
-	pressed.bg_color = color.darkened(0.14)
-	button.add_theme_stylebox_override("pressed", pressed)
 
 
 func _install_button_feedback(button: Button) -> void:
