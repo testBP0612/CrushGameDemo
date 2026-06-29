@@ -10,15 +10,8 @@ const CREAM := Color(1.0, 0.964706, 0.901961, 1.0)
 const TEAL := Color(0.08, 0.67, 0.62, 1.0)
 const PINK := Color(0.96, 0.25, 0.42, 1.0)
 
-const CARD_TEXTURE := "res://Assets/final/ui/ui_panel_card.png"
-const PANEL_TEXTURE := "res://Assets/final/ui/ui_panel_large.png"
-const BANNER_TEXTURE := "res://Assets/final/ui/ui_panel_banner_pink.png"
-const PRIMARY_TEXTURE := "res://Assets/final/ui/ui_btn_primary.png"
-const SECONDARY_TEXTURE := "res://Assets/final/ui/ui_btn_secondary.png"
-const WARM_TEXTURE := "res://Assets/final/ui/ui_btn_warm.png"
-const SMALL_TEXTURE := "res://Assets/final/ui/ui_btn_small.png"
-const CHIP_TEXTURE := "res://Assets/final/ui/ui_chip.png"
-const CHIP_ACTIVE_TEXTURE := "res://Assets/final/ui/ui_chip_active.png"
+# 註：面板/按鈕/chip 外框改用 StyleBoxFlat 程式畫（見 _flat_box/_sticker_box），
+# 原生成的 9-slice 框貼圖已不使用、已移除。實際載入的只有下方 48px icon。
 const ICON_STAGE := "res://Assets/final/ui/runtime/icon_stage_48.png"
 const ICON_MULTIPLIER := "res://Assets/final/ui/runtime/icon_multiplier_48.png"
 const ICON_PAYOUT := "res://Assets/final/ui/runtime/icon_payout_48.png"
