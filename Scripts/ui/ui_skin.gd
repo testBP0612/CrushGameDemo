@@ -37,15 +37,15 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 
 	match style:
 		"card":
-			var card := _texture_box(CARD_TEXTURE, CARD_MARGIN, CREAM, 32, 10, DEEP_NAVY)
+			var card := _sticker_box(CREAM, 32, 8, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
 			_set_content_margins(card, 28.0, 20.0, 28.0, 20.0)
 			panel.add_theme_stylebox_override("panel", card)
 		"large":
-			var large := _texture_box(PANEL_TEXTURE, PANEL_MARGIN, CREAM, 32, 10, DEEP_NAVY)
+			var large := _sticker_box(CREAM, 32, 8, DEEP_NAVY, Color(0.96, 0.25, 0.42, 0.16))
 			_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
 			panel.add_theme_stylebox_override("panel", large)
 		_:
-			var fallback := _texture_box(CARD_TEXTURE, CARD_MARGIN, CREAM, 32, 10, DEEP_NAVY)
+			var fallback := _sticker_box(CREAM, 32, 8, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
 			_set_content_margins(fallback, 28.0, 20.0, 28.0, 20.0)
 			panel.add_theme_stylebox_override("panel", fallback)
 
@@ -61,8 +61,6 @@ static func apply_button(button: Button, style: String) -> void:
 	var shadow_color := Color(0.96, 0.25, 0.42, 0.2)
 	var radius := 28
 	var content_margin := 52.0
-	var texture_path := PRIMARY_TEXTURE
-	var texture_margin := BUTTON_MARGIN
 	var text_outline_size := 8
 	match style:
 		"primary":
@@ -72,21 +70,18 @@ static func apply_button(button: Button, style: String) -> void:
 		"secondary":
 			fallback_color = Color(0.96, 0.47, 0.23, 1.0)
 			shadow_color = Color(0.96, 0.25, 0.42, 0.32)
-			texture_path = WARM_TEXTURE if FileAccess.file_exists(WARM_TEXTURE) else SECONDARY_TEXTURE
 			_apply_button_icon(button, ICON_BACKPACK)
 		"small":
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
 			radius = 28
 			content_margin = 10.0
-			texture_path = SMALL_TEXTURE
 			text_outline_size = 2
 		"step_decrease":
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
 			radius = 28
 			content_margin = 10.0
-			texture_path = SMALL_TEXTURE
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_MINUS)
 		"step_increase":
@@ -94,32 +89,27 @@ static func apply_button(button: Button, style: String) -> void:
 			font_color = DEEP_NAVY
 			radius = 28
 			content_margin = 10.0
-			texture_path = SMALL_TEXTURE
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_PLUS)
 		"chip":
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
-			border_color = Color(0.04, 0.42, 0.58, 1.0)
+			border_color = DEEP_NAVY
 			radius = 28
 			content_margin = 14.0
-			texture_path = CHIP_TEXTURE
-			texture_margin = CHIP_MARGIN
 			text_outline_size = 2
 		"chip_selected":
 			fallback_color = Color(0.08, 0.67, 0.62, 1.0)
 			font_color = Color(1.0, 0.98, 0.86, 1.0)
-			border_color = Color(1.0, 0.72, 0.12, 1.0)
+			border_color = DEEP_NAVY
 			shadow_color = Color(1.0, 0.72, 0.12, 0.35)
 			radius = 28
 			content_margin = 14.0
-			texture_path = CHIP_ACTIVE_TEXTURE
-			texture_margin = CHIP_MARGIN
 			text_outline_size = 2
 		_:
 			_apply_button_icon(button, ICON_PAW)
 
-	var normal := _texture_box(texture_path, texture_margin, fallback_color, radius, 10, border_color, shadow_color)
+	var normal := _sticker_box(fallback_color, radius, 8, border_color, shadow_color)
 	_set_content_margins(normal, content_margin, 12.0, content_margin, 12.0)
 	button.add_theme_stylebox_override("normal", normal)
 
@@ -166,7 +156,7 @@ static func apply_hud_card_text(label: Label, role: String) -> void:
 		"value":
 			color = CREAM
 			outline_color = DEEP_NAVY
-			outline_size = 8
+			outline_size = 10
 	label.add_theme_color_override("font_color", color)
 	label.add_theme_color_override("font_outline_color", outline_color)
 	label.add_theme_constant_override("outline_size", outline_size)
@@ -186,7 +176,7 @@ static func apply_title_label(label: Label) -> void:
 static func apply_resource_label(label: Label) -> void:
 	if label == null or not is_instance_valid(label):
 		return
-	var style := _sticker_box(CREAM, 28, 10, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
+	var style := _sticker_box(CREAM, 28, 8, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
 	_set_content_margins(style, 54.0, 8.0, 18.0, 8.0)
 	label.add_theme_stylebox_override("normal", style)
 	label.add_theme_color_override("font_color", DEEP_NAVY)
@@ -197,23 +187,23 @@ static func apply_resource_label(label: Label) -> void:
 static func apply_ribbon_label(label: Label) -> void:
 	if label == null or not is_instance_valid(label):
 		return
-	var style := _texture_box(BANNER_TEXTURE, PANEL_MARGIN, PINK, 32, 10, DEEP_NAVY, Color(0.96, 0.25, 0.42, 0.3))
+	var style := _sticker_box(PINK, 32, 8, DEEP_NAVY, Color(0.96, 0.25, 0.42, 0.3))
 	_set_content_margins(style, 28.0, 18.0, 28.0, 18.0)
 	label.add_theme_stylebox_override("normal", style)
 	label.add_theme_color_override("font_color", CREAM)
 	label.add_theme_color_override("font_outline_color", DEEP_NAVY)
-	label.add_theme_constant_override("outline_size", 8)
+	label.add_theme_constant_override("outline_size", 10)
 
 
 static func apply_number_display(label: Label) -> void:
 	if label == null or not is_instance_valid(label):
 		return
-	var style := _sticker_box(Color(1.0, 0.96, 0.84, 1.0), 28, 10, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.18))
+	var style := _sticker_box(Color(1.0, 0.96, 0.84, 1.0), 28, 8, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.18))
 	_set_content_margins(style, 24.0, 10.0, 24.0, 10.0)
 	label.add_theme_stylebox_override("normal", style)
 	label.add_theme_color_override("font_color", CREAM)
 	label.add_theme_color_override("font_outline_color", DEEP_NAVY)
-	label.add_theme_constant_override("outline_size", 8)
+	label.add_theme_constant_override("outline_size", 10)
 
 
 static func apply_modal_title(label: Label) -> void:
@@ -222,7 +212,7 @@ static func apply_modal_title(label: Label) -> void:
 	label.remove_theme_stylebox_override("normal")
 	label.add_theme_color_override("font_color", CREAM)
 	label.add_theme_color_override("font_outline_color", DEEP_NAVY)
-	label.add_theme_constant_override("outline_size", 8)
+	label.add_theme_constant_override("outline_size", 10)
 
 
 static func apply_icon(texture_rect: TextureRect, name: String) -> void:
@@ -263,31 +253,6 @@ static func apply_icon(texture_rect: TextureRect, name: String) -> void:
 	texture_rect.visible = true
 
 
-static func _texture_box(
-	path: String,
-	margin: int,
-	fallback_color: Color,
-	radius: int = 18,
-	border_width: int = 4,
-	border_color: Color = DEEP_NAVY,
-	shadow_color: Color = Color(0.96, 0.25, 0.42, 0.2)
-) -> StyleBox:
-	if FileAccess.file_exists(path):
-		var texture := _load_texture(path)
-		if texture != null:
-			var style := StyleBoxTexture.new()
-			style.texture = texture
-			style.draw_center = true
-			style.texture_margin_left = margin
-			style.texture_margin_top = margin
-			style.texture_margin_right = margin
-			style.texture_margin_bottom = margin
-			_set_content_margins(style, 0.0, 0.0, 0.0, 0.0)
-			return style
-
-	return _sticker_box(fallback_color, radius, border_width, border_color, shadow_color)
-
-
 static func _sticker_box(color: Color, radius: int, border_width: int, border_color: Color, shadow_color: Color) -> StyleBoxFlat:
 	var style := _flat_box(color, radius, border_width, border_color)
 	style.shadow_color = shadow_color
@@ -314,9 +279,7 @@ static func _flat_box(color: Color, radius: int, border_width: int = 0, border_c
 
 
 static func _tint_stylebox(style: StyleBox, color: Color) -> void:
-	if style is StyleBoxTexture:
-		(style as StyleBoxTexture).modulate_color = color
-	elif style is StyleBoxFlat:
+	if style is StyleBoxFlat:
 		var flat := style as StyleBoxFlat
 		flat.bg_color = flat.bg_color * color
 
