@@ -26,14 +26,16 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Hero" type="Node2D" parent="BattleScene" unique_id=81658566]
-position = Vector2(250, 1060)
+position = Vector2(250, 1240)
 script = ExtResource("3_hero_actor")
+
+[node name="IdleSprite" type="AnimatedSprite2D" parent="BattleScene/Hero"]
+visible = false
 
 [node name="Body" type="ColorRect" parent="BattleScene/Hero" unique_id=57993242]
 offset_left = -70.0
-offset_top = -170.0
+offset_top = -340.0
 offset_right = 70.0
-offset_bottom = 170.0
 color = Color(0.298039, 0.588235, 0.941176, 1)
 
 [node name="Monster" type="Node2D" parent="BattleScene" unique_id=183370566]

@@ -29,7 +29,7 @@
 ### 主角（Hero）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| hero_idle | hero_idle.png | Assets/final/ | required | PNG32 | yes | right | 主角待機 | Scenes/Actors | 色塊(藍) | planned | 美術 | 約420² |
+| hero_idle | hero_idle.png | Assets/final/ | required | PNG32 | yes | right | 主角待機 | Scenes/Actors | 色塊(藍) | imported | 美術 | 約420² |
 | hero_attack | hero_attack.png | Assets/final/ | required | PNG32 | yes | right | 主角攻擊 | Scenes/Actors | 色塊(藍) | planned | 美術 | 單圖或sheet |
 | hero_hurt | hero_hurt.png | Assets/final/ | required | PNG32 | yes | right | 主角受擊 | Scenes/Actors | 色塊閃紅 | planned | 美術 | — |
 | hero_defeat | hero_defeat.png | Assets/final/ | required | PNG32 | yes | right | 主角戰敗 | Scenes/Actors | 色塊變灰 | planned | 美術 | — |

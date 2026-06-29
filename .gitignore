@@ -34,3 +34,4 @@ Assets/generated/*
 # 例：Codex 驗收截圖、agent-sprite-forge 的 raw-sheet 等中間檔
 /Artifacts/
 /validation_screenshots/
+/ValidationScreenshots/
