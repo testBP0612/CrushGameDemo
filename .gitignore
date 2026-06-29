@@ -29,3 +29,8 @@ mono_crash.*.json
 Assets/generated/*
 !Assets/generated/README.md
 !Assets/generated/.gdkeep
+
+# 驗證截圖 / 工具中間產物（非遊戲本體，不進 repo）
+# 例：Codex 驗收截圖、agent-sprite-forge 的 raw-sheet 等中間檔
+/Artifacts/
+/validation_screenshots/
