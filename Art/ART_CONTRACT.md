@@ -1,6 +1,6 @@
 # Art Contract（給 Magnific / 美術同事）
 
-> **狀態：v1.2 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012）
+> **狀態：v1.3 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012、D-013）
 > **UI 原則（v1.2）**：面板/按鈕/chip 的外框與底色由程式 `StyleBoxFlat` 畫（深藍 8px 描邊），**不需美術框貼圖**；UI 美術只需 **icon 貼紙**。
 > 本檔是**不可變規格合約**。美術同事與 Codex **都必須遵守**。
 > 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `ART_DIRECTION_NOTES.md`。
@@ -56,12 +56,21 @@
   - Logo：寬約 720 內，透明背景。
 - **基準位置**：主角錨點在畫面左 ~30%、垂直中線偏下；怪物在右 ~70%。主體底部對齊地面線（約畫面 70% 高度）。
 
-## 七、單圖 / sprite sheet 接入方式（不可變）
+## 七、單圖 / sprite sheet 接入方式（不可變；v1.3 修訂）
 - **MVP 預設：單張靜態圖**（idle/attack/hurt 各一張），動態由 Codex 用 Tween 假動畫處理。
-- 若要提供逐格動畫，採 **horizontal sprite sheet**：等寬等高格、固定 `frame_count`，附同名 `.json`：
+- 若要提供逐格動畫，採 **sprite sheet（等寬等高格）**，附同名 `.json`。排列規則：
+  - **硬上限：sheet 圖檔單邊 ≤ 4096px**（H5/WebGL 與手機 GPU 材質上限；超過會載不出/破圖）。
+  - **格數少（單邊放得下、總寬 ≤ 4096）→ 可用單列 horizontal**。
+  - **格數多 → 必須用 grid（網格）排列**，於 `.json` 標明 `columns` / `rows`；確保 `columns*frame_width ≤ 4096` 且 `rows*frame_height ≤ 4096`。
+  - 影格讀取順序：**由左到右、由上到下**。
   ```json
-  { "asset_id": "hero_attack", "frame_width": 420, "frame_height": 420, "frame_count": 6, "fps": 12 }
+  // 少格數（單列）：6 格 × 420 = 2520px ≤ 4096，OK
+  { "asset_id": "hero_attack", "frame_width": 420, "frame_height": 420, "columns": 6, "rows": 1, "frame_count": 6, "fps": 12 }
+
+  // 多格數（grid）：25 格排 5×5 = 3840×3840 ≤ 4096，OK（單列 25×768=19200 會爆，禁止）
+  { "asset_id": "hero_idle", "frame_width": 768, "frame_height": 768, "columns": 5, "rows": 5, "frame_count": 25, "fps": 3 }
   ```
+  > `columns`/`rows` 為必填；`columns*rows ≥ frame_count`（最後一列可不填滿）。
 - 不混用：同一 asset_id 要嘛單圖、要嘛 sheet+json，不要兩者並存。
 
 ## 八、Godot 匯入注意（不可變）
@@ -84,8 +93,9 @@
 
 ---
 ## Changelog
+- **v1.3**（`Q-ART-003` / `DECISIONS.md` D-013）：修正 §七 sprite sheet 規則——新增**硬上限單邊 ≤ 4096px**、多格數**必須用 grid**並於 JSON 標 `columns`/`rows`（少格數仍可 horizontal）。修正先前「只寫 horizontal、未設尺寸上限」導致 25×768 單列=19200px 超 H5 材質上限的缺陷。
 - **v1.2**（`Q-ART-002` / `DECISIONS.md` D-012）：新增「UI 素材」類別——面板/按鈕/chip 外框改程式 `StyleBoxFlat` 畫（深藍 8px 描邊），UI 美術只需 **icon 貼紙**（`Assets/final/ui/`，載入 `runtime/<id>_48.png`）；移除未使用的框貼圖。其餘規格不變。
 - **v1.1**（`Q-ART-001` / `DECISIONS.md` D-011）：背景改為**分區**，新增 recommended `background_battle_002`、`background_battle_003`（規格同 001：1080×1920、不透明）；實際選用由 `Data/game_balance.json > background_zones` 資料驅動，命名可續擴 `004…`。其餘規格不變。
 - **v1.0**：初版鎖定。
 
-**版本**：v1.2 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。
+**版本**：v1.3 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。

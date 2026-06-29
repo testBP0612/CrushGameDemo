@@ -43,5 +43,6 @@ AI 提問（OPEN_QUESTIONS / 對話）
 | D-010 | 美術文件集中到 `Art/` 文件中心（Assets 二進位不動） | 定案 |
 | D-011 | 背景改為分區（3 張、資料驅動、Contract 升 v1.1） | 定案 |
 | D-012 | UI 採「程式皮膚 + icon 貼紙」（Contract 升 v1.2） | 定案 |
+| D-013 | sprite sheet 規則修正（≤4096、允許 grid，Contract 升 v1.3） | 定案 |
 
 > 新決策請同步更新本表與 `Docs/DECISIONS.md`。

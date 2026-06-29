@@ -78,3 +78,12 @@
 - 影響：`Art/ART_CONTRACT.md`（v1.1→v1.2，補 UI 類別與「外框程式畫」原則）、`Assets/ART_ASSET_MANIFEST.md`（+UI icon 區段）、`Scripts/ui/ui_skin.gd`、`Codex/10`。
 - 建議新版本號：v1.2
 - 人類裁示：同意（icon 用生成貼紙；框/按鈕程式畫；移除未使用的框貼圖）。
+
+### Q-ART-003：sprite sheet 規則修正（加尺寸上限 + 允許 grid）
+- 狀態：ANSWERED（核准 → 見 DECISIONS D-013，Contract 升 v1.3）
+- 想改什麼：§七 sprite sheet 規則。原文只寫「horizontal sprite sheet」且未設尺寸上限 → 設計師照做出 25 格×768=19200px 單列圖，**超過 H5/手機材質上限(4096~16384)會破圖**。
+- 修正：新增**硬上限單邊 ≤ 4096px**；多格數**必須 grid**並於 JSON 標 `columns`/`rows`（少格數仍可單列 horizontal）。
+- 原因：原規格缺陷（範例只 6 格沒料到大格數）；設計師無誤、是文件該修。
+- 影響：`Art/ART_CONTRACT.md`（v1.2→v1.3 §七）、`Art/ART_SPEC_SHEET.md`、sheet 的 `.json` schema（+columns/rows）、`Codex/08`（切格接入需依 columns/rows）。
+- 建議新版本號：v1.3
+- 人類裁示：同意。現成的 `hero_idle_sheet`（19200×768）請設計師重出 grid（5×5）。

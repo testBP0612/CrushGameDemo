@@ -108,3 +108,14 @@
 - **原因**：粗描邊/份量用程式參數最可控、可量化、確定性命中（task 10 Round 2/2.1 的教訓：別把結構性描邊交給生成圖）。
 - **實作**：`Scripts/ui/ui_skin.gd`（`_flat_box`/`_sticker_box`）；移除未使用的框/chip 貼圖與其 const。
 - **影響**：`Art/ART_CONTRACT.md`(v1.2)、`Assets/ART_ASSET_MANIFEST.md`（新增 UI icon 區段）、`Scripts/ui/ui_skin.gd`、`Codex/10`。
+
+## D-013：sprite sheet 規則修正（尺寸上限 + 允許 grid，Contract 升 v1.3）
+- **問題**：`ART_CONTRACT` §七 原本只寫「horizontal sprite sheet」且**未設尺寸上限**。設計師照做出 `hero_idle` 25 格 × 768 = **19200×768** 單列圖，**超過 H5/WebGL 與手機 GPU 材質上限**（常見 4096~16384）→ 會載不出/破圖。
+- **釐清責任**：**設計師無誤**（嚴格照文件做）；**是規格缺陷**（範例僅 6 格，未預期大格數、未設上限）。前一輪 AI 建議「改 grid」時也未先查合約、與當時 locked 文字相矛盾——本決策正式把規則補正。
+- **流程**：`Q-ART-003` → 人類核准 → Contract `v1.2 → v1.3`。
+- **決策（§七 新規則）**：
+  - sprite sheet 圖檔**單邊 ≤ 4096px**（硬上限）。
+  - 格數少（總寬 ≤ 4096）可單列 horizontal；**格數多必須 grid**，JSON 必填 `columns`/`rows`（`columns*rows ≥ frame_count`）。
+  - 影格順序：左→右、上→下。
+- **行動**：現成 `hero_idle_sheet`（19200×768）請設計師重出 grid（25 格 → 5×5 = 3840²）；`Codex/08` 接入時依 `columns`/`rows` 切格成 `SpriteFrames`/`AnimatedSprite2D`。
+- **影響**：`Art/ART_CONTRACT.md`(v1.3 §七)、`Art/ART_SPEC_SHEET.md`、sheet `.json` schema、`Codex/08`。
