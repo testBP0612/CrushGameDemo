@@ -4,14 +4,15 @@ extends RefCounted
 const CARD_MARGIN := 52
 const PANEL_MARGIN := 58
 const BUTTON_MARGIN := 54
-const CHIP_MARGIN := 20
+const CHIP_MARGIN_X := 48
+const CHIP_MARGIN_Y := 24
 const DEEP_NAVY := Color(0.105882, 0.164706, 0.290196, 1.0)
 const CREAM := Color(1.0, 0.964706, 0.901961, 1.0)
 const TEAL := Color(0.08, 0.67, 0.62, 1.0)
 const PINK := Color(0.96, 0.25, 0.42, 1.0)
 
-# 註：面板/按鈕/chip 外框改用 StyleBoxFlat 程式畫（見 _flat_box/_sticker_box），
-# 原生成的 9-slice 框貼圖已不使用、已移除。實際載入的只有下方 48px icon。
+# 註：Round 3 指定範圍使用生成的 StyleBoxTexture 9-slice skin；
+# 缺圖、載入失敗或非本輪範圍時退回 _sticker_box（StyleBoxFlat）。
 const ICON_STAGE := "res://Assets/final/ui/runtime/icon_stage_48.png"
 const ICON_MULTIPLIER := "res://Assets/final/ui/runtime/icon_multiplier_48.png"
 const ICON_PAYOUT := "res://Assets/final/ui/runtime/icon_payout_48.png"
@@ -22,6 +23,14 @@ const ICON_PLUS := "res://Assets/final/ui/runtime/icon_plus_48.png"
 const ICON_MINUS := "res://Assets/final/ui/runtime/icon_minus_48.png"
 const ICON_CAT_CAN := "res://Assets/final/ui/runtime/icon_cat_can_48.png"
 const ICON_WARNING := "res://Assets/final/ui/runtime/icon_warning_48.png"
+const SKIN_CARD := "res://Assets/final/ui/skin_card.png"
+const SKIN_PANEL := "res://Assets/final/ui/skin_panel.png"
+const SKIN_BTN_PRIMARY := "res://Assets/final/ui/skin_btn_primary.png"
+const SKIN_BTN_SECONDARY := "res://Assets/final/ui/skin_btn_secondary.png"
+const SKIN_BTN_MINUS := "res://Assets/final/ui/skin_btn_minus.png"
+const SKIN_BTN_PLUS := "res://Assets/final/ui/skin_btn_plus.png"
+const SKIN_CHIP := "res://Assets/final/ui/skin_chip.png"
+const SKIN_CHIP_ACTIVE := "res://Assets/final/ui/skin_chip_active.png"
 
 
 static func apply_panel(panel: PanelContainer, style: String) -> void:
@@ -30,11 +39,27 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 
 	match style:
 		"card":
-			var card := _sticker_box(CREAM, 32, 8, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
+			var card := _skin_or_sticker_box(
+				SKIN_CARD if _is_round3_panel(panel, style) else "",
+				Vector4(CARD_MARGIN, CARD_MARGIN, CARD_MARGIN, CARD_MARGIN),
+				CREAM,
+				32,
+				8,
+				DEEP_NAVY,
+				Color(0.08, 0.67, 0.62, 0.16)
+			)
 			_set_content_margins(card, 28.0, 20.0, 28.0, 20.0)
 			panel.add_theme_stylebox_override("panel", card)
 		"large":
-			var large := _sticker_box(CREAM, 32, 8, DEEP_NAVY, Color(0.96, 0.25, 0.42, 0.16))
+			var large := _skin_or_sticker_box(
+				SKIN_PANEL if _is_round3_panel(panel, style) else "",
+				Vector4(PANEL_MARGIN, PANEL_MARGIN, PANEL_MARGIN, PANEL_MARGIN),
+				CREAM,
+				32,
+				8,
+				DEEP_NAVY,
+				Color(0.96, 0.25, 0.42, 0.16)
+			)
 			_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
 			panel.add_theme_stylebox_override("panel", large)
 		_:
@@ -55,12 +80,16 @@ static func apply_button(button: Button, style: String) -> void:
 	var radius := 28
 	var content_margin := 52.0
 	var text_outline_size := 8
+	var skin_path := ""
+	var texture_margins := Vector4(BUTTON_MARGIN, BUTTON_MARGIN, BUTTON_MARGIN, BUTTON_MARGIN)
 	match style:
 		"primary":
+			skin_path = SKIN_BTN_PRIMARY
 			_apply_button_icon(button, ICON_PAW)
 		"primary_plain":
 			pass
 		"secondary":
+			skin_path = SKIN_BTN_SECONDARY
 			fallback_color = Color(0.96, 0.47, 0.23, 1.0)
 			shadow_color = Color(0.96, 0.25, 0.42, 0.32)
 			_apply_button_icon(button, ICON_BACKPACK)
@@ -71,6 +100,7 @@ static func apply_button(button: Button, style: String) -> void:
 			content_margin = 10.0
 			text_outline_size = 2
 		"step_decrease":
+			skin_path = SKIN_BTN_MINUS
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
 			radius = 28
@@ -78,6 +108,7 @@ static func apply_button(button: Button, style: String) -> void:
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_MINUS)
 		"step_increase":
+			skin_path = SKIN_BTN_PLUS
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
 			radius = 28
@@ -85,6 +116,8 @@ static func apply_button(button: Button, style: String) -> void:
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_PLUS)
 		"chip":
+			skin_path = SKIN_CHIP
+			texture_margins = Vector4(CHIP_MARGIN_X, CHIP_MARGIN_Y, CHIP_MARGIN_X, CHIP_MARGIN_Y)
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
 			border_color = DEEP_NAVY
@@ -92,6 +125,8 @@ static func apply_button(button: Button, style: String) -> void:
 			content_margin = 14.0
 			text_outline_size = 2
 		"chip_selected":
+			skin_path = SKIN_CHIP_ACTIVE
+			texture_margins = Vector4(CHIP_MARGIN_X, CHIP_MARGIN_Y, CHIP_MARGIN_X, CHIP_MARGIN_Y)
 			fallback_color = Color(0.08, 0.67, 0.62, 1.0)
 			font_color = Color(1.0, 0.98, 0.86, 1.0)
 			border_color = DEEP_NAVY
@@ -102,7 +137,7 @@ static func apply_button(button: Button, style: String) -> void:
 		_:
 			_apply_button_icon(button, ICON_PAW)
 
-	var normal := _sticker_box(fallback_color, radius, 8, border_color, shadow_color)
+	var normal := _skin_or_sticker_box(skin_path, texture_margins, fallback_color, radius, 8, border_color, shadow_color)
 	_set_content_margins(normal, content_margin, 12.0, content_margin, 12.0)
 	button.add_theme_stylebox_override("normal", normal)
 
@@ -253,6 +288,42 @@ static func _sticker_box(color: Color, radius: int, border_width: int, border_co
 	style.shadow_offset = Vector2(0.0, 4.0)
 	style.anti_aliasing = true
 	return style
+
+
+static func _skin_or_sticker_box(
+	path: String,
+	texture_margins: Vector4,
+	fallback_color: Color,
+	radius: int,
+	border_width: int,
+	border_color: Color,
+	shadow_color: Color
+) -> StyleBox:
+	if not path.is_empty():
+		var texture := _load_texture(path)
+		if texture != null:
+			var style := StyleBoxTexture.new()
+			style.texture = texture
+			style.texture_margin_left = texture_margins.x
+			style.texture_margin_top = texture_margins.y
+			style.texture_margin_right = texture_margins.z
+			style.texture_margin_bottom = texture_margins.w
+			style.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+			style.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+			style.draw_center = true
+			return style
+
+	return _sticker_box(fallback_color, radius, border_width, border_color, shadow_color)
+
+
+static func _is_round3_panel(panel: PanelContainer, style: String) -> bool:
+	var path := str(panel.get_path())
+	match style:
+		"card":
+			return path.contains("/Hud/Columns/")
+		"large":
+			return path.contains("/ActionArea/BetPanel/Panel")
+	return false
 
 
 static func _flat_box(color: Color, radius: int, border_width: int = 0, border_color: Color = Color.TRANSPARENT) -> StyleBoxFlat:
