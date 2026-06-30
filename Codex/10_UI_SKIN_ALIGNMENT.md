@@ -138,3 +138,68 @@ HUD 小標 28 / HUD 大數字 54；金幣 38；下注標題 38；下注數字 60
 - 裁切局部放大確認：**卡片/按鈕外框 ≈ 8px 深藍、不是細淺色邊**；**數字有明顯描邊厚度**。
 - 三狀態截圖與參考圖並排，R2-1 / R2-2 兩點明確 pass。
 - 功能/結構/版面不變量未破。
+
+---
+
+## Round 3 微調（HUD 三欄卡 + 下方操作區改用「生成的 9-slice 貼圖皮膚」）
+> 目標：把使用者最不滿的兩塊——**HUD 三欄卡** 與 **下方操作區（下注面板/按鈕/籌碼）**——從程式 StyleBoxFlat 升級成**生成的貼圖皮膚**，做出參考圖的插畫質感（柔和漸層、貼紙立體感），這是 StyleBoxFlat 給不了的。
+> **本次只動這兩塊的皮膚**；不碰怪物、標題 Logo、背景、戰鬥訊息。文字一律留 Label。
+
+### 為什麼能精準貼齊
+皮膚透過 `StyleBoxTexture` 9-slice **貼到既有節點的已知矩形**（下表），尺寸由節點 `custom_minimum_size` 決定、不變動。精準來自節點矩形，不是對齊大圖。
+
+### 唯一改動點（兩個 chokepoint 函式）
+`Scripts/ui/ui_skin.gd` 的 **`apply_panel(panel, style)`** 與 **`apply_button(button, style)`**：
+- 改成「**對應 style 有生成皮膚 PNG → 用 `StyleBoxTexture` 9-slice；否則 fallback 現有 `_sticker_box`（StyleBoxFlat）**」。
+- `StyleBoxTexture`：`texture_margin_*` ≈ 圓角+描邊寬（約 48），`content_margin` 維持現有內距；**不改任何節點尺寸/結構**。
+- 其餘 apply_*（文字/icon/ribbon）維持不動。
+
+### 節點 → style → 尺寸 對應（本次範圍）
+| 區塊 | 節點 | 套用呼叫 | 節點尺寸 |
+|---|---|---|---|
+| HUD 關卡卡 | `Hud/Columns/StageCard` | `apply_panel(_, "card")` | 300×164 |
+| HUD 倍率卡 | `Hud/Columns/MultiplierCard` | `apply_panel(_, "card")` | 300×164 |
+| HUD 收益卡 | `Hud/Columns/PayoutCard` | `apply_panel(_, "card")` | 300×164 |
+| 下注面板大框 | `ActionArea/BetPanel/Panel` | `apply_panel(_, "large")` | ~984×470 |
+| 下注 − 鈕 | `…/BetRow/DecreaseButton` | `apply_button(_, "step_decrease")` | 148×112 |
+| 下注 ＋ 鈕 | `…/BetRow/IncreaseButton` | `apply_button(_, "step_increase")` | 148×112 |
+| 快捷籌碼 | `…/QuickChipRow/*`（動態） | `apply_button(_, "chip"/"chip_selected")` | ~138×72 |
+| 開始挑戰鈕 | `…/Layout/ConfirmButton` | `apply_button(_, "primary")` | 全寬×116 |
+| 撤退領取鈕 | `ActionArea/DecisionPanel/Buttons/CashoutButton` | `apply_button(_, "secondary")` | 464×144 |
+| 挑戰下一隻鈕 | `…/Buttons/AdvanceButton` | `apply_button(_, "primary")` | 464×144 |
+> 不在本次範圍：ProfileFrame、SettlementPanel、BattleMessage（保持現狀，之後再說）。
+
+### 要生成的皮膚 PNG（`$generate2dsprite`，單張、透明、無文字、9-slice 安全）
+放 `Assets/final/ui/`；命名 `skin_<style>.png`：
+| 檔名 | 對應 style | 來源尺寸 | 色 | 備註 |
+|---|---|---|---|---|
+| skin_card.png | card | 512×288 | 奶白底+深藍厚描邊 | HUD 卡 |
+| skin_panel.png | large | 512×512 | 奶白底+深藍厚描邊 | 下注大框 |
+| skin_btn_primary.png | primary | 512×256 | 青綠 | 主要/挑戰 |
+| skin_btn_secondary.png | secondary | 512×256 | 暖橘/桃 | 撤退 |
+| skin_btn_minus.png | step_decrease | 256×256 | 桃紅 | − 鈕 |
+| skin_btn_plus.png | step_increase | 256×256 | 青綠 | ＋ 鈕 |
+| skin_chip.png | chip | 256×128 | 青藍邊 | 籌碼一般 |
+| skin_chip_active.png | chip_selected | 256×128 | 青綠/金黃高亮 | 籌碼選中 |
+
+**生成品質硬規則（這是上次失敗的關鍵）**：
+- **無任何文字/數字**（文字由 Label 疊上）。
+- **厚深藍描邊（#1B2A4A，視覺 ≥8px）** + 大圓角（卡 32 / 鈕 28）。
+- **中央大面積平整、可拉伸**，柔和內漸層/輕陰影只在邊緣與四角 → 9-slice 拉伸才乾淨。
+- 風格同貓咪參考圖（美式 cartoon、貼紙感、高彩度），和現有 icon/背景同家族。
+
+### 不做
+- 不改功能/狀態/數值/互動；不改節點數量/尺寸/anchors/offset（只換 stylebox）。
+- 不碰怪物、標題 Logo、背景、SettlementPanel、BattleMessage。
+- 文字不內嵌進圖；不改 Data；不改 Art/ART_CONTRACT（locked）。
+
+### Fallback（鐵則）
+任一 skin PNG 缺檔 / 載入失敗 / 9-slice 拉伸不乾淨 → 該 style **退回現有 `_sticker_box`（StyleBoxFlat）**，遊戲與既有外觀不可壞、不可退步。
+
+### 驗收（Godot 目視 + 截圖）
+- BETTING 與 REWARD_DECISION 兩狀態截圖**與參考圖並排**：HUD 卡、下注面板、−/＋、籌碼、開始挑戰/撤退/挑戰下一隻 的質感明顯接近參考圖（漸層/貼紙感）。
+- 局部放大確認 9-slice 邊角不變形、描邊厚實。
+- 功能/版面不變量未破；缺一張 skin 時該元件 fallback 正常。
+- 回報生成的 skin 清單（檔名/來源尺寸/texture_margin/對應 style）。
+
+> 治理註：若生成皮膚效果勝過程式畫並採用，會回頭修訂 `DECISIONS.md` D-012（由人類於 review 後記錄 / 補 Q-ART）。
