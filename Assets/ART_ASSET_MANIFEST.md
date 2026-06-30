@@ -61,10 +61,25 @@
 
 ---
 
-## UI 素材（程式皮膚 + icon 貼紙；見 DECISIONS D-012 / Q-ART-002）
-> 面板/按鈕/chip 的**外框與底色由程式 StyleBoxFlat 畫**（`Scripts/ui/ui_skin.gd`，深藍 8px 描邊），**不使用框貼圖**。
-> UI 只需 **icon 貼紙**。實際載入 `runtime/<id>_48.png`（48px）；`Assets/final/ui/<id>.png` 為全尺寸母檔（供重出）。
+## UI 素材（icon 貼紙 + 9-slice 皮膚；見 DECISIONS D-012〔含 Round 3 修訂〕/ Q-ART-002）
+> **HUD 卡 + 下方操作區（下注面板/按鈕/籌碼）**：採**生成的 9-slice 貼圖皮膚** `skin_*.png`（`StyleBoxTexture`），缺圖 fallback 程式 StyleBoxFlat。
+> **其餘元件**（ProfileFrame、SettlementPanel、ribbon 等）仍由程式 StyleBoxFlat 畫。
+> **icon 貼紙**：實際載入 `runtime/<id>_48.png`（48px）；`Assets/final/ui/<id>.png` 為全尺寸母檔。
 > 風格：流浪貓街頭、美式 cartoon、厚描邊、貼紙感（同背景家族）。
+
+### 9-slice 皮膚（Round 3，apply_panel/apply_button 載入）
+| asset_id | file_name | 對應 style | status | notes |
+|---|---|---|---|---|
+| skin_card | skin_card.png | card（HUD 三欄卡） | imported | 奶白+深藍厚描邊 |
+| skin_panel | skin_panel.png | large（下注面板） | imported | 奶白+深藍厚描邊 |
+| skin_btn_primary | skin_btn_primary.png | primary（開始挑戰/挑戰下一隻） | imported | 青綠 |
+| skin_btn_secondary | skin_btn_secondary.png | secondary（撤退領取） | imported | 暖橘/桃 |
+| skin_btn_minus | skin_btn_minus.png | step_decrease（−） | imported | 桃紅 |
+| skin_btn_plus | skin_btn_plus.png | step_increase（＋） | imported | 青綠 |
+| skin_chip | skin_chip.png | chip（籌碼） | imported | 青藍邊 |
+| skin_chip_active | skin_chip_active.png | chip_selected（選中籌碼） | imported | 高亮 |
+
+### icon 貼紙
 
 | asset_id | file_name（母檔 / 載入） | target_path | required | transparent | status | notes |
 |---|---|---|---|---|---|---|
@@ -78,7 +93,7 @@
 | icon_cat_can | icon_cat_can.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 結算裝飾 |
 | icon_warning | icon_warning.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 金幣不足提示 |
 
-> 已移除：原生成的 9-slice 框/chip 貼圖（`ui_panel_*`、`ui_btn_*`、`ui_chip*`）——改程式畫後未使用故刪除。
+> 註：D-012 初版曾移除舊框貼圖（`ui_panel_*`、`ui_btn_*`、`ui_chip*`，當時改純程式畫）；Round 3 改用上表全新的 `skin_*` 9-slice 皮膚取得插畫質感（見 D-012 修訂）。
 
 ---
 

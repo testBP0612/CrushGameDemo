@@ -108,6 +108,7 @@
 - **原因**：粗描邊/份量用程式參數最可控、可量化、確定性命中（task 10 Round 2/2.1 的教訓：別把結構性描邊交給生成圖）。
 - **實作**：`Scripts/ui/ui_skin.gd`（`_flat_box`/`_sticker_box`）；移除未使用的框/chip 貼圖與其 const。
 - **影響**：`Art/ART_CONTRACT.md`(v1.2)、`Assets/ART_ASSET_MANIFEST.md`（新增 UI icon 區段）、`Scripts/ui/ui_skin.gd`、`Codex/10`。
+- **修訂（Round 3，2026-06）**：純程式 StyleBoxFlat 雖份量達標，但缺插畫質感（柔和漸層/貼紙立體感）。經 `Codex/10` Round 3 試做並由人類確認後，**HUD 三欄卡 + 下方操作區（下注面板/按鈕/籌碼）改用生成的 9-slice 貼圖皮膚 `skin_*.png`（`StyleBoxTexture`）**；`apply_panel`/`apply_button` 改為 `_skin_or_sticker_box`（有 skin 用貼圖、缺圖 fallback StyleBoxFlat，不退步）。其餘元件（ProfileFrame/SettlementPanel/ribbon）仍程式畫。文字仍 Label、不動節點結構。新增素材見 manifest「9-slice 皮膚」表。此為 D-012 的**精煉非反轉**（程式畫仍是 fallback 與其他元件的方案）。
 
 ## D-013：sprite sheet 規則修正（尺寸上限 + 允許 grid，Contract 升 v1.3）
 - **問題**：`ART_CONTRACT` §七 原本只寫「horizontal sprite sheet」且**未設尺寸上限**。設計師照做出 `hero_idle` 25 格 × 768 = **19200×768** 單列圖，**超過 H5/WebGL 與手機 GPU 材質上限**（常見 4096~16384）→ 會載不出/破圖。
