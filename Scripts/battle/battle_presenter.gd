@@ -106,11 +106,16 @@ func play_transition(stage_to_challenge: int) -> void:
 	var half_duration := transition_duration * 0.5
 	var tween := create_tween()
 	tween.tween_property(transition_overlay, "modulate:a", 1.0, half_duration)
-	tween.tween_callback(func() -> void: show_monster_for_stage(stage_to_challenge))
+	tween.tween_callback(_snap_hero_and_show_monster.bind(stage_to_challenge))
 	tween.tween_property(transition_overlay, "modulate:a", 0.0, half_duration)
 	await tween.finished
 	await monster.play_enter()
 	transition_finished.emit()
+
+
+func _snap_hero_and_show_monster(stage_to_challenge: int) -> void:
+	hero.snap_home()
+	show_monster_for_stage(stage_to_challenge)
 
 
 func play_monster_counter() -> void:

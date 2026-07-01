@@ -100,7 +100,7 @@
 ## Optional / Future（缺圖以 placeholder 呈現，不阻塞 MVP）
 | asset_id | required | fallback | notes |
 |---|---|---|---|
-| hero_walk | optional | idle 位移 | 行走動畫 |
+| hero_walk | wired | idle 位移 | 行走動畫；`hero_walk_sheet.png`（4x3=3072x2304，符合 Contract v1.3）+ `hero_walk_sheet.json`（同 hero_idle schema：frame_width/height/columns/rows/frame_count/fps）已接入 `HeroActor.play_walk()`；缺圖時 fallback 回 idle 位移 tween |
 | monster_001_hurt / monster_001_death | optional | flash/縮放 | 受擊/死亡 |
 | monster_002_hurt / monster_002_death | optional | flash/縮放 | 受擊/死亡 |
 | battle_slash_effect | optional | Tween 線條 | 揮砍特效 |
