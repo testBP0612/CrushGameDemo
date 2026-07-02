@@ -134,3 +134,17 @@
 - **與 D-008 關係**：**修訂/接續**——D-008 的「預留接口」設計保留並啟用；「不載入音檔、不發聲」的限制自本決策起解除。缺檔時的行為（靜音不崩）即回到 D-008 狀態。
 - **實作**：交由 `Codex/11_AUDIO_INTEGRATION.md` 執行（驗收見 `VALIDATION_CHECKLIST` 里程碑 — 任務 11）。
 - **影響**：`Scripts/services/audio_service.gd`（空殼→實作）、`Data/audio.json`（新增）、`Docs/06`（+audio schema）、`Docs/07`（§三音訊解鎖轉正式）、`Docs/SFX_TODO.md`（升級為接檔狀態對照表，由 task 11 更新）、`AGENTS.md`（D-008 摘要行、任務卡順序）。
+
+## D-015：線上身分與分數服務（Firebase BaaS，回應 Q-005）
+- **問題**：遊戲要能 Google 登入並記錄自己的分數，且展示「AI 併用 CLI 與瀏覽器自行完成雲端佈建」作為比賽亮點；但 AGENTS 鐵則 2 禁止擅增「後端」。
+- **流程**：`Q-005` 提出（含選型與六個子項）→ 人類採納全部 AI 建議。
+- **人類決策**：
+  1. **選型**：Firebase（Auth + Firestore + Hosting）。**BaaS、零自建伺服器**——本服務定名「線上身分與分數服務」，不屬鐵則 2 意義的自建後端；鐵則 2 補充此定位。
+  2. **H5 執行緒取捨**：Web export **關閉 thread support**，免除 COOP/COEP 標頭需求，讓 Google OAuth popup 可用。**任務 12 的首項驗收就是此技術驗證**，驗證不過則回到本決策重議。
+  3. **fallback 契約**：未登入/離線/初始化失敗/非 Web 平台 → 自動退回 `LocalScoreService`，遊戲完整可玩不崩（同 D-004/D-014 原則）。core 只認 `ScoreService` 介面，不得直接認識 Firebase。
+  4. **範圍**：MVP 只做「登入 + 自己的分數」；排行榜與任何讀他人資料功能列 Future。
+  5. **佈建方式**：CLI 能做的用 CLI，Console 獨有步驟用 AI 瀏覽器操作；**憑證/密碼一律由人類親手輸入，AI 不經手**；全程截圖存證。
+  6. **部署**：`export/web/` 部署至 Firebase Hosting（與 auth 同源）。
+- **原因**：task 05 的 `ScoreService` 介面本就是預留的擴充點；BaaS 讓 solo 開發者零維運；佈建過程本身是比賽的展示素材。
+- **實作**：`Codex/12_CLOUD_PROVISIONING.md`（執行者 Claude）→ `Codex/13_ONLINE_SCORE_INTEGRATION.md`（執行者 Codex），規格見 `Docs/08_ONLINE_SCORE_SPEC.md`。
+- **影響**：`AGENTS.md`（鐵則 2 補充、必讀清單、任務卡順序、決策摘要）、`Docs/07`（§二§三：threads 關閉、COOP/COEP 解除）、`Docs/08_ONLINE_SCORE_SPEC.md`（新增）、`Firebase/` 資料夾（佈建後進版控）、`Scripts/services/online_score_service.gd`（任務 13 新增）。

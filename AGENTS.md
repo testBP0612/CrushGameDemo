@@ -14,7 +14,7 @@
 
 ## 鐵則（違反即停止並回報）
 1. **不得擅自改核心玩法**（風險撤離型自動戰鬥）。
-2. **不得擅自新增大型系統**（商店、會員、後端、抽卡、裝備…，見 `Docs/01`/`02` 不做清單）。
+2. **不得擅自新增大型系統**（商店、會員、後端、抽卡、裝備…，見 `Docs/01`/`02` 不做清單）。經 D-015 核准的「線上身分與分數服務」（Firebase BaaS，僅登入+自己分數，見 `Docs/08`）為唯一例外，且其範圍外的線上功能（排行榜等）仍屬本條禁區。
 3. **不得自行替換遊戲方向**或重新詮釋需求。
 4. **遇到任何不明確處 → 寫入 `Docs/OPEN_QUESTIONS.md`**，停下等人類回答，不要猜。
 5. **每次只執行一張任務卡**，不跨卡。
@@ -26,7 +26,7 @@
 
 ## 必讀順序
 1. 本檔 `AGENTS.md`
-2. `Docs/01`→`07`（設計／系統／狀態機／UI／動畫／資料／H5）
+2. `Docs/01`→`08`（設計／系統／狀態機／UI／動畫／資料／H5／線上分數）
 3. 當前任務卡（依下方「任務卡執行順序」，目前進行到 `Codex/11`）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
 5. 視覺目標：`Art/references/ui_mockup_battle.png`
@@ -43,6 +43,8 @@
 9. `10_UI_SKIN_ALIGNMENT`（UI 視覺貼齊參考圖；只動視覺不動功能；用 agent-sprite-forge 生 UI 圖）✅
 10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）✅（hero_idle/walk 已接，其餘素材到位後持續接入）
 11. `11_AUDIO_INTEGRATION`（音效接入：BGM + SFX 播放能力；依 D-014，排在 01–10 全部完成之後）
+12. `12_CLOUD_PROVISIONING`（Firebase 佈建；依 D-015；**執行者 Claude**，CLI+瀏覽器，人類在旁授權）
+13. `13_ONLINE_SCORE_INTEGRATION`（Godot 接入 Google 登入+雲端分數；依 D-015；需任務 12 完成）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -66,6 +68,7 @@
 - **D-012** UI 皮膚：HUD 卡+下方操作區用生成 9-slice 貼圖（`StyleBoxTexture`），缺圖 fallback 程式 `StyleBoxFlat`；icon 用生成貼紙；其餘元件程式畫（Contract v1.2 + Round 3 修訂）。
 - **D-013** sprite sheet 單邊 ≤ 4096px；多格數必須 grid 且 JSON 標 `columns`/`rows`（Contract v1.3）。
 - **D-014** 正式接入音效：BGM + SFX 播放能力，`Assets/final/audio/` 為唯一音訊入口，設定讀 `Data/audio.json`，缺檔靜音不崩，H5 首次互動解鎖；不做音量/靜音 UI。
+- **D-015** 線上身分與分數服務（Firebase BaaS）：僅 Google 登入+自己分數；Web export 關 thread support（免 COOP/COEP、讓 OAuth popup 可用）；未登入/離線退回 LocalScoreService；core 只認 ScoreService 介面；排行榜 Future。規格見 `Docs/08`。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md

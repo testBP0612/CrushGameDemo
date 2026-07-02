@@ -15,9 +15,13 @@
 - 匯出範本：Godot 4.6 Web（HTML5）。
 - Export preset 名稱建議：`Web`。
 - 輸出路徑：`export/web/`（已在 `.gitignore` 忽略，不提交輸出物）。
-- 注意：Web 匯出需 **HTTPS + 正確 COOP/COEP 標頭**（SharedArrayBuffer）。部署到自有網域時伺服器需設定：
-  - `Cross-Origin-Opener-Policy: same-origin`
-  - `Cross-Origin-Embedder-Policy: require-corp`
+- **Thread support：關閉**（D-015 修訂）。關閉後不需要 SharedArrayBuffer，
+  也就**不再需要 COOP/COEP 標頭**——這是為了讓 Google OAuth popup 可用
+  （cross-origin isolation 會擋 OAuth popup）。本遊戲輕量，單執行緒足夠。
+  此取捨由任務 12 首項技術驗證確認；驗證不過回 D-015 重議。
+  - （歷史紀錄：原規格要求 `Cross-Origin-Opener-Policy: same-origin` +
+    `Cross-Origin-Embedder-Policy: require-corp`，D-015 後不再適用。）
+- 部署：Firebase Hosting（D-015；與 auth 同源，設定見 `Docs/08`）。
 - 音訊（D-014 正式接入）：行動瀏覽器需使用者互動後才能播放——**首次使用者互動（點擊/觸碰）時解鎖音訊並開始 BGM**；解鎖前所有播放呼叫靜默略過、不得報 console 錯誤。
 
 ## 四、行動瀏覽器注意

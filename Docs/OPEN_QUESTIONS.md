@@ -94,9 +94,9 @@
 - 背景：D-008 定案 MVP 不做音效、只預留接口。現任務卡 01–10 皆已完成，MVP 限制的前提已消失，人類指示正式接入音效。既有基礎：`AudioService.play_sfx(event_id)` 空殼已在 `game_controller.gd` 接好 9 個事件呼叫點（清單見 `Docs/SFX_TODO.md`）；`Docs/07` 已預告「行動瀏覽器需使用者互動後解鎖音訊」；工作區有候選 BGM `Assets/FishAlleyQuest.mp3`（約 3.7MB，未 commit、未入 final）。音訊素材**不屬 `Art/ART_CONTRACT.md` 鎖定範圍**（合約只管視覺素材），故走一般 Q 而非 Q-ART。
 - 待決子項與選項：
   - **(a) 範圍**：
-    - A. 只接 BGM（最小改動，先讓遊戲有聲音）。
-    - B. BGM + 既有 9 個 SFX 事件的播放能力（**有檔才播、缺檔靜音不崩**；SFX 音檔可之後分批補，架構一次到位）。
-    - C. 只接 SFX、不接 BGM。
+	- A. 只接 BGM（最小改動，先讓遊戲有聲音）。
+	- B. BGM + 既有 9 個 SFX 事件的播放能力（**有檔才播、缺檔靜音不崩**；SFX 音檔可之後分批補，架構一次到位）。
+	- C. 只接 SFX、不接 BGM。
   - **(b) 素材路徑與命名**：比照 D-004 的 final 入口原則——`Assets/final/audio/` 為唯一正式音訊入口；BGM 命名 `bgm_main.mp3`（`FishAlleyQuest.mp3` 改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不需 placeholder 音檔**：缺檔的 fallback 就是靜音（遊戲不可壞）。
   - **(c) 資料驅動**：新增 `Data/audio.json`（event_id→檔名映射、各音量、BGM loop 設定），禁止在腳本寫死檔名/音量（AGENTS 鐵則 6）。
   - **(d) H5 音訊解鎖**：依 `Docs/07`——首次使用者互動（點擊/觸碰）時解鎖並開始播 BGM；解鎖前所有播放呼叫靜默略過。
@@ -104,3 +104,21 @@
 - AI 建議：(a) 採 **B**；(b)(c)(d) 依上述；(e) 不做。定案後在 `DECISIONS.md` 新增 **D-014（修訂 D-008）**，同步更新 `AGENTS.md` 的 D-008 摘要行與任務卡順序。
 - 影響範圍：新任務卡 `Codex/11_AUDIO_INTEGRATION.md`（已備妥，等本題定案）、`Scripts/services/audio_service.gd`（空殼→實作）、`Data/audio.json`（新增，schema 需同步 `Docs/06`）、`Docs/SFX_TODO.md`（升級為音訊素材對照清單）、`Docs/07_H5_EXPORT_SPEC.md`（音訊解鎖由 Future 轉正式）、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`（+里程碑）。
 - 人類回答：照 AI 建議全部採納——(a) B（BGM+SFX 播放能力）、(b)(c)(d) 依建議、(e) 不做靜音 UI。已寫入 DECISIONS.md D-014。
+
+### Q-005：線上身分與分數服務（Google 登入 + 雲端記分）
+- 狀態：ANSWERED → 見 DECISIONS D-015
+- 提出者：人類（提案）+ Claude（整理選項）
+- 背景：人類希望遊戲能 Google 登入並記錄自己的分數，且**展示「AI 併用 CLI 與瀏覽器自行完成雲端佈建」**作為比賽亮點。AGENTS 鐵則 2 禁止擅增「後端」，故本案走正式決策。既有接點：task 05 已定「核心只依賴 `ScoreService` 介面」，`LocalScoreService` 可無縫並存。環境現況：使用者機器已有 Node v22 + npm，Firebase CLI 未裝（由 AI 安裝，屬展示內容）。
+- 待決子項與選項：
+  - **(a) 選型**：
+    - A. **Firebase（Auth + Firestore + Hosting，BaaS）**：零自建伺服器、免費 Spark 方案即可、安全靠 Security Rules；定名「線上身分與分數服務（BaaS）」，非鐵則 2 意義的自建後端。
+    - B. 自建後端（Node/Go + DB）：完全掌控，但引入維運/主機成本，違反輕量原則。
+    - C. 不做，維持純本機。
+  - **(b) H5 執行緒取捨**：cross-origin isolation（COOP/COEP，SharedArrayBuffer 需要）**會擋 Google OAuth popup**。方案：Web export **關閉 thread support**（本遊戲輕量、單執行緒足夠）→ 不再需要 COOP/COEP 標頭，`Docs/07` §二§三需修訂。**此點需最先技術驗證**（任務卡 12 的首項驗收）。
+  - **(c) fallback 契約**：未登入/離線/初始化失敗 → 自動退回 `LocalScoreService`，遊戲功能完整不崩（同 D-004/D-014 的缺什麼都不壞原則）。
+  - **(d) 範圍**：MVP 只做「登入 + 記錄/讀取**自己的**分數」；排行榜（讀他人資料的 rules 複雜度）列 Future。
+  - **(e) 佈建方式**：CLI 能做的用 CLI（init/rules/deploy），Console 獨有步驟（建專案、啟用 Google provider）用 AI 瀏覽器操作；**憑證/密碼一律由人類親手輸入，AI 不經手**；全程截圖存證供簡報。
+  - **(f) 部署**：遊戲 `export/web/` 部署至 Firebase Hosting，與 auth 同源，登入設定最簡。
+- AI 建議：(a) 採 **A**；(b)–(f) 依上述。定案後寫 `DECISIONS.md` **D-015**、新增 `Docs/08_ONLINE_SCORE_SPEC.md`（auth 流程、Firestore 結構、rules、fallback 契約）、更新 `AGENTS.md`（鐵則 2 補充 BaaS 定位 + 任務卡順序）與 `Docs/07`。
+- 影響範圍：新任務卡 `Codex/12_CLOUD_PROVISIONING.md`（執行者：Claude，CLI+瀏覽器）、`Codex/13_ONLINE_SCORE_INTEGRATION.md`（執行者：Codex，Godot 接入）、`Firebase/` 新資料夾（firebase.json/.firebaserc/firestore.rules 進版控）、`Scripts/services/`（新增 online_score_service.gd）、export HTML shell、`Docs/07`、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`。
+- 人類回答：照 AI 建議全部採納——(a) A（Firebase BaaS）、(b)–(f) 依建議。已寫入 DECISIONS.md D-015。

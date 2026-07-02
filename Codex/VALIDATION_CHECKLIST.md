@@ -70,6 +70,21 @@
 - [ ] 未動玩法/狀態機/版面/節點結構；未新增 UI。
 - [ ] `Docs/SFX_TODO.md` 已更新各事件接檔狀態。
 
+## 里程碑 — 任務 12（雲端佈建，需 D-015 定案後執行；執行者 Claude）
+- [ ] 技術驗證通過：無 COOP/COEP 下 `signInWithPopup`（Google）可完成登入。
+- [ ] Firebase 專案建立、Google provider 啟用、Firestore rules 部署生效。
+- [ ] rules 實測：本人可讀寫自己分數；未登入/跨 uid 被拒。
+- [ ] `Firebase/` 設定檔進版控；無任何 secret 入 repo。
+- [ ] 佈建全程步驟紀錄 + 截圖齊備（簡報素材）。
+- [ ] 憑證/授權皆由人類親手操作（回報中聲明）。
+
+## 里程碑 — 任務 13（線上分數接入，需任務 12 完成後執行）
+- [ ] H5 可 Google 登入；結算後 Firestore 更新自己分數；重整還原正確。
+- [ ] 未登入/離線/拒絕登入 → 自動退回本機，遊戲完整可玩、無 console 錯誤。
+- [ ] 桌面編輯器行為與接入前完全一致（core 只認 ScoreService 介面）。
+- [ ] 雲端呼叫非同步不阻塞；僅結算時寫入。
+- [ ] 登入鈕遵守版面不變量（Godot 目視 + 截圖）；文案讀 `ui_text.json`。
+
 ## 里程碑 9 — 任務 08（素材接入）
 - [ ] `Assets/final/` 齊備素材正確顯示，符合 manifest 檔名/路徑。
 - [ ] **缺檔自動 fallback placeholder，遊戲不崩**（移除某 final 素材重跑驗證）。
