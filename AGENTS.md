@@ -27,7 +27,7 @@
 ## 必讀順序
 1. 本檔 `AGENTS.md`
 2. `Docs/01`→`07`（設計／系統／狀態機／UI／動畫／資料／H5）
-3. 當前任務卡 `Codex/01`→`08`（依序）
+3. 當前任務卡（依下方「任務卡執行順序」，目前進行到 `Codex/11`）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
 5. 視覺目標：`Art/references/ui_mockup_battle.png`
 
@@ -36,12 +36,12 @@
 2. `02_STATE_MACHINE_AND_BETTING_LOOP` ✅
 3. `03_BATTLE_PRESENTATION_LOOP` ✅
 4. `04_H5_VERTICAL_UI` ✅
-5. `05_SETTLEMENT_AND_LOCAL_SCORE`
-6. `06_FEEL_AND_EFFECTS`
-7. `07_DATA_BALANCE_TUNING`
-8. `09_UI_FEEL_AND_PACING`（UI 進場微動畫 + 提示文字節奏；排在 07 之後、與 08 獨立）
-9. `10_UI_SKIN_ALIGNMENT`（UI 視覺貼齊參考圖；只動視覺不動功能；用 agent-sprite-forge 生 UI 圖）
-10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）
+5. `05_SETTLEMENT_AND_LOCAL_SCORE` ✅
+6. `06_FEEL_AND_EFFECTS` ✅
+7. `07_DATA_BALANCE_TUNING` ✅
+8. `09_UI_FEEL_AND_PACING`（UI 進場微動畫 + 提示文字節奏；排在 07 之後、與 08 獨立）✅
+9. `10_UI_SKIN_ALIGNMENT`（UI 視覺貼齊參考圖；只動視覺不動功能；用 agent-sprite-forge 生 UI 圖）✅
+10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）✅（hero_idle/walk 已接，其餘素材到位後持續接入）
 11. `11_AUDIO_INTEGRATION`（音效接入：BGM + SFX 播放能力；依 D-014，排在 01–10 全部完成之後）
 
 ## 工作流程（每張卡）
@@ -60,6 +60,11 @@
 - **D-006** 畫面分區座標契約 + 版面不變量（需 Godot 目視）。
 - **D-007** 餘額不足 → 重置為 `starting_balance`（不做「遊戲結束」畫面）。
 - **D-008** MVP 不做音效，只預留 `AudioService` 接口與待補音效清單。（已由 D-014 修訂）
+- **D-009** H5 字型用 OFL 開源字型：主字型 Baloo 2（英數）、fallback openhuninn（中文）；禁用/移除專有 `kaiu.ttf`。
+- **D-010** 美術文件集中 `Art/`（人看的文件入口）；`Assets/` 二進位產線（res:// 綁定路徑）不得搬動。
+- **D-011** 背景分區資料驅動：`game_balance.json > background_zones` 依關卡選背景，缺檔逐級 fallback（Contract v1.1）。
+- **D-012** UI 皮膚：HUD 卡+下方操作區用生成 9-slice 貼圖（`StyleBoxTexture`），缺圖 fallback 程式 `StyleBoxFlat`；icon 用生成貼紙；其餘元件程式畫（Contract v1.2 + Round 3 修訂）。
+- **D-013** sprite sheet 單邊 ≤ 4096px；多格數必須 grid 且 JSON 標 `columns`/`rows`（Contract v1.3）。
 - **D-014** 正式接入音效：BGM + SFX 播放能力，`Assets/final/audio/` 為唯一音訊入口，設定讀 `Data/audio.json`，缺檔靜音不崩，H5 首次互動解鎖；不做音量/靜音 UI。
 
 ## 完成回報格式（每張卡完成後必附）
