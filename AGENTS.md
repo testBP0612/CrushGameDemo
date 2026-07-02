@@ -42,6 +42,7 @@
 8. `09_UI_FEEL_AND_PACING`（UI 進場微動畫 + 提示文字節奏；排在 07 之後、與 08 獨立）
 9. `10_UI_SKIN_ALIGNMENT`（UI 視覺貼齊參考圖；只動視覺不動功能；用 agent-sprite-forge 生 UI 圖）
 10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）
+11. `11_AUDIO_INTEGRATION`（音效接入：BGM + SFX 播放能力；依 D-014，排在 01–10 全部完成之後）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -58,7 +59,8 @@
 - **D-005** `DataLoader` 為 autoload 單例 `Data`，全專案 `Data.xxx` 取值。
 - **D-006** 畫面分區座標契約 + 版面不變量（需 Godot 目視）。
 - **D-007** 餘額不足 → 重置為 `starting_balance`（不做「遊戲結束」畫面）。
-- **D-008** MVP 不做音效，只預留 `AudioService` 接口與待補音效清單。
+- **D-008** MVP 不做音效，只預留 `AudioService` 接口與待補音效清單。（已由 D-014 修訂）
+- **D-014** 正式接入音效：BGM + SFX 播放能力，`Assets/final/audio/` 為唯一音訊入口，設定讀 `Data/audio.json`，缺檔靜音不崩，H5 首次互動解鎖；不做音量/靜音 UI。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md

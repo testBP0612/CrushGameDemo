@@ -87,3 +87,20 @@
 - 影響：`Art/ART_CONTRACT.md`（v1.2→v1.3 §七）、`Art/ART_SPEC_SHEET.md`、sheet 的 `.json` schema（+columns/rows）、`Codex/08`（切格接入需依 columns/rows）。
 - 建議新版本號：v1.3
 - 人類裁示：同意。現成的 `hero_idle_sheet`（19200×768）請設計師重出 grid（5×5）。
+
+### Q-004：正式接入音效/音樂（修訂 D-008 的「MVP 不做音效」）
+- 狀態：ANSWERED → 見 DECISIONS D-014
+- 提出者：人類（指示正式接入）+ Claude（整理選項）
+- 背景：D-008 定案 MVP 不做音效、只預留接口。現任務卡 01–10 皆已完成，MVP 限制的前提已消失，人類指示正式接入音效。既有基礎：`AudioService.play_sfx(event_id)` 空殼已在 `game_controller.gd` 接好 9 個事件呼叫點（清單見 `Docs/SFX_TODO.md`）；`Docs/07` 已預告「行動瀏覽器需使用者互動後解鎖音訊」；工作區有候選 BGM `Assets/FishAlleyQuest.mp3`（約 3.7MB，未 commit、未入 final）。音訊素材**不屬 `Art/ART_CONTRACT.md` 鎖定範圍**（合約只管視覺素材），故走一般 Q 而非 Q-ART。
+- 待決子項與選項：
+  - **(a) 範圍**：
+    - A. 只接 BGM（最小改動，先讓遊戲有聲音）。
+    - B. BGM + 既有 9 個 SFX 事件的播放能力（**有檔才播、缺檔靜音不崩**；SFX 音檔可之後分批補，架構一次到位）。
+    - C. 只接 SFX、不接 BGM。
+  - **(b) 素材路徑與命名**：比照 D-004 的 final 入口原則——`Assets/final/audio/` 為唯一正式音訊入口；BGM 命名 `bgm_main.mp3`（`FishAlleyQuest.mp3` 改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不需 placeholder 音檔**：缺檔的 fallback 就是靜音（遊戲不可壞）。
+  - **(c) 資料驅動**：新增 `Data/audio.json`（event_id→檔名映射、各音量、BGM loop 設定），禁止在腳本寫死檔名/音量（AGENTS 鐵則 6）。
+  - **(d) H5 音訊解鎖**：依 `Docs/07`——首次使用者互動（點擊/觸碰）時解鎖並開始播 BGM；解鎖前所有播放呼叫靜默略過。
+  - **(e) 靜音/音量 UI**：建議本卡**不做**（避免動版面、觸及 D-006 不變量），列 Future。
+- AI 建議：(a) 採 **B**；(b)(c)(d) 依上述；(e) 不做。定案後在 `DECISIONS.md` 新增 **D-014（修訂 D-008）**，同步更新 `AGENTS.md` 的 D-008 摘要行與任務卡順序。
+- 影響範圍：新任務卡 `Codex/11_AUDIO_INTEGRATION.md`（已備妥，等本題定案）、`Scripts/services/audio_service.gd`（空殼→實作）、`Data/audio.json`（新增，schema 需同步 `Docs/06`）、`Docs/SFX_TODO.md`（升級為音訊素材對照清單）、`Docs/07_H5_EXPORT_SPEC.md`（音訊解鎖由 Future 轉正式）、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`（+里程碑）。
+- 人類回答：照 AI 建議全部採納——(a) B（BGM+SFX 播放能力）、(b)(c)(d) 依建議、(e) 不做靜音 UI。已寫入 DECISIONS.md D-014。

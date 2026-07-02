@@ -18,7 +18,7 @@
 - 注意：Web 匯出需 **HTTPS + 正確 COOP/COEP 標頭**（SharedArrayBuffer）。部署到自有網域時伺服器需設定：
   - `Cross-Origin-Opener-Policy: same-origin`
   - `Cross-Origin-Embedder-Policy: require-corp`
-- 音訊：行動瀏覽器需使用者互動後才能播放（若加音效，於第一次點擊解鎖）。
+- 音訊（D-014 正式接入）：行動瀏覽器需使用者互動後才能播放——**首次使用者互動（點擊/觸碰）時解鎖音訊並開始 BGM**；解鎖前所有播放呼叫靜默略過、不得報 console 錯誤。
 
 ## 四、行動瀏覽器注意
 - 觸控即點擊；按鈕熱區夠大（直式下方操作區）。

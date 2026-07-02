@@ -120,3 +120,17 @@
   - 影格順序：左→右、上→下。
 - **行動**：現成 `hero_idle_sheet`（19200×768）請設計師重出 grid（25 格 → 5×5 = 3840²）；`Codex/08` 接入時依 `columns`/`rows` 切格成 `SpriteFrames`/`AnimatedSprite2D`。
 - **影響**：`Art/ART_CONTRACT.md`(v1.3 §七)、`Art/ART_SPEC_SHEET.md`、sheet `.json` schema、`Codex/08`。
+
+## D-014：正式接入音效/音樂（修訂 D-008，回應 Q-004）
+- **問題**：D-008 定 MVP 不做音效、只留接口。任務卡 01–10 皆完成，MVP 前提已消失；人類指示正式接入音效。
+- **流程**：`Q-004` 提出（含選項與 AI 建議）→ 人類採納全部 AI 建議。音訊素材不屬 `Art/ART_CONTRACT.md` 鎖定範圍（合約只管視覺素材），不觸發 Freeze 變更程序、不升 Contract 版本。
+- **人類決策**：
+  1. **範圍**：BGM + 既有 9 個 SFX 事件的**播放能力**（事件清單見 `Docs/SFX_TODO.md`，不得擅增事件 ID）。SFX 音檔可分批補齊；**有檔才播、缺檔靜音，遊戲不可壞**。
+  2. **素材路徑**：`Assets/final/audio/` 為唯一正式音訊入口（比照 D-004 final 原則）。BGM 命名 `bgm_main.mp3`（由工作區 `Assets/FishAlleyQuest.mp3` 於 Godot 編輯器內改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不設 placeholder 音檔**——缺檔的 fallback 就是靜音。
+  3. **資料驅動**：新增 `Data/audio.json`（event_id→檔名映射、音量、BGM loop），schema 見 `Docs/06`；禁止在腳本寫死檔名/音量（AGENTS 鐵則 6）。
+  4. **H5 音訊解鎖**：首次使用者互動時解鎖並開始播 BGM；解鎖前所有播放呼叫靜默略過（`Docs/07` §三由 Future 轉正式）。
+  5. **不做靜音/音量 UI**：避免動版面（D-006 不變量），列 Future。
+- **原因**：接口（`AudioService.play_sfx` 空殼 + 9 個呼叫點）本就是 D-008 為此刻預留的擴充點；本決策是啟用而非推翻架構。方法簽名不變，既有呼叫點零修改。
+- **與 D-008 關係**：**修訂/接續**——D-008 的「預留接口」設計保留並啟用；「不載入音檔、不發聲」的限制自本決策起解除。缺檔時的行為（靜音不崩）即回到 D-008 狀態。
+- **實作**：交由 `Codex/11_AUDIO_INTEGRATION.md` 執行（驗收見 `VALIDATION_CHECKLIST` 里程碑 — 任務 11）。
+- **影響**：`Scripts/services/audio_service.gd`（空殼→實作）、`Data/audio.json`（新增）、`Docs/06`（+audio schema）、`Docs/07`（§三音訊解鎖轉正式）、`Docs/SFX_TODO.md`（升級為接檔狀態對照表，由 task 11 更新）、`AGENTS.md`（D-008 摘要行、任務卡順序）。

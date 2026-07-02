@@ -67,6 +67,17 @@
 
 > 缺 key 時的 fallback：建議回傳 `[key]` 字串以利除錯，並寫入 `OPEN_QUESTIONS.md`。
 
+## audio.json（D-014 新增）
+| 路徑 | 型別 | 說明 |
+|---|---|---|
+| `bgm.file` | string | BGM 檔名（相對 `Assets/final/audio/`，如 `bgm_main.mp3`）。 |
+| `bgm.loop` | bool | BGM 是否循環。 |
+| `bgm.volume_db` | float | BGM 音量（dB）。 |
+| `sfx_volume_db` | float | SFX 統一音量（dB）。 |
+| `sfx_events.<event_id>` | string | 事件→SFX 檔名映射。**只列已有音檔的事件**；未列出的 event_id 一律靜音略過。event_id 全集見 `Docs/SFX_TODO.md`，不得擅增。 |
+
+> 容錯（D-014）：檔案缺失/整檔缺失 → warning + 靜音，遊戲不可壞；即回到 D-008 的無聲狀態。
+
 ---
 
 ## 載入器建議（`Scripts/core/data_loader.gd`）
