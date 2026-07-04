@@ -35,3 +35,6 @@ Assets/generated/*
 /Artifacts/
 /validation_screenshots/
 /ValidationScreenshots/
+
+# Firebase deploy cache
+Firebase/.firebase/

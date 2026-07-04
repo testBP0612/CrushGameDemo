@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <title>CrushGameDemo — D-015 技術驗證頁</title>
+  <style>
+    body { font-family: sans-serif; max-width: 480px; margin: 40px auto; }
+    button { font-size: 1.1em; padding: 8px 20px; margin: 4px 0; }
+    #log { white-space: pre-wrap; background: #f0f0f0; padding: 12px; font-size: .9em; }
+  </style>
+</head>
+<body>
+  <h2>D-015 驗證：無 COOP/COEP 下的 Google 登入</h2>
+  <button id="btn-login">Google 登入（signInWithPopup）</button>
+  <button id="btn-write" disabled>寫入測試分數</button>
+  <button id="btn-read" disabled>讀回測試分數</button>
+  <div id="log">待操作…</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // TODO(任務12)：專案建立後由 `firebase apps:sdkconfig web` 填入
+    const firebaseConfig = window.__FIREBASE_CONFIG__ || null;
+
+    const log = (m) => { document.getElementById("log").textContent += "\n" + m; };
+    if (!firebaseConfig) { log("尚未填入 web config"); throw new Error("no config"); }
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    let user = null;
+
+    log("crossOriginIsolated = " + self.crossOriginIsolated + "（驗證目標：false）");
+
+    document.getElementById("btn-login").onclick = async () => {
+      try {
+        const res = await signInWithPopup(auth, new GoogleAuthProvider());
+        user = res.user;
+        log("登入成功：" + user.displayName + " (uid=" + user.uid + ")");
+        document.getElementById("btn-write").disabled = false;
+        document.getElementById("btn-read").disabled = false;
+      } catch (e) { log("登入失敗：" + e.code + " " + e.message); }
+    };
+    document.getElementById("btn-write").onclick = async () => {
+      try {
+        await setDoc(doc(db, "users", user.uid), {
+          best_payout: 999, balance: 1234,
+          display_name: user.displayName, updated_at: serverTimestamp()
+        });
+        log("寫入成功 users/" + user.uid);
+      } catch (e) { log("寫入失敗：" + e.code + " " + e.message); }
+    };
+    document.getElementById("btn-read").onclick = async () => {
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        log("讀回：" + JSON.stringify(snap.data()));
+      } catch (e) { log("讀取失敗：" + e.code + " " + e.message); }
+    };
+  </script>
+  <script src="./config.js"></script>
+</body>
+</html>
