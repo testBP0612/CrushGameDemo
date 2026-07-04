@@ -6,9 +6,10 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
     // D-016 / Docs/08 §七：排行榜——登入可讀，僅本人可寫，型別 + 單調遞增 + 上限守門。
+    // create/update 才有 request.resource.data 可驗；delete 允許本人（清測試資料/退榜）。
     match /leaderboard/{uid} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null
+      allow create, update: if request.auth != null
         && request.auth.uid == uid
         && request.resource.data.display_name is string
         && request.resource.data.best_payout is int
@@ -16,6 +17,7 @@ service cloud.firestore {
         && request.resource.data.best_payout <= 1000000000
         && (!exists(/databases/$(database)/documents/leaderboard/$(uid))
             || request.resource.data.best_payout >= resource.data.best_payout);
+      allow delete: if request.auth != null && request.auth.uid == uid;
     }
     match /{document=**} {
       allow read, write: if false;

@@ -22,8 +22,8 @@
 
 ## Firebase 相關工作
 
-部署/測試/打包一律先讀 `Firebase/README.md`（含：**不要裝 Java/Emulator**，
-用真環境驗證的完整做法；部署需人類明確授權）。
+部署/測試/打包一律先讀 `Firebase/README.md`（含:**不要裝 Java/Emulator**，
+用真環境驗證的完整做法；本專案部署免授權——人類 2026-07-05 裁示）。
 
 ## 現況錨點
 
