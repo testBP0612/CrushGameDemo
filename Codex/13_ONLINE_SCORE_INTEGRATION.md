@@ -1,6 +1,7 @@
-# 任務 13：線上分數接入（Godot 端，Codex 執行）
+# 任務 13：線上分數接入（Godot 端）
 
 > **前置條件（未滿足不得執行）**：D-015 已定案，且**任務 12 已完成並回報**（Firebase 專案可用、web config 已取得）。
+> **分工變更（人類 2026-07-04 指示）**：本卡**程式串接由 Claude 執行**（§範圍 1–4，已完成——`online_score_service.gd`、`crush-online.js` 橋接、export preset、部署腳本）；**§範圍 5（登入 UI）拆出為 `Codex/14_ONLINE_LOGIN_UI.md` 由 Codex 執行**。in-engine 驗證由 Codex/人類在任務 14 一併完成。
 
 ## 目標
 遊戲 H5 版可用 Google 登入，分數自動同步到 Firestore；未登入/離線時完整退回本機模式。**不改玩法/數值/狀態機。**

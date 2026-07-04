@@ -44,7 +44,8 @@
 10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）✅（hero_idle/walk 已接，其餘素材到位後持續接入）
 11. `11_AUDIO_INTEGRATION`（音效接入：BGM + SFX 播放能力；依 D-014，排在 01–10 全部完成之後）
 12. `12_CLOUD_PROVISIONING`（Firebase 佈建；依 D-015；**執行者 Claude**，CLI+瀏覽器，人類在旁授權）
-13. `13_ONLINE_SCORE_INTEGRATION`（Godot 接入 Google 登入+雲端分數；依 D-015；需任務 12 完成）
+13. `13_ONLINE_SCORE_INTEGRATION`（Godot 接入 Google 登入+雲端分數；依 D-015；需任務 12 完成；程式串接由 Claude 執行〔人類指示〕）
+14. `14_ONLINE_LOGIN_UI`（登入 UI 生成+擺位+目視驗證；Codex 執行；需任務 13 串接完成）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。

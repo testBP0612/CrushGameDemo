@@ -241,6 +241,14 @@ func reset_balance_to_starting() -> void:
 	_emit_balance_changed()
 
 
+## D-015：登入後雲端合併可能改變存檔餘額；僅允許在 BETTING（局外）同步回狀態機。
+func refresh_balance_from_service() -> void:
+	if state != State.BETTING or score_service == null:
+		return
+	balance = score_service.get_balance()
+	_emit_balance_changed()
+
+
 func stage_to_challenge() -> int:
 	return stage + 1
 

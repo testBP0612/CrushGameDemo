@@ -2,7 +2,7 @@ extends Node2D
 
 const EventBusScript := preload("res://Scripts/core/event_bus.gd")
 const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.gd")
-const LocalScoreServiceScript := preload("res://Scripts/services/local_score_service.gd")
+const OnlineScoreServiceScript := preload("res://Scripts/services/online_score_service.gd")
 const PlayerProfileServiceScript := preload("res://Scripts/services/player_profile_service.gd")
 const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 
@@ -16,7 +16,9 @@ const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 
 var event_bus := EventBusScript.new()
 var state_machine := GameStateMachineScript.new()
-var score_service := LocalScoreServiceScript.new()
+# D-015：OnlineScoreService 繼承 LocalScoreService——非 Web/未登入/橋接缺失時
+# 行為與純本機完全相同（fallback 契約見 Docs/08 §五）。
+var score_service := OnlineScoreServiceScript.new()
 var player_profile_service := PlayerProfileServiceScript.new()
 var audio_service := AudioServiceScript.new()
 
@@ -24,6 +26,9 @@ var audio_service := AudioServiceScript.new()
 func _ready() -> void:
 	add_child(event_bus)
 	add_child(audio_service)
+	score_service.setup_bridge()
+	score_service.auth_changed.connect(_on_auth_changed)
+	score_service.cloud_merged.connect(_on_cloud_merged)
 	state_machine.setup(event_bus, score_service)
 	_connect_events()
 	_connect_buttons()
@@ -130,6 +135,7 @@ func _on_balance_reset_pressed() -> void:
 
 
 func _on_state_changed(state_name: String) -> void:
+	_try_apply_cloud_balance()
 	_update_view()
 	_play_presentation_for_state(state_name)
 
@@ -265,3 +271,24 @@ func _ui_snapshot(state_name: String) -> Dictionary:
 		"best_payout": score_service.get_best_payout(),
 		"can_advance": state_machine.can_advance()
 	}
+
+
+# --- D-015 線上分數（UI 接點見 Codex/14；本層只做狀態同步，不做版面） ---
+
+func _on_auth_changed(_signed_in: bool, _display_name: String) -> void:
+	_update_view()
+
+
+func _on_cloud_merged() -> void:
+	_try_apply_cloud_balance()
+	_update_view()
+
+
+## 雲端餘額只在局外（BETTING）套用，避免覆寫進行中的一局（Docs/08 §五）。
+func _try_apply_cloud_balance() -> void:
+	if not score_service.has_pending_cloud_balance():
+		return
+	if not state_machine.is_betting():
+		return
+	score_service.apply_pending_cloud_balance()
+	state_machine.refresh_balance_from_service()
