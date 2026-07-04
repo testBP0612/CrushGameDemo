@@ -111,9 +111,9 @@
 - 背景：人類希望遊戲能 Google 登入並記錄自己的分數，且**展示「AI 併用 CLI 與瀏覽器自行完成雲端佈建」**作為比賽亮點。AGENTS 鐵則 2 禁止擅增「後端」，故本案走正式決策。既有接點：task 05 已定「核心只依賴 `ScoreService` 介面」，`LocalScoreService` 可無縫並存。環境現況：使用者機器已有 Node v22 + npm，Firebase CLI 未裝（由 AI 安裝，屬展示內容）。
 - 待決子項與選項：
   - **(a) 選型**：
-    - A. **Firebase（Auth + Firestore + Hosting，BaaS）**：零自建伺服器、免費 Spark 方案即可、安全靠 Security Rules；定名「線上身分與分數服務（BaaS）」，非鐵則 2 意義的自建後端。
-    - B. 自建後端（Node/Go + DB）：完全掌控，但引入維運/主機成本，違反輕量原則。
-    - C. 不做，維持純本機。
+	- A. **Firebase（Auth + Firestore + Hosting，BaaS）**：零自建伺服器、免費 Spark 方案即可、安全靠 Security Rules；定名「線上身分與分數服務（BaaS）」，非鐵則 2 意義的自建後端。
+	- B. 自建後端（Node/Go + DB）：完全掌控，但引入維運/主機成本，違反輕量原則。
+	- C. 不做，維持純本機。
   - **(b) H5 執行緒取捨**：cross-origin isolation（COOP/COEP，SharedArrayBuffer 需要）**會擋 Google OAuth popup**。方案：Web export **關閉 thread support**（本遊戲輕量、單執行緒足夠）→ 不再需要 COOP/COEP 標頭，`Docs/07` §二§三需修訂。**此點需最先技術驗證**（任務卡 12 的首項驗收）。
   - **(c) fallback 契約**：未登入/離線/初始化失敗 → 自動退回 `LocalScoreService`，遊戲功能完整不崩（同 D-004/D-014 的缺什麼都不壞原則）。
   - **(d) 範圍**：MVP 只做「登入 + 記錄/讀取**自己的**分數」；排行榜（讀他人資料的 rules 複雜度）列 Future。

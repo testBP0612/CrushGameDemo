@@ -20,7 +20,7 @@
   （cross-origin isolation 會擋 OAuth popup）。本遊戲輕量，單執行緒足夠。
   此取捨由任務 12 首項技術驗證確認；驗證不過回 D-015 重議。
   - （歷史紀錄：原規格要求 `Cross-Origin-Opener-Policy: same-origin` +
-    `Cross-Origin-Embedder-Policy: require-corp`，D-015 後不再適用。）
+	`Cross-Origin-Embedder-Policy: require-corp`，D-015 後不再適用。）
 - 部署：Firebase Hosting（D-015；與 auth 同源，設定見 `Docs/08`）。
 - 音訊（D-014 正式接入）：行動瀏覽器需使用者互動後才能播放——**首次使用者互動（點擊/觸碰）時解鎖音訊並開始 BGM**；解鎖前所有播放呼叫靜默略過、不得報 console 錯誤。
 

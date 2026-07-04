@@ -9,6 +9,10 @@ const DATA_PATHS := {
 	"ui_text": "res://Data/ui_text.json"
 }
 
+const OPTIONAL_DATA_PATHS := {
+	"audio": "res://Data/audio.json"
+}
+
 var _data: Dictionary = {}
 var _loaded := false
 
@@ -36,8 +40,25 @@ func load_all() -> bool:
 
 		_data[key] = parsed
 
+	for key: String in OPTIONAL_DATA_PATHS:
+		_load_optional_json(key, OPTIONAL_DATA_PATHS[key])
+
 	_loaded = true
 	return true
+
+
+func _load_optional_json(key: String, path: String) -> void:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		push_warning("DataLoader optional file missing: %s. Related systems will use silent fallback." % path)
+		return
+
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_warning("DataLoader failed to parse optional file %s as a JSON object. Related systems will use silent fallback." % path)
+		return
+
+	_data[key] = parsed
 
 
 func is_loaded() -> bool:
@@ -90,6 +111,10 @@ func battle_sequence_config() -> Dictionary:
 
 func animation_timing_config() -> Dictionary:
 	return _data.get("animation_timing", {})
+
+
+func audio_config() -> Dictionary:
+	return _data.get("audio", {})
 
 
 func multiplier_at(stage: int) -> float:

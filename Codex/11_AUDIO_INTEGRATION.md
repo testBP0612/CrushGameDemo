@@ -12,12 +12,12 @@
 1. **`Data/audio.json`（新增）**，schema 如下（定案後由規劃端同步至 `Docs/06`）：
    ```json
    {
-     "bgm": { "file": "bgm_main.mp3", "loop": true, "volume_db": -8.0 },
-     "sfx_volume_db": -4.0,
-     "sfx_events": {
-       "button_click": "sfx_button_click.ogg",
-       "attack_hit": "sfx_attack_hit.ogg"
-     }
+	 "bgm": { "file": "bgm_main.mp3", "loop": true, "volume_db": -8.0 },
+	 "sfx_volume_db": -4.0,
+	 "sfx_events": {
+	   "button_click": "sfx_button_click.ogg",
+	   "attack_hit": "sfx_attack_hit.ogg"
+	 }
    }
    ```
    - `sfx_events` 只列**已有音檔**的事件；未列出的 event_id 一律靜音略過。

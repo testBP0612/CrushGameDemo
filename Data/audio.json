@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "bgm": {
+    "file": "bgm_main.mp3",
+    "loop": true,
+    "volume_db": -8.0
+  },
+  "sfx_volume_db": -4.0,
+  "sfx_events": {}
+}
