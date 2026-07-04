@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "_comment": "Mock leaderboard NPC data for D-016 Phase 1. These are simulated players; Phase 2 replaces the data source with Firebase.",
+  "entries": [
+    { "display_name": "小莓騎士", "best_payout": 110 },
+    { "display_name": "風鈴法師", "best_payout": 160 },
+    { "display_name": "橘子守衛", "best_payout": 220 },
+    { "display_name": "豆花勇者", "best_payout": 300 },
+    { "display_name": "藍莓弓手", "best_payout": 390 },
+    { "display_name": "月光小隊", "best_payout": 500 },
+    { "display_name": "星砂旅人", "best_payout": 640 },
+    { "display_name": "泡泡劍士", "best_payout": 820 },
+    { "display_name": "銀河牧師", "best_payout": 1050 },
+    { "display_name": "海鹽獵人", "best_payout": 1350 },
+    { "display_name": "南瓜隊長", "best_payout": 1700 },
+    { "display_name": "薄荷刺客", "best_payout": 2150 },
+    { "display_name": "晴空術士", "best_payout": 2700 },
+    { "display_name": "紅茶衛士", "best_payout": 3400 },
+    { "display_name": "奶油騎兵", "best_payout": 4300 },
+    { "display_name": "琥珀遊俠", "best_payout": 5400 },
+    { "display_name": "霜糖王子", "best_payout": 6800 },
+    { "display_name": "黑糖女巫", "best_payout": 8500 },
+    { "display_name": "流星貓爵", "best_payout": 11000 },
+    { "display_name": "金幣大師", "best_payout": 14500 },
+    { "display_name": "熔岩冠軍", "best_payout": 19000 }
+  ]
+}

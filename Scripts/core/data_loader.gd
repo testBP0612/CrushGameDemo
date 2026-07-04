@@ -6,7 +6,8 @@ const DATA_PATHS := {
 	"monsters": "res://Data/monsters.json",
 	"battle_sequences": "res://Data/battle_sequences.json",
 	"animation_timing": "res://Data/animation_timing.json",
-	"ui_text": "res://Data/ui_text.json"
+	"ui_text": "res://Data/ui_text.json",
+	"leaderboard_mock": "res://Data/leaderboard_mock.json"
 }
 
 const OPTIONAL_DATA_PATHS := {
@@ -115,6 +116,10 @@ func animation_timing_config() -> Dictionary:
 
 func audio_config() -> Dictionary:
 	return _data.get("audio", {})
+
+
+func leaderboard_mock_config() -> Dictionary:
+	return _data.get("leaderboard_mock", {})
 
 
 func multiplier_at(stage: int) -> float:

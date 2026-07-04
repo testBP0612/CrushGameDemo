@@ -12,10 +12,10 @@ GDScript 程式碼分層存放區。由 **Codex 依任務卡建立**，本階段
 | `actors/` | 主角與怪物的演出控制（動畫狀態、受擊、死亡） | `HeroActor`、`MonsterActor` |
 | `ui/` | UI 控制：下注面板、本局資訊、結算、按鈕狀態 | `BetPanel`、`HudInfo`、`SettlementPanel` |
 | `effects/` | 傷害數字、hit flash、撤退/戰敗特效 | `DamageNumber`、`HitFlash` |
-| `services/` | 抽象服務層：分數、玩家資料（MVP 只做 Local/mock） | `ScoreService`、`LocalScoreService`、`PlayerProfileService` |
+| `services/` | 抽象服務層：分數、玩家資料、排行榜（MVP 只做 Local/mock） | `ScoreService`、`LocalScoreService`、`PlayerProfileService`、`LeaderboardService` |
 
 ## 規則
 
 - 數值與設定一律從 `Data/*.json` 讀取（單一真實來源），**禁止寫死**倍率/成功率/文案。
-- 服務層以介面 + 實作分離，Future 可替換成 `ApiScoreService` / `FirebaseScoreService`。
+- 服務層以介面 + 實作分離，Future 可替換成 `ApiScoreService` / `FirebaseScoreService` / `FirebaseLeaderboardService`。
 - 詳細責任見 `Docs/02_SYSTEM_SPEC.md` 與 `Docs/03_STATE_MACHINE.md`。

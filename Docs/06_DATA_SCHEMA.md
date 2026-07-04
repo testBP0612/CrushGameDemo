@@ -78,6 +78,15 @@
 
 > 容錯（D-014）：檔案缺失/整檔缺失 → warning + 靜音，遊戲不可壞；即回到 D-008 的無聲狀態。
 
+## leaderboard_mock.json（D-016 Phase 1 新增）
+| 路徑 | 型別 | 說明 |
+|---|---|---|
+| `entries[]` | array | Mock 排行榜 NPC 名單，明示為模擬資料。 |
+| `entries[].display_name` | string | NPC 顯示名稱。 |
+| `entries[].best_payout` | int | NPC 歷史最佳單局收益，用於 `best_payout` 排名。 |
+
+> `MockLeaderboardService` 會把玩家本人（`ScoreService.get_best_payout()` + profile display name）併入同一排序；NPC 不得寫死在 `.gd`。
+
 ---
 
 ## 載入器建議（`Scripts/core/data_loader.gd`）
