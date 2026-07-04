@@ -3,6 +3,7 @@ extends Control
 
 const UiEntrance := preload("res://Scripts/effects/ui_entrance.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
+const LeaderboardPanelScript := preload("res://Scripts/ui/leaderboard_panel.gd")
 
 signal bet_decrease_requested
 signal bet_increase_requested
@@ -23,6 +24,7 @@ signal balance_reset_requested
 @onready var bet_panel: BetPanel = $ActionArea/BetPanel
 @onready var decision_panel: DecisionPanel = $ActionArea/DecisionPanel
 @onready var settlement_panel: SettlementPanel = $ActionArea/SettlementPanel
+@onready var leaderboard_entry_button: Button = $LeaderboardEntryButton
 
 var _visible_state := {
 	"top_bar": false,
@@ -31,6 +33,8 @@ var _visible_state := {
 	"decision_panel": false,
 	"settlement_panel": false
 }
+var _leaderboard_panel: LeaderboardPanel
+var _last_snapshot := {}
 
 
 func _ready() -> void:
@@ -47,14 +51,22 @@ func _ready() -> void:
 	decision_panel.cashout_requested.connect(func() -> void: cashout_requested.emit())
 	decision_panel.advance_requested.connect(func() -> void: advance_requested.emit())
 	settlement_panel.acknowledge_requested.connect(func() -> void: settle_acknowledged.emit())
+	settlement_panel.leaderboard_requested.connect(_on_leaderboard_requested)
+	leaderboard_entry_button.text = Data.text("lb_button")
+	UiSkin.apply_button(leaderboard_entry_button, "trophy_small")
+	leaderboard_entry_button.pressed.connect(_on_leaderboard_requested)
+	_build_leaderboard_panel()
 
 
 func update_snapshot(snapshot: Dictionary) -> void:
+	_last_snapshot = snapshot
 	var state_name := str(snapshot.get("state_name", ""))
 	var show_game_ui := state_name != "TITLE"
 	_set_visible_with_entrance("top_bar", top_bar, show_game_ui)
 	_set_visible_with_entrance("hud", hud, show_game_ui, hud.entrance_targets())
 	hud.update_snapshot(snapshot)
+	leaderboard_entry_button.visible = bool(snapshot.get("is_betting", false))
+	leaderboard_entry_button.disabled = not bool(snapshot.get("is_betting", false))
 	battle_message.update_snapshot(snapshot)
 
 	_set_visible_with_entrance("bet_panel", bet_panel, bool(snapshot.get("is_betting", false)))
@@ -94,3 +106,18 @@ func _set_visible_with_entrance(key: String, control: Control, should_show: bool
 		UiEntrance.reset(control)
 		for target in stagger_targets:
 			UiEntrance.reset_fade(target)
+
+
+func _build_leaderboard_panel() -> void:
+	_leaderboard_panel = LeaderboardPanelScript.new()
+	_leaderboard_panel.name = "LeaderboardPanel"
+	_leaderboard_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(_leaderboard_panel)
+
+
+func _on_leaderboard_requested() -> void:
+	if _leaderboard_panel == null:
+		return
+	if not (bool(_last_snapshot.get("is_betting", false)) or bool(_last_snapshot.get("is_settle", false))):
+		return
+	_leaderboard_panel.open(_last_snapshot.get("leaderboard_service", null))

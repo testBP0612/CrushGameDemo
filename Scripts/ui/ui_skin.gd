@@ -25,6 +25,7 @@ const ICON_PLUS := "res://Assets/final/ui/runtime/icon_plus_48.png"
 const ICON_MINUS := "res://Assets/final/ui/runtime/icon_minus_48.png"
 const ICON_CAT_CAN := "res://Assets/final/ui/runtime/icon_cat_can_48.png"
 const ICON_WARNING := "res://Assets/final/ui/runtime/icon_warning_48.png"
+const ICON_TROPHY := "res://Assets/final/ui/runtime/icon_trophy_48.png"
 const SKIN_CARD := "res://Assets/final/ui/skin_card.png"
 const SKIN_PANEL := "res://Assets/final/ui/skin_panel.png"
 const SKIN_BTN_PRIMARY := "res://Assets/final/ui/skin_btn_primary.png"
@@ -65,7 +66,9 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 			_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
 			panel.add_theme_stylebox_override("panel", large)
 		_:
-			var fallback := _sticker_box(CREAM, 32, 8, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
+			var fallback_color := Color(1.0, 0.96, 0.84, 1.0) if style == "leaderboard_me" else CREAM
+			var fallback_shadow := Color(1.0, 0.72, 0.12, 0.32) if style == "leaderboard_me" else Color(0.08, 0.67, 0.62, 0.16)
+			var fallback := _sticker_box(fallback_color, 32, 8, DEEP_NAVY, fallback_shadow)
 			_set_content_margins(fallback, 28.0, 20.0, 28.0, 20.0)
 			panel.add_theme_stylebox_override("panel", fallback)
 
@@ -106,6 +109,13 @@ static func apply_button(button: Button, style: String) -> void:
 			radius = 28
 			content_margin = 10.0
 			text_outline_size = 2
+		"trophy_small":
+			fallback_color = CREAM
+			font_color = DEEP_NAVY
+			radius = 28
+			content_margin = 18.0
+			text_outline_size = 2
+			_apply_button_icon(button, ICON_TROPHY)
 		"step_decrease":
 			skin_path = SKIN_BTN_MINUS
 			fallback_color = CREAM
@@ -275,6 +285,8 @@ static func apply_icon(texture_rect: TextureRect, name: String) -> void:
 			path = ICON_CAT_CAN
 		"warning":
 			path = ICON_WARNING
+		"trophy":
+			path = ICON_TROPHY
 		"plus":
 			path = ICON_PLUS
 		"minus":
@@ -335,6 +347,14 @@ static func _is_round3_panel(panel: PanelContainer, style: String) -> bool:
 		"large":
 			return path.contains("/ActionArea/BetPanel/Panel")
 	return false
+
+
+static func apply_leaderboard_hint(panel: PanelContainer) -> void:
+	if panel == null or not is_instance_valid(panel):
+		return
+	var style := _sticker_box(Color(1.0, 0.96, 0.84, 1.0), 26, 7, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.18))
+	_set_content_margins(style, 24.0, 12.0, 24.0, 12.0)
+	panel.add_theme_stylebox_override("panel", style)
 
 
 static func _flat_box(color: Color, radius: int, border_width: int = 0, border_color: Color = Color.TRANSPARENT) -> StyleBoxFlat:

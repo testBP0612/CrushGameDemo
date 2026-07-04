@@ -19,7 +19,6 @@ signal balance_reset_requested
 @onready var insufficient_label: Label = $Panel/Margin/Layout/InsufficientLabel
 @onready var insufficient_icon: TextureRect = $Panel/Margin/Layout/InsufficientIcon
 @onready var confirm_button: Button = $Panel/Margin/Layout/ConfirmButton
-
 var _quick_buttons: Array[Button] = []
 var _is_reset_mode := false
 

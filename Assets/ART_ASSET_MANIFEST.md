@@ -94,6 +94,7 @@
 | icon_warning | icon_warning.png / runtime/…_48.png | Assets/final/ui/ | imported | yes | imported | 金幣不足提示 |
 | icon_login | icon_login.png / runtime/icon_login_48.png | Assets/final/ui/ | imported | yes | imported | Google 登入/登出按鈕貼紙（貓項圈鈴鐺） |
 | icon_cloud | icon_cloud.png / runtime/icon_cloud_48.png | Assets/final/ui/ | imported | yes | imported | 已登入/雲端同步標記（雲朵魚滴） |
+| icon_trophy | icon_trophy.png / runtime/icon_trophy_48.png | Assets/final/ui/ | imported | yes | imported | 排行榜入口與面板貼紙 |
 
 > 註：D-012 初版曾移除舊框貼圖（`ui_panel_*`、`ui_btn_*`、`ui_chip*`，當時改純程式畫）；Round 3 改用上表全新的 `skin_*` 9-slice 皮膚取得插畫質感（見 D-012 修訂）。
 
