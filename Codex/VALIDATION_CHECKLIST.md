@@ -4,6 +4,7 @@
 
 ## 通用（每張卡都檢查）
 - [ ] 只動了該任務卡範圍內的檔案。
+- [ ] **資源存在性判斷一律用 `ResourceLoader.exists()`，不可用 `FileAccess.file_exists()`**——後者在匯出版對 imported 資源（PNG/MP3…）恆為 false，會讓缺檔 fallback 全部誤觸發（編輯器正常、部署後素材消失；2026-07-04 教訓，raw 檔如 .json 除外）。涉及素材/音訊載入的卡，**必須做一次 H5 匯出實機驗證**，不能只在編輯器目視。
 - [ ] 沒有把數值/文案寫死（皆讀 `Data/*.json`）。
 - [ ] 程式依 `Scripts/` 分層，無單一巨大 script。
 - [ ] 不明確處已寫入 `Docs/OPEN_QUESTIONS.md`。
