@@ -3,23 +3,22 @@ extends Node2D
 const EventBusScript := preload("res://Scripts/core/event_bus.gd")
 const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.gd")
 const OnlineScoreServiceScript := preload("res://Scripts/services/online_score_service.gd")
-const PlayerProfileServiceScript := preload("res://Scripts/services/player_profile_service.gd")
 const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
+const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
 @onready var title_label: Label = $UILayer/TitleScreen/TitleLayout/TitleLabel
 @onready var best_record_label: Label = $UILayer/TitleScreen/TitleLayout/BestRecordLabel
 @onready var start_button: Button = $UILayer/TitleScreen/TitleLayout/StartButton
+@onready var login_button: Button = $UILayer/TitleScreen/TitleLayout/LoginButton
 @onready var vertical_ui: VerticalUi = $UILayer/VerticalUi
-@onready var profile_label: Label = $UILayer/VerticalUi/TopBar/ProfileFrame/ProfileLabel
 
 var event_bus := EventBusScript.new()
 var state_machine := GameStateMachineScript.new()
 # D-015：OnlineScoreService 繼承 LocalScoreService——非 Web/未登入/橋接缺失時
 # 行為與純本機完全相同（fallback 契約見 Docs/08 §五）。
 var score_service := OnlineScoreServiceScript.new()
-var player_profile_service := PlayerProfileServiceScript.new()
 var audio_service := AudioServiceScript.new()
 
 
@@ -52,6 +51,7 @@ func _connect_events() -> void:
 
 func _connect_buttons() -> void:
 	start_button.pressed.connect(_on_start_pressed)
+	login_button.pressed.connect(_on_login_pressed)
 	vertical_ui.bet_decrease_requested.connect(_on_decrease_pressed)
 	vertical_ui.bet_increase_requested.connect(_on_increase_pressed)
 	vertical_ui.bet_confirm_requested.connect(_on_confirm_bet_pressed)
@@ -77,13 +77,23 @@ func _apply_static_text() -> void:
 	title_label.text = Data.text("title_game_name")
 	_update_best_record_text()
 	start_button.text = Data.text("title_tap_to_start")
-	profile_label.text = str(player_profile_service.get_profile().get("display_name", ""))
+	_update_auth_ui()
+	UiSkin.apply_button(login_button, "login")
 
 
 func _on_start_pressed() -> void:
 	audio_service.play_sfx("button_click")
 	state_machine.start_from_title()
 	_update_view()
+
+
+func _on_login_pressed() -> void:
+	if score_service.is_signed_in():
+		score_service.sign_out()
+	else:
+		score_service.sign_in()
+	audio_service.play_sfx("button_click")
+	_update_auth_ui()
 
 
 func _on_decrease_pressed() -> void:
@@ -236,6 +246,7 @@ func _update_view() -> void:
 	var state_name := state_machine.state_name()
 	title_screen.visible = state_machine.is_title()
 	vertical_ui.visible = not state_machine.is_title()
+	_update_auth_ui()
 	vertical_ui.update_snapshot(_ui_snapshot(state_name))
 	_update_best_record_text()
 
@@ -273,14 +284,26 @@ func _ui_snapshot(state_name: String) -> Dictionary:
 	}
 
 
+func _update_auth_ui() -> void:
+	if not is_node_ready():
+		return
+	var online_available := score_service.is_online_available()
+	var signed_in := score_service.is_signed_in()
+	login_button.visible = online_available
+	login_button.text = Data.text("logout_button" if signed_in else "login_button")
+	vertical_ui.set_profile_auth_state(signed_in, score_service.online_display_name())
+
+
 # --- D-015 線上分數（UI 接點見 Codex/14；本層只做狀態同步，不做版面） ---
 
 func _on_auth_changed(_signed_in: bool, _display_name: String) -> void:
+	_update_auth_ui()
 	_update_view()
 
 
 func _on_cloud_merged() -> void:
 	_try_apply_cloud_balance()
+	_update_auth_ui()
 	_update_view()
 
 

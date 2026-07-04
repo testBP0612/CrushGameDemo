@@ -7,6 +7,9 @@
 
     "title_game_name": "勇者撤離戰",
     "title_tap_to_start": "點擊開始",
+    "login_button": "Google 登入",
+    "logout_button": "登出",
+    "login_hint_synced": "已同步雲端",
     "profile_mock_display_name": "試玩勇者",
 
     "hud_stage": "關卡 {stage}/{max}",

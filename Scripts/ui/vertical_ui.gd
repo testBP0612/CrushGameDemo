@@ -16,7 +16,8 @@ signal balance_reset_requested
 @onready var hud: Hud = $Hud
 @onready var top_bar: Control = $TopBar
 @onready var profile_frame: PanelContainer = $TopBar/ProfileFrame
-@onready var profile_label: Label = $TopBar/ProfileFrame/ProfileLabel
+@onready var profile_cloud_icon: TextureRect = $TopBar/ProfileFrame/ProfileContent/ProfileCloudIcon
+@onready var profile_label: Label = $TopBar/ProfileFrame/ProfileContent/ProfileLabel
 @onready var logo_label: Label = $TopBar/LogoLabel
 @onready var battle_message: BattleMessage = $BattleMessage
 @onready var bet_panel: BetPanel = $ActionArea/BetPanel
@@ -34,8 +35,10 @@ var _visible_state := {
 
 func _ready() -> void:
 	UiSkin.apply_panel(profile_frame, "card")
+	UiSkin.apply_icon(profile_cloud_icon, "cloud")
 	UiSkin.apply_light_panel_label(profile_label)
 	logo_label.text = Data.text("title_game_name")
+	set_profile_auth_state(false, "")
 	bet_panel.decrease_requested.connect(func() -> void: bet_decrease_requested.emit())
 	bet_panel.increase_requested.connect(func() -> void: bet_increase_requested.emit())
 	bet_panel.confirm_requested.connect(func() -> void: bet_confirm_requested.emit())
@@ -62,6 +65,11 @@ func update_snapshot(snapshot: Dictionary) -> void:
 
 	_set_visible_with_entrance("settlement_panel", settlement_panel, bool(snapshot.get("is_settle", false)), settlement_panel.entrance_targets())
 	settlement_panel.update_snapshot(snapshot)
+
+
+func set_profile_auth_state(signed_in: bool, display_name: String) -> void:
+	profile_label.text = display_name if signed_in and not display_name.is_empty() else Data.text("profile_mock_display_name")
+	profile_cloud_icon.visible = signed_in and profile_cloud_icon.texture != null
 
 
 func _set_visible_with_entrance(key: String, control: Control, should_show: bool, stagger_targets: Array[Control] = []) -> void:

@@ -19,6 +19,8 @@ const ICON_PAYOUT := "res://Assets/final/ui/runtime/icon_payout_48.png"
 const ICON_COIN := "res://Assets/final/ui/runtime/icon_coin_48.png"
 const ICON_PAW := "res://Assets/final/ui/runtime/icon_paw_48.png"
 const ICON_BACKPACK := "res://Assets/final/ui/runtime/icon_backpack_48.png"
+const ICON_LOGIN := "res://Assets/final/ui/runtime/icon_login_48.png"
+const ICON_CLOUD := "res://Assets/final/ui/runtime/icon_cloud_48.png"
 const ICON_PLUS := "res://Assets/final/ui/runtime/icon_plus_48.png"
 const ICON_MINUS := "res://Assets/final/ui/runtime/icon_minus_48.png"
 const ICON_CAT_CAN := "res://Assets/final/ui/runtime/icon_cat_can_48.png"
@@ -93,6 +95,11 @@ static func apply_button(button: Button, style: String) -> void:
 			fallback_color = Color(0.96, 0.47, 0.23, 1.0)
 			shadow_color = Color(0.96, 0.25, 0.42, 0.32)
 			_apply_button_icon(button, ICON_BACKPACK)
+		"login":
+			skin_path = SKIN_BTN_SECONDARY
+			fallback_color = Color(0.96, 0.47, 0.23, 1.0)
+			shadow_color = Color(0.96, 0.25, 0.42, 0.32)
+			_apply_button_icon(button, ICON_LOGIN)
 		"small":
 			fallback_color = CREAM
 			font_color = DEEP_NAVY
@@ -260,6 +267,10 @@ static func apply_icon(texture_rect: TextureRect, name: String) -> void:
 			path = ICON_PAW
 		"backpack":
 			path = ICON_BACKPACK
+		"login":
+			path = ICON_LOGIN
+		"cloud":
+			path = ICON_CLOUD
 		"cat_can":
 			path = ICON_CAT_CAN
 		"warning":
@@ -268,7 +279,7 @@ static func apply_icon(texture_rect: TextureRect, name: String) -> void:
 			path = ICON_PLUS
 		"minus":
 			path = ICON_MINUS
-	if path.is_empty() or not FileAccess.file_exists(path):
+	if path.is_empty():
 		texture_rect.visible = false
 		return
 	var texture := _load_texture(path)
@@ -349,8 +360,6 @@ static func _tint_stylebox(style: StyleBox, color: Color) -> void:
 
 
 static func _apply_button_icon(button: Button, path: String) -> void:
-	if not FileAccess.file_exists(path):
-		return
 	var texture := _load_texture(path)
 	if texture == null:
 		return
@@ -361,12 +370,13 @@ static func _apply_button_icon(button: Button, path: String) -> void:
 
 
 static func _load_texture(path: String) -> Texture2D:
-	if not FileAccess.file_exists(path):
-		return null
 	if ResourceLoader.exists(path, "Texture2D"):
 		var imported := load(path) as Texture2D
 		if imported != null:
 			return imported
+
+	if not FileAccess.file_exists(path):
+		return null
 
 	var image := Image.new()
 	var error := image.load(path)

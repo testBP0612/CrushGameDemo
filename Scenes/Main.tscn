@@ -99,11 +99,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -440.0
-offset_top = -180.0
+offset_top = -250.0
 offset_right = 440.0
-offset_bottom = 180.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 18
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="UILayer/TitleScreen/TitleLayout" unique_id=1424243166]
@@ -119,7 +120,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StartButton" type="Button" parent="UILayer/TitleScreen/TitleLayout" unique_id=1574974623]
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 theme_override_font_sizes/font_size = 44
+
+[node name="LoginButton" type="Button" parent="UILayer/TitleScreen/TitleLayout"]
+visible = false
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
 
 [node name="VerticalUi" parent="UILayer" unique_id=1208085620 instance=ExtResource("5_vertical_ui")]
