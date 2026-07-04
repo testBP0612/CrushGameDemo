@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "../export/web",
+    "public": "export/web",
     "ignore": ["**/.*"]
   }
 }

@@ -121,7 +121,8 @@ func _load_stream(file_name: String, label: String) -> AudioStream:
 		return null
 
 	var path := AUDIO_BASE_PATH.path_join(file_name)
-	if not FileAccess.file_exists(path):
+	# FileAccess.file_exists 在匯出版對 imported 音檔恆為 false，改用 ResourceLoader。
+	if not ResourceLoader.exists(path):
 		push_warning("AudioService skipped %s: missing file %s." % [label, path])
 		return null
 

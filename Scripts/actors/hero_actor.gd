@@ -211,7 +211,9 @@ func _load_sheet_metadata(path: String) -> Dictionary:
 
 
 func _load_sheet_texture(path: String) -> Texture2D:
-	if not FileAccess.file_exists(path) or not ResourceLoader.exists(path, "Texture2D"):
+	# 匯出版中原始 PNG 已 remap 進 .pck，FileAccess.file_exists 恆為 false；
+	# 資源存在性只能用 ResourceLoader.exists 判斷（同 ui_skin.gd 慣例）。
+	if not ResourceLoader.exists(path, "Texture2D"):
 		push_error("HeroActor missing sheet texture: %s" % path)
 		return null
 

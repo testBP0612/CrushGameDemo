@@ -38,3 +38,6 @@ Assets/generated/*
 
 # Firebase deploy cache
 Firebase/.firebase/
+
+# Firebase CLI cache (repo root)
+.firebase/

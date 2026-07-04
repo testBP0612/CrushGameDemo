@@ -217,7 +217,8 @@ func _resolve_background_path(background_id: String) -> String:
 
 func _background_asset_exists(background_id: String) -> bool:
 	var path := _background_path(background_id)
-	return not background_id.is_empty() and FileAccess.file_exists(path) and ResourceLoader.exists(path, "Texture2D")
+	# FileAccess.file_exists 在匯出版對 imported 資源恆為 false，只能用 ResourceLoader。
+	return not background_id.is_empty() and ResourceLoader.exists(path, "Texture2D")
 
 
 func _background_path(background_id: String) -> String:
