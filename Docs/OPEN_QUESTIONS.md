@@ -122,3 +122,24 @@
 - AI 建議：(a) 採 **A**；(b)–(f) 依上述。定案後寫 `DECISIONS.md` **D-015**、新增 `Docs/08_ONLINE_SCORE_SPEC.md`（auth 流程、Firestore 結構、rules、fallback 契約）、更新 `AGENTS.md`（鐵則 2 補充 BaaS 定位 + 任務卡順序）與 `Docs/07`。
 - 影響範圍：新任務卡 `Codex/12_CLOUD_PROVISIONING.md`（執行者：Claude，CLI+瀏覽器）、`Codex/13_ONLINE_SCORE_INTEGRATION.md`（執行者：Codex，Godot 接入）、`Firebase/` 新資料夾（firebase.json/.firebaserc/firestore.rules 進版控）、`Scripts/services/`（新增 online_score_service.gd）、export HTML shell、`Docs/07`、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`。
 - 人類回答：照 AI 建議全部採納——(a) A（Firebase BaaS）、(b)–(f) 依建議。已寫入 DECISIONS.md D-015。
+
+### Q-006：排行榜（D-015 Future 項目啟用）
+- 狀態：ANSWERED → 見 DECISIONS D-016
+- 提出者：人類（提案）+ Claude（整理選項）
+- 背景：D-015 把排行榜列 Future；現 D-015 全鏈路已上線驗收（登入/雲端分數/UI，2026-07-04）。人類另已口頭定案多人方向採「第二階：非同步比分競爭」、不做即時連線（2026-07-04 對話），排行榜是該方向第一步。啟用即擴大 AGENTS 鐵則 2 的例外範圍，故開 Q。
+- 待決子項與選項：
+  - **(a) 資料結構**：獨立集合 `leaderboard/{uid}`（`display_name`/`best_payout`/`updated_at`），與 `users/` 分離——**不暴露 balance 等私人欄位**。結算與登入合併時由 client 順帶同步寫入。
+  - **(b) 讀取權限**：
+    - A. **需登入才可讀**（內部 demo，建議）。
+    - B. 完全公開可讀。
+    - 寫入不論何者皆：僅本人文件、rules 驗證型別（int）、**單調遞增**（新值 ≥ 舊值）、sanity 上限（≤ 1e9）。
+  - **(c) 防作弊定位（誠實標註）**：client 寫入本質可偽造。內部比賽 demo 採「信任內網玩家 + rules 型別/單調檢查」為底線；伺服器端驗證（Cloud Functions）**需 Blaze 付費方案**，列 Future 不做。
+  - **(d) UI 範圍**：標題畫面加「排行榜」按鈕 → 面板顯示 Top 10（名次/暱稱/分數，本人列高亮）；未登入時顯示「登入後查看」提示。不做分頁/好友/歷史曲線。
+  - **(e) 每日同種子挑戰**：不在本題——排行榜地基打好後另開 Q-007。
+- AI 建議：(a)(d) 依上述；(b) 採 **A**；(c) 接受底線定位。定案後寫 **D-016**，分工沿用：**卡 15（rules+橋接+service）= Claude、卡 16（排行榜 UI）= Codex**。
+- 影響範圍：`Firebase/firestore.rules`、`Firebase/web/crush-online.js`、`Scripts/services/online_score_service.gd`、`Docs/08`（+排行榜節）、`AGENTS.md`（鐵則 2 例外範圍、任務順序）、`Codex/15`/`16`（新卡）、`Data/ui_text.json`、manifest（+icon_trophy）。
+- 人類回答（2026-07-04，附四張 UI mockup）：採「**輕量 leaderboard-based 非同步競爭**」，
+  範圍比原選項更收斂——單局流程完全不動，只加 UI 與資料回饋（四個接觸點：下注畫面入口、
+  決策畫面排名提示、撤退成功結算、失敗結算）；**不做**每日挑戰/同種子/模式選擇/即時連線/房間；
+  **MVP 先用 Local/MockLeaderboardService 模擬同一資料結構，Firebase 串接列 Phase 2**。
+  詳見 D-016。

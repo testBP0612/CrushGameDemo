@@ -148,3 +148,16 @@
 - **原因**：task 05 的 `ScoreService` 介面本就是預留的擴充點；BaaS 讓 solo 開發者零維運；佈建過程本身是比賽的展示素材。
 - **實作**：`Codex/12_CLOUD_PROVISIONING.md`（執行者 Claude）→ `Codex/13_ONLINE_SCORE_INTEGRATION.md`（執行者 Codex），規格見 `Docs/08_ONLINE_SCORE_SPEC.md`。
 - **影響**：`AGENTS.md`（鐵則 2 補充、必讀清單、任務卡順序、決策摘要）、`Docs/07`（§二§三：threads 關閉、COOP/COEP 解除）、`Docs/08_ONLINE_SCORE_SPEC.md`（新增）、`Firebase/` 資料夾（佈建後進版控）、`Scripts/services/online_score_service.gd`（任務 13 新增）。
+
+## D-016：輕量排行榜式非同步競爭（回應 Q-006，D-015 Future 項目啟用）
+- **問題**：D-015 全鏈路上線後，如何加入「跟別人比」的體驗而不動核心玩法。
+- **人類決策**（2026-07-04，附四張 UI mockup 為視覺目標）：
+  1. **單局流程完全不變**（下注→挑戰→打怪→撤退/續戰→結算→再來一局）。排行榜是**疊在上面的 UI 與資料回饋層**。
+  2. **四個接觸點**：(i) 下注畫面小型「排行榜」入口；(ii) 決策畫面「目前最佳/若現在撤退約排第幾」提示；(iii) 撤退成功結算：目前排名+超過百分比+個人最高+排行榜入口；(iv) 失敗結算：本次最深進度+超過百分比+目前最佳排名+排行榜入口。
+  3. **明確不做**：每日挑戰、同種子模式、模式選擇、即時連線、房間、複雜非同步賽制。
+  4. **分階段**：**Phase 1（MVP）用 `MockLeaderboardService`**（資料驅動的 NPC 名單，同一資料結構與介面）；**Phase 2 換 Firebase 實作**（`leaderboard/{uid}` 集合、登入可讀、僅本人可寫、單調遞增驗證）。介面先行，換後端不動 UI 與 core。
+  5. **排名指標單一化**：一律以 `best_payout` 比較。排名 = 比你高的人數+1；百分比 = 比你低的人數/總數。失敗畫面的「超過 X%」用死前的 `current_payout` 對照他人最佳紀錄；「本次最深進度」為本局統計（stage），不進排行榜。
+  6. Mock 名單為**明示的 NPC 資料**（`Data/leaderboard_mock.json`，可調），demo 對評審說明為模擬資料；Phase 2 上線後移除。
+- **原因**：撤退時機判斷是本遊戲核心樂趣，「知道自己排第幾」直接強化它；Mock 先行讓 UI/體驗先完整，Firebase 只是換資料來源（防作弊定位承 Q-006 (c)：內部信任 + rules 底線，伺服器驗證需付費方案列 Future）。
+- **實作**：`Codex/15`（LeaderboardService 介面 + Mock 實作 + 本局統計，Codex）→ `Codex/16`（四接觸點 UI，Codex，依 mockup）→ `Codex/17`（Phase 2 Firebase 實作，Claude，人類另行啟動）。
+- **影響**：`Scripts/services/`（+leaderboard_service.gd/mock_leaderboard_service.gd）、`Data/leaderboard_mock.json`（新）、`Data/ui_text.json`、四張 mockup 入 `Art/references/`、manifest（+icon_trophy 等）、`Docs/08` §八、`AGENTS.md`。

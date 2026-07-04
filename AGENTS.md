@@ -46,6 +46,9 @@
 12. `12_CLOUD_PROVISIONING`（Firebase 佈建；依 D-015；**執行者 Claude**，CLI+瀏覽器，人類在旁授權）
 13. `13_ONLINE_SCORE_INTEGRATION`（Godot 接入 Google 登入+雲端分數；依 D-015；需任務 12 完成；程式串接由 Claude 執行〔人類指示〕）
 14. `14_ONLINE_LOGIN_UI`（登入 UI 生成+擺位+目視驗證；Codex 執行；需任務 13 串接完成）
+15. `15_LEADERBOARD_SERVICE`（排行榜服務層介面+Mock；依 D-016；Codex）
+16. `16_LEADERBOARD_UI`（排行榜四接觸點 UI，依 mockup；Codex；需任務 15）
+17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -69,7 +72,8 @@
 - **D-012** UI 皮膚：HUD 卡+下方操作區用生成 9-slice 貼圖（`StyleBoxTexture`），缺圖 fallback 程式 `StyleBoxFlat`；icon 用生成貼紙；其餘元件程式畫（Contract v1.2 + Round 3 修訂）。
 - **D-013** sprite sheet 單邊 ≤ 4096px；多格數必須 grid 且 JSON 標 `columns`/`rows`（Contract v1.3）。
 - **D-014** 正式接入音效：BGM + SFX 播放能力，`Assets/final/audio/` 為唯一音訊入口，設定讀 `Data/audio.json`，缺檔靜音不崩，H5 首次互動解鎖；不做音量/靜音 UI。
-- **D-015** 線上身分與分數服務（Firebase BaaS）：僅 Google 登入+自己分數；Web export 關 thread support（免 COOP/COEP、讓 OAuth popup 可用）；未登入/離線退回 LocalScoreService；core 只認 ScoreService 介面；排行榜 Future。規格見 `Docs/08`。
+- **D-015** 線上身分與分數服務（Firebase BaaS）：僅 Google 登入+自己分數；Web export 關 thread support（免 COOP/COEP、讓 OAuth popup 可用）；未登入/離線退回 LocalScoreService；core 只認 ScoreService 介面。規格見 `Docs/08`。
+- **D-016** 輕量排行榜式非同步競爭：單局流程不變、只加四個 UI 接觸點與資料回饋；指標單一 `best_payout`；Phase 1 用 Mock（NPC 名單 JSON）、Phase 2 換 Firebase；不做每日挑戰/同種子/模式選擇/即時連線/房間。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md

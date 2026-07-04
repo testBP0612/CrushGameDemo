@@ -61,6 +61,17 @@ match /users/{uid} {
 - Firebase web config（apiKey 等）屬**公開設計**，可入 repo（放 export shell 或
   `Firebase/web_config.js`）；私鑰/service account/token **一律不可**入 repo。
 
-## 七、驗收對照
+## 七、排行榜（D-016 新增）
 
-任務 12 見 `Codex/VALIDATION_CHECKLIST.md`「里程碑 — 任務 12」；任務 13 見「里程碑 — 任務 13」。
+- 定位：**輕量非同步競爭回饋層**，單局流程不變。指標單一：`best_payout`。
+  排名 = 比你高的人數+1；beaten% = 比你低的人數/總數。
+- 介面 `LeaderboardService`（signal 非同步）：`request_top(n)`／`request_rank_for(payout)`／
+  `submit_best(payout)`。**Phase 1 = MockLeaderboardService**（NPC 名單
+  `Data/leaderboard_mock.json`，明示為模擬資料）；**Phase 2 = Firebase 實作**
+  （`leaderboard/{uid}`：`display_name`/`best_payout`/`updated_at`；登入可讀、僅本人可寫、
+  int + 單調遞增 + ≤1e9；不暴露 `users/` 私人欄位）。
+- UI 四接觸點與明確不做清單見 D-016 與 `Codex/16`。
+
+## 八、驗收對照
+
+任務 12 見 `Codex/VALIDATION_CHECKLIST.md`「里程碑 — 任務 12」；任務 13 見「里程碑 — 任務 13」；排行榜見「里程碑 — 任務 15／16／17」。
