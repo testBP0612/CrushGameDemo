@@ -14,6 +14,7 @@ var _auth_cb: JavaScriptObject = null
 var _load_cb: JavaScriptObject = null
 var _signed_in := false
 var _display_name := ""
+var _uid := ""
 # 雲端餘額不可在局中套用（會覆寫進行中的存檔）；暫存待局外由 controller 觸發套用。
 var _pending_cloud_balance := -1
 
@@ -41,6 +42,11 @@ func is_signed_in() -> bool:
 
 func online_display_name() -> String:
 	return _display_name
+
+
+## 排行榜寫入需綁定 uid（Docs/08 §七：leaderboard/{uid} 僅本人可寫）。
+func online_uid() -> String:
+	return _uid
 
 
 func sign_in() -> void:
@@ -85,6 +91,7 @@ func _on_auth_state(args: Array) -> void:
 		return
 	_signed_in = bool(payload.get("signed_in", false))
 	_display_name = str(payload.get("display_name", ""))
+	_uid = str(payload.get("uid", ""))
 	if _signed_in and _bridge != null:
 		_bridge.requestLoad()
 	auth_changed.emit(_signed_in, _display_name)

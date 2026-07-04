@@ -5,7 +5,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp }
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp,
+         collection, query, where, orderBy, limit, getDocs, getCountFromServer }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const SAVE_DEBOUNCE_MS = 800;
@@ -86,6 +87,77 @@ window.CrushOnline = {
       console.warn("[CrushOnline] load failed:", e.code || e.message);
       state.godotLoadCb(JSON.stringify({ found: false, best_payout: 0, balance: 0, error: true }));
     }
+  },
+
+  // --- D-016 排行榜（Phase 2）：每次呼叫帶入自己的一次性回呼，避免與上面
+  // 的 auth/load 常駐回呼互相干擾，也天然支援多個排行榜請求並存。 ---
+
+  submitLeaderboard(best, name) {
+    if (!state.user) return;
+    (async () => {
+      try {
+        const ref = doc(state.db, "leaderboard", state.user.uid);
+        const snap = await getDoc(ref);
+        const prevBest = snap.exists() ? (snap.data().best_payout || 0) : -1;
+        if (Number(best) <= prevBest) return; // 單調遞增：client 端也守一次，rules 是最終底線
+        await setDoc(ref, {
+          display_name: name || (state.user.displayName || ""),
+          best_payout: Number(best) || 0,
+          updated_at: serverTimestamp(),
+        });
+      } catch (e) {
+        console.warn("[CrushOnline] submitLeaderboard failed:", e.code || e.message);
+      }
+    })();
+  },
+
+  fetchLeaderboard(topN, cb) {
+    if (!state.ready) { cb(JSON.stringify({ rows: [], error: true })); return; }
+    (async () => {
+      try {
+        const q = query(collection(state.db, "leaderboard"), orderBy("best_payout", "desc"), limit(topN));
+        const snap = await getDocs(q);
+        const rows = [];
+        let rank = 1;
+        snap.forEach((d) => {
+          const data = d.data();
+          rows.push({
+            rank: rank++,
+            uid: d.id,
+            display_name: data.display_name || "",
+            best_payout: data.best_payout || 0,
+          });
+        });
+        cb(JSON.stringify({ rows }));
+      } catch (e) {
+        console.warn("[CrushOnline] fetchLeaderboard failed:", e.code || e.message);
+        cb(JSON.stringify({ rows: [], error: true }));
+      }
+    })();
+  },
+
+  fetchRankFor(payout, cb) {
+    if (!state.ready) { cb(JSON.stringify({ rank: 0, beaten_percent: 0, error: true })); return; }
+    (async () => {
+      try {
+        const col = collection(state.db, "leaderboard");
+        const [higherSnap, lowerSnap, totalSnap] = await Promise.all([
+          getCountFromServer(query(col, where("best_payout", ">", payout))),
+          getCountFromServer(query(col, where("best_payout", "<", payout))),
+          getCountFromServer(query(col)),
+        ]);
+        const higher = higherSnap.data().count;
+        const lower = lowerSnap.data().count;
+        const total = totalSnap.data().count;
+        cb(JSON.stringify({
+          rank: higher + 1,
+          beaten_percent: total > 0 ? Math.floor((lower * 100) / total) : 0,
+        }));
+      } catch (e) {
+        console.warn("[CrushOnline] fetchRankFor failed:", e.code || e.message);
+        cb(JSON.stringify({ rank: 0, beaten_percent: 0, error: true }));
+      }
+    })();
   },
 };
 

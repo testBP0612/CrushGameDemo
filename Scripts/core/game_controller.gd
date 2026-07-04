@@ -3,6 +3,8 @@ extends Node2D
 const EventBusScript := preload("res://Scripts/core/event_bus.gd")
 const GameStateMachineScript := preload("res://Scripts/core/game_state_machine.gd")
 const OnlineScoreServiceScript := preload("res://Scripts/services/online_score_service.gd")
+const MockLeaderboardServiceScript := preload("res://Scripts/services/mock_leaderboard_service.gd")
+const FirebaseLeaderboardServiceScript := preload("res://Scripts/services/firebase_leaderboard_service.gd")
 const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
@@ -19,7 +21,12 @@ var state_machine := GameStateMachineScript.new()
 # D-015：OnlineScoreService 繼承 LocalScoreService——非 Web/未登入/橋接缺失時
 # 行為與純本機完全相同（fallback 契約見 Docs/08 §五）。
 var score_service := OnlineScoreServiceScript.new()
+# D-016 §4 / Codex 17：Web 且橋接可用才用 Firebase 實作，否則 Mock（同一介面，UI 零修改）。
+var leaderboard_service
 var audio_service := AudioServiceScript.new()
+var _run_deepest_stage := 0
+var _defeat_payout_before_loss := 0
+var _last_settlement_payout := 0
 
 
 func _ready() -> void:
@@ -28,6 +35,8 @@ func _ready() -> void:
 	score_service.setup_bridge()
 	score_service.auth_changed.connect(_on_auth_changed)
 	score_service.cloud_merged.connect(_on_cloud_merged)
+	leaderboard_service = FirebaseLeaderboardServiceScript.new() if score_service.is_online_available() else MockLeaderboardServiceScript.new()
+	leaderboard_service.setup(score_service)
 	state_machine.setup(event_bus, score_service)
 	_connect_events()
 	_connect_buttons()
@@ -145,6 +154,10 @@ func _on_balance_reset_pressed() -> void:
 
 
 func _on_state_changed(state_name: String) -> void:
+	if state_name == "BETTING":
+		_reset_run_stats()
+	elif state_name == "BATTLE_ATTACK":
+		_run_deepest_stage = maxi(_run_deepest_stage, state_machine.active_monster_stage)
 	_try_apply_cloud_balance()
 	_update_view()
 	_play_presentation_for_state(state_name)
@@ -160,16 +173,23 @@ func _on_bet_changed(_bet: int) -> void:
 
 func _on_stage_advanced(stage: int, multiplier: float, payout: int) -> void:
 	print("Stage advanced: stage=%d multiplier=%s payout=%d" % [stage, multiplier, payout])
+	_run_deepest_stage = maxi(_run_deepest_stage, stage)
 	_update_view()
 
 
 func _on_result_resolved(is_win: bool) -> void:
 	print("Result resolved: is_win=%s" % is_win)
+	if not is_win:
+		_run_deepest_stage = maxi(_run_deepest_stage, state_machine.active_monster_stage)
+		_defeat_payout_before_loss = state_machine.current_payout
 	_update_view()
 
 
 func _on_settled(result: String) -> void:
 	print("Settled: %s balance=%d" % [result, state_machine.balance])
+	_last_settlement_payout = _defeat_payout_before_loss if result == "defeat" else state_machine.current_payout
+	if result == "cash_out":
+		leaderboard_service.submit_best(state_machine.current_payout)
 	_play_settlement_sfx(result)
 	_update_best_record_text()
 	_update_view()
@@ -280,7 +300,11 @@ func _ui_snapshot(state_name: String) -> Dictionary:
 		"is_bet_affordable": state_machine.is_bet_affordable(),
 		"is_balance_below_min_bet": state_machine.is_balance_below_min_bet(),
 		"best_payout": score_service.get_best_payout(),
-		"can_advance": state_machine.can_advance()
+		"can_advance": state_machine.can_advance(),
+		"run_deepest_stage": _run_deepest_stage,
+		"defeat_payout_before_loss": _defeat_payout_before_loss,
+		"settlement_payout": _last_settlement_payout,
+		"leaderboard_service": leaderboard_service
 	}
 
 
@@ -315,3 +339,9 @@ func _try_apply_cloud_balance() -> void:
 		return
 	score_service.apply_pending_cloud_balance()
 	state_machine.refresh_balance_from_service()
+
+
+func _reset_run_stats() -> void:
+	_run_deepest_stage = 0
+	_defeat_payout_before_loss = 0
+	_last_settlement_payout = 0

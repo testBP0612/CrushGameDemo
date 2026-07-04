@@ -5,6 +5,18 @@ service cloud.firestore {
     match /users/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
+    // D-016 / Docs/08 §七：排行榜——登入可讀，僅本人可寫，型別 + 單調遞增 + 上限守門。
+    match /leaderboard/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.display_name is string
+        && request.resource.data.best_payout is int
+        && request.resource.data.best_payout >= 0
+        && request.resource.data.best_payout <= 1000000000
+        && (!exists(/databases/$(database)/documents/leaderboard/$(uid))
+            || request.resource.data.best_payout >= resource.data.best_payout);
+    }
     match /{document=**} {
       allow read, write: if false;
     }

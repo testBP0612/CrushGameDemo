@@ -41,3 +41,6 @@ Firebase/.firebase/
 
 # Firebase CLI cache (repo root)
 .firebase/
+
+# Codex task evidence scratch
+tmp/
