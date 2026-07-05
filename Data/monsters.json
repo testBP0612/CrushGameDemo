@@ -9,7 +9,7 @@
       "display_hp": 90,
       "attack_hits_range": [3, 3],
       "placeholder_color": "#7ed957",
-      "art_asset_id": "monster_001_idle",
+      "art_asset_id": "boss1_idle",
       "required_for_mvp": true
     },
     {
@@ -19,7 +19,7 @@
       "display_hp": 125,
       "attack_hits_range": [3, 4],
       "placeholder_color": "#5ec5d4",
-      "art_asset_id": "monster_002_idle",
+      "art_asset_id": "boss2_idle",
       "required_for_mvp": true
     },
     {
@@ -29,7 +29,7 @@
       "display_hp": 170,
       "attack_hits_range": [3, 4],
       "placeholder_color": "#b083e0",
-      "art_asset_id": "monster_003_idle",
+      "art_asset_id": "boss3_idle",
       "required_for_mvp": true
     },
     {
@@ -39,7 +39,7 @@
       "display_hp": 225,
       "attack_hits_range": [4, 4],
       "placeholder_color": "#e08a5b",
-      "art_asset_id": "monster_004_idle",
+      "art_asset_id": "boss4_idle",
       "required_for_mvp": true
     },
     {
@@ -49,7 +49,7 @@
       "display_hp": 295,
       "attack_hits_range": [4, 5],
       "placeholder_color": "#e05b7a",
-      "art_asset_id": "monster_005_idle",
+      "art_asset_id": "boss5_idle",
       "required_for_mvp": true
     },
     {
@@ -59,7 +59,7 @@
       "display_hp": 375,
       "attack_hits_range": [4, 5],
       "placeholder_color": "#d4c45e",
-      "art_asset_id": "monster_006_idle",
+      "art_asset_id": "boss6_idle",
       "required_for_mvp": false
     },
     {
@@ -69,7 +69,7 @@
       "display_hp": 470,
       "attack_hits_range": [4, 5],
       "placeholder_color": "#5e7ad4",
-      "art_asset_id": "monster_007_idle",
+      "art_asset_id": "boss7_idle",
       "required_for_mvp": false
     },
     {
@@ -79,7 +79,7 @@
       "display_hp": 590,
       "attack_hits_range": [5, 5],
       "placeholder_color": "#9b5ed4",
-      "art_asset_id": "monster_008_idle",
+      "art_asset_id": "boss8_idle",
       "required_for_mvp": false
     },
     {
@@ -89,7 +89,7 @@
       "display_hp": 735,
       "attack_hits_range": [5, 5],
       "placeholder_color": "#d45e9b",
-      "art_asset_id": "monster_009_idle",
+      "art_asset_id": "boss9_idle",
       "required_for_mvp": false
     },
     {

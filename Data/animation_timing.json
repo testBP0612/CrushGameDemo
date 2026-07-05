@@ -3,7 +3,7 @@
   "_comment": "各動畫狀態時長與轉場時間（秒）。例外：以 _offset 結尾的欄位為像素位移量（非秒）。與 battle_sequences.json 互補：此檔定義單一動畫片段長度，battle_sequences 定義流程節奏。",
   "hero": {
     "idle_loop": 1.00,
-    "attack": 0.30,
+    "attack": 0.50,
     "hurt": 0.35,
     "defeat": 0.80,
     "walk_loop": 0.60

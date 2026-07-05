@@ -39,14 +39,13 @@ offset_right = 70.0
 color = Color(0.298039, 0.588235, 0.941176, 1)
 
 [node name="Monster" type="Node2D" parent="BattleScene" unique_id=183370566]
-position = Vector2(780, 1010)
+position = Vector2(780, 1240)
 script = ExtResource("4_monster_actor")
 
 [node name="Body" type="ColorRect" parent="BattleScene/Monster" unique_id=2017070052]
 offset_left = -110.0
-offset_top = -130.0
+offset_top = -260.0
 offset_right = 110.0
-offset_bottom = 130.0
 
 [node name="MonsterNameLabel" type="Label" parent="BattleScene" unique_id=1878847436]
 offset_left = 560.0

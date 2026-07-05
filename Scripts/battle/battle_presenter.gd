@@ -151,7 +151,7 @@ func _spawn_damage_number(damage: int, hit_index: int) -> void:
 
 func _play_hit_feel() -> void:
 	var duration := float(Data.animation_timing_config().get("monster", {}).get("hurt", 0.0))
-	HitFlash.play(monster.body, duration)
+	HitFlash.play(monster.hit_flash_target(), duration)
 	ScreenShake.play(self, duration, 14.0)
 
 

@@ -44,6 +44,11 @@
 |---|---|---|
 | `attack_sequence.hit_interval` | float(s) | 每擊間隔。 |
 | `attack_sequence.first_hit_delay` | float(s) | 第一擊延遲。 |
+| `attack_sequence.hero_attack_frame_count` | int | 主角攻擊序列圖幀數；正式動畫可載入時以實際幀數優先。 |
+| `attack_sequence.hero_attack_contact_frame` | int | 主角攻擊伸手打到的幀序，用於對齊前衝到位時間。 |
+| `attack_sequence.hero_attack_recover_frame` | int | 主角攻擊收手幀序，用於對齊後退開始時間。 |
+| `attack_sequence.hero_strike_charge_lerp_weight` | float | 主角攻擊蓄力時相對目標方向的位移比例，可為負值表示微後壓。 |
+| `attack_sequence.hero_strike_lerp_weight` | float(0~1) | 主角攻擊時往怪物方向前衝的距離比例。 |
 | `attack_sequence.damage_per_hit_ratio` | float | 每擊扣血比例（演出用）。 |
 | `result_resolution.resolve_after_attack` | bool | 連擊後才判定。 |
 | `result_resolution.win_branch.*` / `lose_branch.*` | float(s) | 勝/敗分支各演出時長。 |

@@ -5,6 +5,11 @@
     "_comment": "主角對怪物連擊。實際擊數取 monsters.json 的 attack_hits_range 隨機。",
     "hit_interval": 0.32,
     "first_hit_delay": 0.18,
+    "hero_attack_frame_count": 12,
+    "hero_attack_contact_frame": 8,
+    "hero_attack_recover_frame": 11,
+    "hero_strike_charge_lerp_weight": -0.04,
+    "hero_strike_lerp_weight": 0.22,
     "damage_per_hit_ratio": 0.34,
     "_damage_comment": "每擊扣怪物 display_hp 的比例（演出用，非真實數值，最後一擊保證歸零）。"
   },
