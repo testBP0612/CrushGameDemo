@@ -102,6 +102,13 @@
 - [ ] rules 四象限實測 + 降分被拒；`users/` 私人欄位未暴露。
 - [ ] 換資料來源後 UI 與 core 零修改；未登入/失敗 fallback 不崩。
 
+## 里程碑 — 任務 18（怪物序列圖接入，需 D-017；Codex）
+- [ ] stage 1–9 顯示對應 idle 動畫；面向左、地面線對齊、不壓 UI（編輯器目視截圖）。
+- [ ] 切格以各自 `.json` 的 frame 座標為準（非假設同一 grid）；fps 讀 `animation_timing.json`。
+- [ ] stage 10 與缺檔案例退 placeholder 不崩（實測移除一張 png）。
+- [ ] `monsters.json`/manifest 僅資料欄位更新；存在性判斷用 `ResourceLoader.exists()`。
+- [ ] **H5 實機**：九隻動畫正常、整局無卡頓（素材量大，材質/效能務必實測）。
+
 ## 里程碑 9 — 任務 08（素材接入）
 - [ ] `Assets/final/` 齊備素材正確顯示，符合 manifest 檔名/路徑。
 - [ ] **缺檔自動 fallback placeholder，遊戲不崩**（移除某 final 素材重跑驗證）。

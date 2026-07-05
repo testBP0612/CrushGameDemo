@@ -1,4 +1,4 @@
-# AGENTS.md — 代理協作鐵則（本 repo 單一正本）
+﻿# AGENTS.md — 代理協作鐵則（本 repo 單一正本）
 
 > 本檔是所有 AI 代理（Codex 等）在本 repo 的**最高行為準則正本**。
 > `Codex/00_MASTER_PROMPT.md` 為指向本檔的轉介；兩者若有出入，**以本檔為準**。
@@ -14,20 +14,20 @@
 
 ## 鐵則（違反即停止並回報）
 1. **不得擅自改核心玩法**（風險撤離型自動戰鬥）。
-2. **不得擅自新增大型系統**（商店、會員、後端、抽卡、裝備…，見 `Docs/01`/`02` 不做清單）。經 D-015 核准的「線上身分與分數服務」（Firebase BaaS，僅登入+自己分數，見 `Docs/08`）為唯一例外，且其範圍外的線上功能（排行榜等）仍屬本條禁區。
+2. **不得擅自新增大型系統**（商店、會員、後端、抽卡、裝備…，見 `Docs/01`/`02` 不做清單）。例外僅限已定案範圍：D-015「線上身分與分數服務」+ D-016「輕量排行榜」（見 `Docs/08`）；其餘線上功能（每日挑戰、即時連線、好友等）仍屬本條禁區。
 3. **不得自行替換遊戲方向**或重新詮釋需求。
 4. **遇到任何不明確處 → 寫入 `Docs/OPEN_QUESTIONS.md`**，停下等人類回答，不要猜。
 5. **每次只執行一張任務卡**，不跨卡。
 6. **不得把數值/文案寫死**：倍率、成功率、下注上下限、快捷籌碼、怪物、時長、UI 文字一律讀 `Data/*.json`。
 7. **不得把所有邏輯塞進單一巨大 script**，依 `Scripts/` 分層（core/battle/actors/ui/effects/services）。
 8. **版面（直式 9:16）**：遵守 `Docs/04` §二之一座標契約與§二之二版面不變量（角色與操作 UI 不得重疊；操作 UI 落在 y≥1300）。**任何版面調整必須在 Godot 內目視確認**，不可只靠座標算術盲改（見 `DECISIONS.md` D-006）。
-9. **美術**：只讀 `Assets/final/` 與 `Assets/placeholders/`，不得依賴 `Assets/generated/`；不得自行生成正式美術；缺檔必須 **fallback placeholder，不可讓遊戲壞掉**；不得修改 `Art/ART_CONTRACT.md`（`v1.0 locked`，要改走 `OPEN_QUESTIONS` 的 `Q-ART-XXX`）。
+9. **美術**：只讀 `Assets/final/` 與 `Assets/placeholders/`，不得依賴 `Assets/generated/`；不得自行生成正式美術；缺檔必須 **fallback placeholder，不可讓遊戲壞掉**；不得修改 `Art/ART_CONTRACT.md`（鎖版，現行 **v1.4**；要改走 `OPEN_QUESTIONS` 的 `Q-ART-XXX`）。
 10. **Git/協作邊界**：不要動 `Planning/`（除非任務卡明確要求）。
 
 ## 必讀順序
 1. 本檔 `AGENTS.md`
 2. `Docs/01`→`08`（設計／系統／狀態機／UI／動畫／資料／H5／線上分數）
-3. 當前任務卡（依下方「任務卡執行順序」，目前進行到 `Codex/11`）
+3. 當前任務卡（依下方「任務卡執行順序」，取最前面尚未打 ✅ 的那張）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
 5. 視覺目標：`Art/references/ui_mockup_battle.png`
 
@@ -42,13 +42,14 @@
 8. `09_UI_FEEL_AND_PACING`（UI 進場微動畫 + 提示文字節奏；排在 07 之後、與 08 獨立）✅
 9. `10_UI_SKIN_ALIGNMENT`（UI 視覺貼齊參考圖；只動視覺不動功能；用 agent-sprite-forge 生 UI 圖）✅
 10. `08_ASSET_REPLACEMENT_GUIDE`（角色/怪物素材接入，需 `Assets/final/` 就緒；背景已接）✅（hero_idle/walk 已接，其餘素材到位後持續接入）
-11. `11_AUDIO_INTEGRATION`（音效接入：BGM + SFX 播放能力；依 D-014，排在 01–10 全部完成之後）
-12. `12_CLOUD_PROVISIONING`（Firebase 佈建；依 D-015；**執行者 Claude**，CLI+瀏覽器，人類在旁授權）
-13. `13_ONLINE_SCORE_INTEGRATION`（Godot 接入 Google 登入+雲端分數；依 D-015；需任務 12 完成；程式串接由 Claude 執行〔人類指示〕）
-14. `14_ONLINE_LOGIN_UI`（登入 UI 生成+擺位+目視驗證；Codex 執行；需任務 13 串接完成）
-15. `15_LEADERBOARD_SERVICE`（排行榜服務層介面+Mock；依 D-016；Codex）
-16. `16_LEADERBOARD_UI`（排行榜四接觸點 UI，依 mockup；Codex；需任務 15）
-17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）
+11. `11_AUDIO_INTEGRATION`（音效接入：BGM + SFX 播放能力；依 D-014，排在 01–10 全部完成之後）✅
+12. `12_CLOUD_PROVISIONING`（Firebase 佈建；依 D-015；**執行者 Claude**，CLI+瀏覽器，人類在旁授權）✅
+13. `13_ONLINE_SCORE_INTEGRATION`（Godot 接入 Google 登入+雲端分數；依 D-015；需任務 12 完成；程式串接由 Claude 執行〔人類指示〕）✅
+14. `14_ONLINE_LOGIN_UI`（登入 UI 生成+擺位+目視驗證；Codex 執行；需任務 13 串接完成）✅
+15. `15_LEADERBOARD_SERVICE`（排行榜服務層介面+Mock；依 D-016；Codex）✅
+16. `16_LEADERBOARD_UI`（排行榜四接觸點 UI，依 mockup；Codex；需任務 15）✅
+17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）✅
+18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex；stage 10 維持 placeholder）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -74,6 +75,7 @@
 - **D-014** 正式接入音效：BGM + SFX 播放能力，`Assets/final/audio/` 為唯一音訊入口，設定讀 `Data/audio.json`，缺檔靜音不崩，H5 首次互動解鎖；不做音量/靜音 UI。
 - **D-015** 線上身分與分數服務（Firebase BaaS）：僅 Google 登入+自己分數；Web export 關 thread support（免 COOP/COEP、讓 OAuth popup 可用）；未登入/離線退回 LocalScoreService；core 只認 ScoreService 介面。規格見 `Docs/08`。
 - **D-016** 輕量排行榜式非同步競爭：單局流程不變、只加四個 UI 接觸點與資料回饋；指標單一 `best_payout`；Phase 1 用 Mock（NPC 名單 JSON）、Phase 2 換 Firebase；不做每日挑戰/同種子/模式選擇/即時連線/房間。
+- **D-017** 怪物素材＝動畫序列圖 `bossN_idle`（N=1..9，TexturePacker JSON）置於 `Assets/final/boss/`；stage 10 維持 placeholder；Contract v1.4。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md

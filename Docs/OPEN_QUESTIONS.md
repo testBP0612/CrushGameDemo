@@ -143,3 +143,17 @@
   決策畫面排名提示、撤退成功結算、失敗結算）；**不做**每日挑戰/同種子/模式選擇/即時連線/房間；
   **MVP 先用 Local/MockLeaderboardService 模擬同一資料結構，Firebase 串接列 Phase 2**。
   詳見 D-016。
+
+### Q-ART-004：怪物素材以動畫序列圖交付（命名/路徑與 v1.3 清單不符）
+- 狀態：ANSWERED（人類 2026-07-05 裁示照現狀接入 → 見 DECISIONS D-017，Contract 升 v1.4）
+- 想改什麼：§二必要素材清單與§三§四命名/路徑。原清單期待靜態 `monster_00N_idle.png`
+  置於 `Assets/final/`；美術實際交付**動畫 idle 序列圖** `Assets/final/boss/bossN_idle.png`
+  + 同名 `.json`（TexturePacker 格式，N=1..9）。第 10 隻未交付。
+- 實測規格：九張皆 3072×2304（4×3 grid、768px 框、12 幀），**符合 v1.3 §七的 ≤4096 硬上限**；
+  JSON 含明確 frame 座標與 `meta.animations`，資訊量**優於** v1.3 要求的 `columns`/`rows`。
+- 原因：美術升級交付品質（靜態→動畫），且沿用了 hero_idle 的 sheet 規格慣例；屬清單/命名
+  的文件面修訂，非素材缺陷。
+- 影響：`Art/ART_CONTRACT.md`（v1.3→v1.4：§二怪物條目改序列圖、§四允許 `boss/` 子資料夾、
+  §七接受 TexturePacker JSON 為 sheet 中繼資料）、`Assets/ART_ASSET_MANIFEST.md`（怪物區段
+  對映 bossN）、`Data/monsters.json`（`art_asset_id` 對映）、新任務卡 `Codex/18`。
+- 人類裁示：素材照現狀接入；**第 10 隻暫缺，維持 placeholder**（缺檔 fallback 本就不阻塞）。

@@ -1,6 +1,6 @@
 # Art Contract（給 Magnific / 美術同事）
 
-> **狀態：v1.3 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012、D-013）
+> **狀態：v1.4 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012、D-013、D-017）
 > **UI 原則（v1.2）**：面板/按鈕/chip 的外框與底色由程式 `StyleBoxFlat` 畫（深藍 8px 描邊），**不需美術框貼圖**；UI 美術只需 **icon 貼紙**。
 > 本檔是**不可變規格合約**。美術同事與 Codex **都必須遵守**。
 > 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `ART_DIRECTION_NOTES.md`。
@@ -24,7 +24,7 @@
 
 ## 二、必要素材清單（MVP）
 完整逐項清單見 `Assets/ART_ASSET_MANIFEST.md`（含每項 file_name / path / 是否必要）。摘要：
-- **MVP Required**：主角 `hero_idle / hero_attack / hero_hurt / hero_defeat`；怪物 `monster_001_idle`~`monster_005_idle`；背景 `background_battle_001`。
+- **MVP Required**：主角 `hero_idle / hero_attack / hero_hurt / hero_defeat`；怪物 idle（v1.4 修訂：已改以動畫序列圖 `boss1_idle`~`boss9_idle` 交付，取代原靜態 `monster_00N_idle` 條目；第 10 隻未交付前走 placeholder）；背景 `background_battle_001`。
 - **Recommended（v1.1 新增）**：分區背景 `background_battle_002`、`background_battle_003`（依 `Data/game_balance.json > background_zones` 選用；缺檔可 fallback，不阻塞）。
 - **Optional**：`game_logo`、`ui_panel_style_reference`、`hero_walk`、怪物 hurt/death、各式特效、6~10 隻怪物、更多分區背景 `background_battle_004…`。
 
@@ -38,6 +38,8 @@
 
 ## 四、路徑規則（不可變）
 - 正式素材一律放 `Assets/final/`（唯一正式入口）。
+- v1.4：怪物序列圖系列允許置於子資料夾 `Assets/final/boss/`（同系列集中管理）；
+  其他類別未經 Q-ART 不得自創子資料夾。
 - 候選稿/失敗稿**不進 repo**；可選暫存在本機或 `Assets/generated/`（Codex 不讀）。
 
 ## 五、圖片格式與透明背景（不可變）
@@ -71,6 +73,9 @@
   { "asset_id": "hero_idle", "frame_width": 768, "frame_height": 768, "columns": 5, "rows": 5, "frame_count": 25, "fps": 3 }
   ```
   > `columns`/`rows` 為必填；`columns*rows ≥ frame_count`（最後一列可不填滿）。
+- **v1.4：亦接受 TexturePacker 標準 JSON**（`frames` 含明確 frame 座標 + `meta.animations`）
+  作為 sheet 中繼資料——資訊量高於 columns/rows 最低要求，尺寸硬上限與讀取順序規則不變。
+  怪物 `bossN_idle` 系列即此格式。
 - 不混用：同一 asset_id 要嘛單圖、要嘛 sheet+json，不要兩者並存。
 
 ## 八、Godot 匯入注意（不可變）
@@ -93,9 +98,10 @@
 
 ---
 ## Changelog
+- **v1.4**（`Q-ART-004` / `DECISIONS.md` D-017）：怪物素材改以動畫序列圖 `bossN_idle`（N=1..9，3072×2304、4×3、12 幀）交付；§四允許 `Assets/final/boss/` 子資料夾；§七接受 TexturePacker JSON 為 sheet 中繼資料。第 10 隻未交付，placeholder fallback。
 - **v1.3**（`Q-ART-003` / `DECISIONS.md` D-013）：修正 §七 sprite sheet 規則——新增**硬上限單邊 ≤ 4096px**、多格數**必須用 grid**並於 JSON 標 `columns`/`rows`（少格數仍可 horizontal）。修正先前「只寫 horizontal、未設尺寸上限」導致 25×768 單列=19200px 超 H5 材質上限的缺陷。
 - **v1.2**（`Q-ART-002` / `DECISIONS.md` D-012）：新增「UI 素材」類別——面板/按鈕/chip 外框改程式 `StyleBoxFlat` 畫（深藍 8px 描邊），UI 美術只需 **icon 貼紙**（`Assets/final/ui/`，載入 `runtime/<id>_48.png`）；移除未使用的框貼圖。其餘規格不變。
 - **v1.1**（`Q-ART-001` / `DECISIONS.md` D-011）：背景改為**分區**，新增 recommended `background_battle_002`、`background_battle_003`（規格同 001：1080×1920、不透明）；實際選用由 `Data/game_balance.json > background_zones` 資料驅動，命名可續擴 `004…`。其餘規格不變。
 - **v1.0**：初版鎖定。
 
-**版本**：v1.3 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。
+**版本**：v1.4 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。

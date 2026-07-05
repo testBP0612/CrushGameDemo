@@ -1,0 +1,271 @@
+{
+  "frames": {
+    "boss101": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss102": {
+      "frame": {
+        "x": 768,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss103": {
+      "frame": {
+        "x": 1536,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss104": {
+      "frame": {
+        "x": 2304,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss105": {
+      "frame": {
+        "x": 0,
+        "y": 768,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss106": {
+      "frame": {
+        "x": 768,
+        "y": 768,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss107": {
+      "frame": {
+        "x": 1536,
+        "y": 768,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss108": {
+      "frame": {
+        "x": 2304,
+        "y": 768,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss109": {
+      "frame": {
+        "x": 0,
+        "y": 1536,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss110": {
+      "frame": {
+        "x": 768,
+        "y": 1536,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss111": {
+      "frame": {
+        "x": 1536,
+        "y": 1536,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    },
+    "boss112": {
+      "frame": {
+        "x": 2304,
+        "y": 1536,
+        "w": 768,
+        "h": 768
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 768,
+        "h": 768
+      },
+      "sourceSize": {
+        "w": 768,
+        "h": 768
+      }
+    }
+  },
+  "meta": {
+    "app": "TexturePacker",
+    "version": "1.0",
+    "image": "boss7_idle.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 3072,
+      "h": 2304
+    },
+    "scale": "1",
+    "animations": {
+      "boss7_idle": [
+        "boss101",
+        "boss102",
+        "boss103",
+        "boss104",
+        "boss105",
+        "boss106",
+        "boss107",
+        "boss108",
+        "boss109",
+        "boss110",
+        "boss111",
+        "boss112"
+      ]
+    }
+  }
+}

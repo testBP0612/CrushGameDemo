@@ -1,0 +1,27 @@
+{
+  "frames": {
+    "boss9_load01": { "frame": { "x":    0, "y":    0, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load02": { "frame": { "x":  768, "y":    0, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load03": { "frame": { "x": 1536, "y":    0, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load04": { "frame": { "x": 2304, "y":    0, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load05": { "frame": { "x":    0, "y":  768, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load06": { "frame": { "x":  768, "y":  768, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load07": { "frame": { "x": 1536, "y":  768, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load08": { "frame": { "x": 2304, "y":  768, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load09": { "frame": { "x":    0, "y": 1536, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load10": { "frame": { "x":  768, "y": 1536, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load11": { "frame": { "x": 1536, "y": 1536, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } },
+    "boss9_load12": { "frame": { "x": 2304, "y": 1536, "w": 768, "h": 768 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 768, "h": 768 }, "sourceSize": { "w": 768, "h": 768 } }
+  },
+  "meta": {
+    "app": "TexturePacker",
+    "version": "1.0",
+    "image": "boss9_idle.png",
+    "format": "RGBA8888",
+    "size": { "w": 3072, "h": 2304 },
+    "scale": "1",
+    "animations": {
+      "boss9_idle": ["boss9_load01", "boss9_load02", "boss9_load03", "boss9_load04", "boss9_load05", "boss9_load06", "boss9_load07", "boss9_load08", "boss9_load09", "boss9_load10", "boss9_load11", "boss9_load12"]
+    }
+  }
+}

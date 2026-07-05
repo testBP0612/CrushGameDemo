@@ -161,3 +161,22 @@
 - **原因**：撤退時機判斷是本遊戲核心樂趣，「知道自己排第幾」直接強化它；Mock 先行讓 UI/體驗先完整，Firebase 只是換資料來源（防作弊定位承 Q-006 (c)：內部信任 + rules 底線，伺服器驗證需付費方案列 Future）。
 - **實作**：`Codex/15`（LeaderboardService 介面 + Mock 實作 + 本局統計，Codex）→ `Codex/16`（四接觸點 UI，Codex，依 mockup）→ `Codex/17`（Phase 2 Firebase 實作，Claude，人類另行啟動）。
 - **影響**：`Scripts/services/`（+leaderboard_service.gd/mock_leaderboard_service.gd）、`Data/leaderboard_mock.json`（新）、`Data/ui_text.json`、四張 mockup 入 `Art/references/`、manifest（+icon_trophy 等）、`Docs/08` §八、`AGENTS.md`。
+
+## D-017：怪物素材接入——動畫序列圖 + boss/ 子資料夾（回應 Q-ART-004，Contract 升 v1.4）
+- **問題**：美術交付九隻怪物的 idle 動畫序列圖（`Assets/final/boss/bossN_idle.png/.json`，
+  TexturePacker 格式），命名/路徑與 Contract v1.3 §二清單（靜態 `monster_00N_idle.png`）不符；
+  第 10 隻未交付。
+- **實測**：九張皆 3072×2304（4×3、768px 框、12 幀），符合 §七 ≤4096 上限；JSON 含明確
+  frame 座標與 `meta.animations`，優於 columns/rows 最低要求。
+- **人類決策**（2026-07-05）：
+  1. **素材照現狀接入**，不要求美術改名重交——文件配合現實（同 D-013 精神：規格服務交付，
+     不折騰設計師）。
+  2. Contract `v1.3 → v1.4`：§二怪物條目改為動畫序列圖、§四允許 `Assets/final/boss/` 子資料夾、
+     §七接受 TexturePacker JSON（frames + meta.animations）為 sheet 中繼資料格式。
+  3. **第 10 隻維持 placeholder**（缺檔 fallback 不阻塞，D-004 原則），日後補檔即自動接入。
+- **對映**：`Data/monsters.json` 的 stage N（1–9）↔ `boss<N>_idle`；idle 動畫時長仍讀
+  `animation_timing.json`（鐵則 6）。
+- **實作**：`Codex/18_MONSTER_ASSET_INTEGRATION.md`（Codex 執行，含 H5 實機驗證——
+  VALIDATION_CHECKLIST 通用段的 ResourceLoader/實機規則適用）。
+- **影響**：`Art/ART_CONTRACT.md`(v1.4)、`Assets/ART_ASSET_MANIFEST.md`、`Data/monsters.json`、
+  `Scripts/actors/monster_actor.gd`、`Assets/ART_MISSING_CHECKLIST.md`（美術交付現況文件）。
