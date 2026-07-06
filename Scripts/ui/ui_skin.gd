@@ -143,8 +143,9 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 
 	match style:
 		"card":
+			# HUD 貓耳卡已由 board.png 看板取代，skin_card 不再套用（缺路徑=用 fallback flat）
 			var card := _skin_or_sticker_box(
-				SKIN_CARD if _is_round3_panel(panel, style) else "",
+				"",
 				Vector4(CARD_MARGIN, CARD_MARGIN, CARD_MARGIN, CARD_MARGIN),
 				CREAM,
 				32,
@@ -470,8 +471,6 @@ static func _skin_or_sticker_box(
 static func _is_round3_panel(panel: PanelContainer, style: String) -> bool:
 	var path := str(panel.get_path())
 	match style:
-		"card":
-			return path.contains("/Hud/Columns/")
 		"large":
 			return path.contains("/ActionArea/BetPanel/Panel")
 	return false
