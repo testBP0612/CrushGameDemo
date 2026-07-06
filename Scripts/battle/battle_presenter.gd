@@ -14,6 +14,7 @@ const DamageNumberScript := preload("res://Scripts/effects/damage_number.gd")
 const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
 const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
 const BACKGROUND_ASSET_DIR := "res://Assets/final/"
+const BACKGROUND_ASSET_EXTENSIONS := [".jpg", ".jpeg", ".png"]
 const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
 
 @onready var background_fallback: ColorRect = $Background
@@ -204,22 +205,26 @@ func _apply_background_id(background_id: String) -> void:
 
 
 func _resolve_background_path(background_id: String) -> String:
-	if _background_asset_exists(background_id):
-		return _background_path(background_id)
+	var resolved_path := _background_path(background_id)
+	if not resolved_path.is_empty():
+		return resolved_path
 
 	var background_config := Data.background_zones_config()
 	var fallback_background_id := str(background_config.get("fallback_background_id", ""))
-	if fallback_background_id != background_id and _background_asset_exists(fallback_background_id):
+	if fallback_background_id != background_id:
 		return _background_path(fallback_background_id)
 
 	return ""
 
 
-func _background_asset_exists(background_id: String) -> bool:
-	var path := _background_path(background_id)
-	# FileAccess.file_exists 在匯出版對 imported 資源恆為 false，只能用 ResourceLoader。
-	return not background_id.is_empty() and ResourceLoader.exists(path, "Texture2D")
-
-
 func _background_path(background_id: String) -> String:
-	return "%s%s.png" % [BACKGROUND_ASSET_DIR, background_id]
+	if background_id.is_empty():
+		return ""
+
+	for extension: String in BACKGROUND_ASSET_EXTENSIONS:
+		var path := "%s%s%s" % [BACKGROUND_ASSET_DIR, background_id, extension]
+		# FileAccess.file_exists 在匯出版對 imported 資源恆為 false，只能用 ResourceLoader。
+		if ResourceLoader.exists(path, "Texture2D"):
+			return path
+
+	return ""

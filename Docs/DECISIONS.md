@@ -170,9 +170,9 @@
   frame 座標與 `meta.animations`，優於 columns/rows 最低要求。
 - **人類決策**（2026-07-05）：
   1. **素材照現狀接入**，不要求美術改名重交——文件配合現實（同 D-013 精神：規格服務交付，
-     不折騰設計師）。
+	 不折騰設計師）。
   2. Contract `v1.3 → v1.4`：§二怪物條目改為動畫序列圖、§四允許 `Assets/final/boss/` 子資料夾、
-     §七接受 TexturePacker JSON（frames + meta.animations）為 sheet 中繼資料格式。
+	 §七接受 TexturePacker JSON（frames + meta.animations）為 sheet 中繼資料格式。
   3. **第 10 隻維持 placeholder**（缺檔 fallback 不阻塞，D-004 原則），日後補檔即自動接入。
 - **對映**：`Data/monsters.json` 的 stage N（1–9）↔ `boss<N>_idle`；idle 動畫時長仍讀
   `animation_timing.json`（鐵則 6）。
@@ -180,3 +180,20 @@
   VALIDATION_CHECKLIST 通用段的 ResourceLoader/實機規則適用）。
 - **影響**：`Art/ART_CONTRACT.md`(v1.4)、`Assets/ART_ASSET_MANIFEST.md`、`Data/monsters.json`、
   `Scripts/actors/monster_actor.gd`、`Assets/ART_MISSING_CHECKLIST.md`（美術交付現況文件）。
+
+## D-018：背景素材改以 JPG 交付 + 副檔名優先序解析（回應 Q-ART-005，Contract 升 v1.5）
+- **問題**：美術交付背景新版 `background_battle_001/002/003.jpg`（1080×1920 滿版），格式與
+  Contract v1.4 §三/§五（PNG-only）不符；`ART_SPEC_SHEET.md` 原已註明 JPG 需走 Q-ART。
+- **實測**：三張皆 1080×1920（優於舊 png 版 001 的 941×1672）；約 300KB/張 vs 舊 png 約
+  2.2MB/張，Web 版載入量大幅下降。
+- **人類決策**（2026-07-06，已在 Godot 目視驗收）：
+  1. **JPG 版本照現狀入庫**，成為現行背景素材——同 D-013/D-017 精神：文件配合現實交付。
+  2. Contract `v1.4 → v1.5`：§三/§五 修訂——**不透明全幅背景圖允許 JPG**；角色/怪物/特效/
+	 Logo 等需透明素材仍限 PNG（32-bit alpha）。
+  3. **程式配套**：背景解析依副檔名優先序嘗試 `.jpg` → `.jpeg` → `.png`（`battle_presenter.gd`）；
+	 缺檔 fallback 鏈（zone 背景 → `fallback_background_id` → 漸層 placeholder）不變（D-011）。
+  4. 舊 `.png` 三張**暫留庫中**作備份；是否移除以縮小 Web 匯出體積，另行決定。
+- **原因**：背景不需 alpha，PNG-only 是對「角色需透明」的過度概括；JPG 對全幅照片式底圖
+  是正確格式，且直接改善 H5 載入。
+- **影響**：`Art/ART_CONTRACT.md`(v1.5)、`Art/ART_SPEC_SHEET.md`、`Assets/ART_ASSET_MANIFEST.md`
+  （背景列）、`Scripts/battle/battle_presenter.gd`、`Assets/final/background_battle_00[1-3].jpg`（新增）。

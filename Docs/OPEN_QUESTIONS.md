@@ -157,3 +157,19 @@
   §七接受 TexturePacker JSON 為 sheet 中繼資料）、`Assets/ART_ASSET_MANIFEST.md`（怪物區段
   對映 bossN）、`Data/monsters.json`（`art_asset_id` 對映）、新任務卡 `Codex/18`。
 - 人類裁示：素材照現狀接入；**第 10 隻暫缺，維持 placeholder**（缺檔 fallback 本就不阻塞）。
+
+### Q-ART-005：背景素材改以 JPG 交付（格式與 §三/§五 不符）
+- 狀態：ANSWERED（人類 2026-07-06 目視驗收並指示入庫 → 見 DECISIONS D-018，Contract 升 v1.5）
+- 想改什麼：§三檔名規則（`<asset_id>.png`）與 §五圖片格式（PNG）。美術實際交付背景新版
+  `background_battle_001/002/003.jpg`（`ART_SPEC_SHEET.md` 原註明「亦可 JPG/WebP→需 Q-ART」，
+  即本題）。
+- 實測規格：三張皆 **1080×1920 滿版**（符合 §六，且優於舊 png 版 001 的 941×1672）；檔量
+  約 300KB/張 vs 舊 png 約 2.2MB/張——**Web 版載入量大幅下降**。
+- 原因：背景為不透明全幅底圖，本就不需要 alpha；JPG 是此類素材的合理格式，PNG-only 規則
+  是原規格對「角色需透明」的過度概括。
+- 程式配套：`battle_presenter.gd` 背景解析改為依副檔名優先序嘗試（`.jpg` → `.jpeg` → `.png`），
+  fallback 鏈（zone 背景 → fallback_background_id → 漸層 placeholder）不變。
+- 影響：`Art/ART_CONTRACT.md`（v1.4→v1.5：§三/§五 背景允許 JPG）、`Art/ART_SPEC_SHEET.md`、
+  `Assets/ART_ASSET_MANIFEST.md`（背景列 file_name）、`Scripts/battle/battle_presenter.gd`。
+- 人類裁示：照現狀入庫（jpg 為現行版本，程式優先讀取）；舊 `.png` 三張暫留庫中作備份，
+  是否移除以縮小 Web 匯出體積另行決定。

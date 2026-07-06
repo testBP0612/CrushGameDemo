@@ -1,6 +1,6 @@
 # Art Contract（給 Magnific / 美術同事）
 
-> **狀態：v1.4 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012、D-013、D-017）
+> **狀態：v1.5 locked** 🔒（變更見文末 changelog / `DECISIONS.md` D-011、D-012、D-013、D-017、D-018）
 > **UI 原則（v1.2）**：面板/按鈕/chip 的外框與底色由程式 `StyleBoxFlat` 畫（深藍 8px 描邊），**不需美術框貼圖**；UI 美術只需 **icon 貼紙**。
 > 本檔是**不可變規格合約**。美術同事與 Codex **都必須遵守**。
 > 本檔**只定「接入規格」，不定「美術風格」**。風格（長相、色彩、筆觸…）由美術同事自由決定，見 `ART_DIRECTION_NOTES.md`。
@@ -32,7 +32,9 @@
 
 ## 三、檔名規則（不可變）
 - 全小寫、底線分隔、英數，與 manifest `asset_id` 一致。
-- 格式：`<asset_id>.png`，例：`hero_idle.png`、`monster_001_idle.png`、`background_battle_001.png`。
+- 格式：`<asset_id>.png`，例：`hero_idle.png`、`monster_001_idle.png`。
+- v1.5：**不透明全幅背景圖亦可 `<asset_id>.jpg`**（例：`background_battle_001.jpg`）；
+  程式依 `.jpg` → `.jpeg` → `.png` 優先序解析背景。其他類別仍限 PNG。
 - sprite sheet（若採用）：`<asset_id>_sheet.png` + 同名 `.json`（見第七節）。
 - **不得自創檔名 / 路徑**；Codex 依 manifest 檔名讀取，檔名不符即不會被接入。
 
@@ -44,7 +46,8 @@
 
 ## 五、圖片格式與透明背景（不可變）
 - 格式：**PNG，32-bit，含 alpha 透明背景**（角色、怪物、特效、Logo）。
-- 背景圖 `background_battle_001` 可不透明（全幅底圖）。
+- 背景圖 `background_battle_00N` 可不透明（全幅底圖）；v1.5 起**允許 JPG**（不需 alpha，
+  檔量遠小於 PNG，利於 H5 載入）。
 - 色彩空間 sRGB；勿內嵌奇特 ICC。
 - 邊緣保留乾淨 alpha（避免白邊/雜邊）。
 
@@ -98,10 +101,13 @@
 
 ---
 ## Changelog
+- **v1.5**（`Q-ART-005` / `DECISIONS.md` D-018）：§三/§五 修訂——**不透明全幅背景圖允許 JPG**
+  （`background_battle_001/002/003.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析。
+  需透明的素材（角色/怪物/特效/Logo）仍限 PNG 32-bit alpha。其餘規格不變。
 - **v1.4**（`Q-ART-004` / `DECISIONS.md` D-017）：怪物素材改以動畫序列圖 `bossN_idle`（N=1..9，3072×2304、4×3、12 幀）交付；§四允許 `Assets/final/boss/` 子資料夾；§七接受 TexturePacker JSON 為 sheet 中繼資料。第 10 隻未交付，placeholder fallback。
 - **v1.3**（`Q-ART-003` / `DECISIONS.md` D-013）：修正 §七 sprite sheet 規則——新增**硬上限單邊 ≤ 4096px**、多格數**必須用 grid**並於 JSON 標 `columns`/`rows`（少格數仍可 horizontal）。修正先前「只寫 horizontal、未設尺寸上限」導致 25×768 單列=19200px 超 H5 材質上限的缺陷。
 - **v1.2**（`Q-ART-002` / `DECISIONS.md` D-012）：新增「UI 素材」類別——面板/按鈕/chip 外框改程式 `StyleBoxFlat` 畫（深藍 8px 描邊），UI 美術只需 **icon 貼紙**（`Assets/final/ui/`，載入 `runtime/<id>_48.png`）；移除未使用的框貼圖。其餘規格不變。
 - **v1.1**（`Q-ART-001` / `DECISIONS.md` D-011）：背景改為**分區**，新增 recommended `background_battle_002`、`background_battle_003`（規格同 001：1080×1920、不透明）；實際選用由 `Data/game_balance.json > background_zones` 資料驅動，命名可續擴 `004…`。其餘規格不變。
 - **v1.0**：初版鎖定。
 
-**版本**：v1.4 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。
+**版本**：v1.5 locked ｜ 變更請走 `Q-ART-XXX` + `DECISIONS.md`。

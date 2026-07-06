@@ -21,7 +21,7 @@
 6. **不得把數值/文案寫死**：倍率、成功率、下注上下限、快捷籌碼、怪物、時長、UI 文字一律讀 `Data/*.json`。
 7. **不得把所有邏輯塞進單一巨大 script**，依 `Scripts/` 分層（core/battle/actors/ui/effects/services）。
 8. **版面（直式 9:16）**：遵守 `Docs/04` §二之一座標契約與§二之二版面不變量（角色與操作 UI 不得重疊；操作 UI 落在 y≥1300）。**任何版面調整必須在 Godot 內目視確認**，不可只靠座標算術盲改（見 `DECISIONS.md` D-006）。
-9. **美術**：只讀 `Assets/final/` 與 `Assets/placeholders/`，不得依賴 `Assets/generated/`；不得自行生成正式美術；缺檔必須 **fallback placeholder，不可讓遊戲壞掉**；不得修改 `Art/ART_CONTRACT.md`（鎖版，現行 **v1.4**；要改走 `OPEN_QUESTIONS` 的 `Q-ART-XXX`）。
+9. **美術**：只讀 `Assets/final/` 與 `Assets/placeholders/`，不得依賴 `Assets/generated/`；不得自行生成正式美術；缺檔必須 **fallback placeholder，不可讓遊戲壞掉**；不得修改 `Art/ART_CONTRACT.md`（鎖版，現行 **v1.5**；要改走 `OPEN_QUESTIONS` 的 `Q-ART-XXX`）。
 10. **Git/協作邊界**：不要動 `Planning/`（除非任務卡明確要求）。
 
 ## 必讀順序
@@ -49,7 +49,7 @@
 15. `15_LEADERBOARD_SERVICE`（排行榜服務層介面+Mock；依 D-016；Codex）✅
 16. `16_LEADERBOARD_UI`（排行榜四接觸點 UI，依 mockup；Codex；需任務 15）✅
 17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）✅
-18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex；stage 10 維持 placeholder）
+18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex；stage 10 維持 placeholder）✅（人類 2026-07-06 目視驗收；同 commit 併入 hero_attack 序列圖）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -76,6 +76,7 @@
 - **D-015** 線上身分與分數服務（Firebase BaaS）：僅 Google 登入+自己分數；Web export 關 thread support（免 COOP/COEP、讓 OAuth popup 可用）；未登入/離線退回 LocalScoreService；core 只認 ScoreService 介面。規格見 `Docs/08`。
 - **D-016** 輕量排行榜式非同步競爭：單局流程不變、只加四個 UI 接觸點與資料回饋；指標單一 `best_payout`；Phase 1 用 Mock（NPC 名單 JSON）、Phase 2 換 Firebase；不做每日挑戰/同種子/模式選擇/即時連線/房間。
 - **D-017** 怪物素材＝動畫序列圖 `bossN_idle`（N=1..9，TexturePacker JSON）置於 `Assets/final/boss/`；stage 10 維持 placeholder；Contract v1.4。
+- **D-018** 不透明全幅背景允許 JPG（`background_battle_00N.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析背景；需透明素材仍限 PNG；Contract v1.5。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md
