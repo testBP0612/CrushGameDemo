@@ -259,18 +259,18 @@ theme_override_constants/separation = 14
 layout_mode = 1
 anchors_preset = 0
 offset_left = 140.0
-offset_top = 260.0
+offset_top = 252.0
 offset_right = 250.0
-offset_bottom = 356.0
+offset_bottom = 348.0
 theme_override_font_sizes/font_size = 48
 
 [node name="BetLabel" type="Label" parent="ActionArea/BetPanel/Panel/Content"]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 280.0
-offset_top = 258.0
+offset_top = 250.0
 offset_right = 640.0
-offset_bottom = 358.0
+offset_bottom = 350.0
 theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -279,18 +279,18 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 0
 offset_left = 670.0
-offset_top = 260.0
+offset_top = 252.0
 offset_right = 780.0
-offset_bottom = 356.0
+offset_bottom = 348.0
 theme_override_font_sizes/font_size = 48
 
 [node name="InsufficientRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Content"]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 0.0
-offset_top = 358.0
+offset_top = 352.0
 offset_right = 920.0
-offset_bottom = 392.0
+offset_bottom = 386.0
 theme_override_constants/separation = 12
 alignment = 1
 

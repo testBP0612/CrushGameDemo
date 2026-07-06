@@ -17,7 +17,7 @@
 3.5. [`ART_SPEC_SHEET.md`](ART_SPEC_SHEET.md) — **精確尺寸 + pivot + 製程清單**(照這做最省事;含 UI 尺寸參考)
 4. [`../Assets/ART_ASSET_MANIFEST.md`](../Assets/ART_ASSET_MANIFEST.md) — 要做哪些素材的清單(檔名/規格逐項)
 5. [`ART_DIRECTION_NOTES.md`](ART_DIRECTION_NOTES.md) — 風格筆記(**你主筆**,可自由改)
-6. [`references/ui_mockup_battle.png`](references/ui_mockup_battle.png) — 整體視覺目標
+6. [`references/ui_mockup_battle.jpg`](references/ui_mockup_battle.jpg) — 整體視覺目標
 7. [`prompts/magnific_prompts.md`](prompts/magnific_prompts.md) — 每個素材的 Magnific prompt 起手樣板
 
 ## MVP 你只要先做這些(前 5 隻怪 + 主角 + 背景)

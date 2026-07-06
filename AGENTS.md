@@ -29,7 +29,7 @@
 2. `Docs/01`→`08`（設計／系統／狀態機／UI／動畫／資料／H5／線上分數）
 3. 當前任務卡（依下方「任務卡執行順序」，取最前面尚未打 ✅ 的那張）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
-5. 視覺目標：`Art/references/ui_mockup_battle.png`
+5. 視覺目標：`Art/references/ui_mockup_battle.jpg`
 
 ## 任務卡執行順序（先閉環，後效果與美術）
 1. `01_PROJECT_SCAFFOLD_AND_DATA_LOAD` ✅
