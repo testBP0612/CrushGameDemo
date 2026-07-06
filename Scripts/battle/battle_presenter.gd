@@ -11,6 +11,7 @@ signal player_hurt_finished
 signal hit_landed
 
 const DamageNumberScript := preload("res://Scripts/effects/damage_number.gd")
+const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
 const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
 const BACKGROUND_ASSET_DIR := "res://Assets/final/"
@@ -31,6 +32,7 @@ var _current_background_path := ""
 
 
 func _ready() -> void:
+	UiSkin.style_monster_status(monster_name_label, monster_hp_bar)
 	_configure_background_image()
 	transition_overlay.modulate.a = 0.0
 	show_monster_for_stage(1)

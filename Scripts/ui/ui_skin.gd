@@ -35,6 +35,107 @@ const SKIN_BTN_PLUS := "res://Assets/final/ui/skin_btn_plus.png"
 const SKIN_CHIP := "res://Assets/final/ui/skin_chip.png"
 const SKIN_CHIP_ACTIVE := "res://Assets/final/ui/skin_chip_active.png"
 
+# 對齊 ui_mockup_battle 的整圖美術素材（缺檔一律退回程式樣式，不崩）。
+const TEX_LOGO := "res://Assets/final/logo.png"
+const TEX_BOARD := "res://Assets/final/ui/board.png"
+const TEX_BET_RIBBON := "res://Assets/final/ui/bet_info.png"
+const TEX_BET_CONTEXT := "res://Assets/final/ui/bet_context.png"
+const TEX_BTN_NEXT := "res://Assets/final/ui/next.png"
+const TEX_BTN_RETREAT := "res://Assets/final/ui/retreat.png"
+
+# mockup 色票（看板棕字、粉紅籌碼、藍色加號鈕）
+const BOARD_BROWN := Color(0.47, 0.28, 0.16, 1.0)
+const BOARD_INK := Color(0.3, 0.24, 0.19, 1.0)
+const CHIP_PINK := Color(0.937, 0.337, 0.494, 1.0)
+const CHIP_PINK_BORDER := Color(0.78, 0.2, 0.36, 1.0)
+const CHIP_GOLD := Color(0.99, 0.76, 0.19, 1.0)
+const CHIP_GOLD_BORDER := Color(0.85, 0.5, 0.1, 1.0)
+const STEP_BLUE := Color(0.255, 0.71, 0.91, 1.0)
+const STEP_BLUE_BORDER := Color(0.13, 0.5, 0.72, 1.0)
+
+
+static func art_texture(name: String) -> Texture2D:
+	var path := ""
+	match name:
+		"logo":
+			path = TEX_LOGO
+		"board":
+			path = TEX_BOARD
+		"bet_ribbon":
+			path = TEX_BET_RIBBON
+		"bet_context":
+			path = TEX_BET_CONTEXT
+		"btn_next":
+			path = TEX_BTN_NEXT
+		"btn_retreat":
+			path = TEX_BTN_RETREAT
+	if path.is_empty():
+		return null
+	return _load_texture(path)
+
+
+static func apply_art_texture(rect: TextureRect, name: String) -> bool:
+	if rect == null or not is_instance_valid(rect):
+		return false
+	var texture := art_texture(name)
+	if texture == null:
+		rect.visible = false
+		return false
+	rect.texture = texture
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.visible = true
+	return true
+
+
+## 整張美術圖（含烤字）作為按鈕外觀。成功回傳 true，呼叫端應清空 text；
+## 失敗（缺檔）回傳 false，呼叫端退回 apply_button 文字樣式。
+static func apply_art_button(button: Button, name: String) -> bool:
+	if button == null or not is_instance_valid(button):
+		return false
+	var texture := art_texture(name)
+	if texture == null:
+		return false
+	button.icon = null
+	var normal := StyleBoxTexture.new()
+	normal.texture = texture
+	normal.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	normal.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	normal.draw_center = true
+	_set_content_margins(normal, 0.0, 0.0, 0.0, 0.0)
+	button.add_theme_stylebox_override("normal", normal)
+	var hover := normal.duplicate() as StyleBoxTexture
+	hover.modulate_color = Color(1.08, 1.08, 1.08, 1.0)
+	button.add_theme_stylebox_override("hover", hover)
+	var pressed := normal.duplicate() as StyleBoxTexture
+	pressed.modulate_color = Color(0.85, 0.85, 0.88, 1.0)
+	button.add_theme_stylebox_override("pressed", pressed)
+	var disabled := normal.duplicate() as StyleBoxTexture
+	disabled.modulate_color = Color(0.55, 0.55, 0.6, 0.8)
+	button.add_theme_stylebox_override("disabled", disabled)
+	return true
+
+
+## 怪物名牌與血條：去掉預設灰主題，改為奶油描邊字 + 粉紅血條（貼齊 mockup 風格）。
+static func style_monster_status(name_label: Label, hp_bar: ProgressBar) -> void:
+	if name_label != null and is_instance_valid(name_label):
+		name_label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+		name_label.add_theme_color_override("font_color", CREAM)
+		name_label.add_theme_color_override("font_outline_color", DEEP_NAVY)
+		name_label.add_theme_constant_override("outline_size", 10)
+	if hp_bar != null and is_instance_valid(hp_bar):
+		var background := _flat_box(Color(1.0, 0.964706, 0.901961, 0.92), 18, 6, DEEP_NAVY)
+		var fill := _flat_box(PINK, 12)
+		hp_bar.add_theme_stylebox_override("background", background)
+		hp_bar.add_theme_stylebox_override("fill", fill)
+
+
+## 缺 board.png 時給 HUD 數值標籤的底板（缺檔不崩，仍可讀）。
+static func fallback_value_box() -> StyleBoxFlat:
+	var style := _sticker_box(CREAM, 24, 6, DEEP_NAVY, Color(0.08, 0.67, 0.62, 0.16))
+	_set_content_margins(style, 16.0, 6.0, 16.0, 6.0)
+	return style
+
 
 static func apply_panel(panel: PanelContainer, style: String) -> void:
 	if panel == null or not is_instance_valid(panel):
@@ -116,41 +217,53 @@ static func apply_button(button: Button, style: String) -> void:
 			content_margin = 18.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_TROPHY)
+		"trophy_pill":
+			# mockup 左上「玩家排行」粉紅膠囊
+			fallback_color = CHIP_PINK
+			font_color = CREAM
+			border_color = CHIP_PINK_BORDER
+			shadow_color = Color(0.78, 0.2, 0.36, 0.3)
+			radius = 44
+			content_margin = 22.0
+			text_outline_size = 4
+			_apply_button_icon(button, ICON_TROPHY)
 		"step_decrease":
-			skin_path = SKIN_BTN_MINUS
-			fallback_color = CREAM
-			font_color = DEEP_NAVY
-			radius = 28
+			# mockup 粉紅方形減號鈕
+			fallback_color = CHIP_PINK
+			font_color = CREAM
+			border_color = CHIP_PINK_BORDER
+			shadow_color = Color(0.78, 0.2, 0.36, 0.3)
+			radius = 24
 			content_margin = 10.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_MINUS)
 		"step_increase":
-			skin_path = SKIN_BTN_PLUS
-			fallback_color = CREAM
-			font_color = DEEP_NAVY
-			radius = 28
+			# mockup 天藍方形加號鈕
+			fallback_color = STEP_BLUE
+			font_color = CREAM
+			border_color = STEP_BLUE_BORDER
+			shadow_color = Color(0.13, 0.5, 0.72, 0.3)
+			radius = 24
 			content_margin = 10.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_PLUS)
 		"chip":
-			skin_path = SKIN_CHIP
-			texture_margins = Vector4(CHIP_MARGIN_X, CHIP_MARGIN_Y, CHIP_MARGIN_X, CHIP_MARGIN_Y)
-			fallback_color = CREAM
-			font_color = DEEP_NAVY
-			border_color = DEEP_NAVY
-			radius = 28
+			# mockup 粉紅籌碼藥丸（奶油字）
+			fallback_color = CHIP_PINK
+			font_color = CREAM
+			border_color = CHIP_PINK_BORDER
+			shadow_color = Color(0.78, 0.2, 0.36, 0.24)
+			radius = 30
 			content_margin = 14.0
-			text_outline_size = 2
+			text_outline_size = 0
 		"chip_selected":
-			skin_path = SKIN_CHIP_ACTIVE
-			texture_margins = Vector4(CHIP_MARGIN_X, CHIP_MARGIN_Y, CHIP_MARGIN_X, CHIP_MARGIN_Y)
-			fallback_color = Color(0.08, 0.67, 0.62, 1.0)
-			font_color = Color(1.0, 0.98, 0.86, 1.0)
-			border_color = DEEP_NAVY
+			fallback_color = CHIP_GOLD
+			font_color = Color(0.42, 0.26, 0.05, 1.0)
+			border_color = CHIP_GOLD_BORDER
 			shadow_color = Color(1.0, 0.72, 0.12, 0.35)
-			radius = 28
+			radius = 30
 			content_margin = 14.0
-			text_outline_size = 2
+			text_outline_size = 0
 		_:
 			_apply_button_icon(button, ICON_PAW)
 
@@ -202,6 +315,21 @@ static func apply_hud_card_text(label: Label, role: String) -> void:
 			color = CREAM
 			outline_color = DEEP_NAVY
 			outline_size = 10
+		"board_caption":
+			# 木質看板上的棕色欄位標題（底圖本身是奶油色，不需描邊）
+			color = BOARD_BROWN
+			outline_size = 0
+		"board_value":
+			color = BOARD_INK
+			outline_size = 0
+		"board_value_pink":
+			color = PINK
+			outline_size = 0
+		"board_tab":
+			# 粉紅頁籤上的奶油色小標
+			color = CREAM
+			outline_color = Color(0.78, 0.2, 0.36, 1.0)
+			outline_size = 4
 	label.add_theme_color_override("font_color", color)
 	label.add_theme_color_override("font_outline_color", outline_color)
 	label.add_theme_constant_override("outline_size", outline_size)

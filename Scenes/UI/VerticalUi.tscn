@@ -26,13 +26,11 @@ grow_horizontal = 2
 
 [node name="ProfileFrame" type="PanelContainer" parent="TopBar"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.08
-anchor_top = 0.24
-anchor_right = 0.34
-anchor_bottom = 0.76
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 12.0
+offset_right = 370.0
+offset_bottom = 100.0
 
 [node name="ProfileContent" type="HBoxContainer" parent="TopBar/ProfileFrame"]
 layout_mode = 2
@@ -52,156 +50,128 @@ vertical_alignment = 1
 
 [node name="LogoLabel" type="Label" parent="TopBar"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.32
-anchor_top = 0.12
-anchor_right = 0.68
-anchor_bottom = 0.88
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_left = 620.0
+offset_top = 20.0
+offset_right = 1060.0
+offset_bottom = 200.0
 theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="LogoRect" type="TextureRect" parent="TopBar"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 620.0
+offset_top = 20.0
+offset_right = 1060.0
+offset_bottom = 316.0
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Hud" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 210.0
-offset_bottom = 460.0
+offset_top = 330.0
+offset_bottom = 580.0
 grow_horizontal = 2
 script = ExtResource("2_hud")
 
-[node name="Columns" type="HBoxContainer" parent="Hud"]
+[node name="BoardRect" type="TextureRect" parent="Hud"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
+anchors_preset = 0
 offset_left = 40.0
 offset_top = 0.0
-offset_right = -40.0
-offset_bottom = 164.0
-grow_horizontal = 2
-theme_override_constants/separation = 28
-alignment = 1
+offset_right = 1040.0
+offset_bottom = 242.0
+expand_mode = 1
+stretch_mode = 5
 
-[node name="StageCard" type="PanelContainer" parent="Hud/Columns"]
-custom_minimum_size = Vector2(300, 164)
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="StageCaption" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 122.0
+offset_top = 26.0
+offset_right = 354.0
+offset_bottom = 76.0
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="StageContent" type="VBoxContainer" parent="Hud/Columns/StageCard"]
-layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 1
+[node name="StageValue" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 122.0
+offset_top = 80.0
+offset_right = 354.0
+offset_bottom = 187.0
+theme_override_font_sizes/font_size = 60
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="StageHeader" type="HBoxContainer" parent="Hud/Columns/StageCard/StageContent"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
+[node name="MultiplierCaption" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 414.0
+offset_top = 26.0
+offset_right = 628.0
+offset_bottom = 76.0
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="StageIcon" type="TextureRect" parent="Hud/Columns/StageCard/StageContent/StageHeader"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
+[node name="MultiplierValue" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 414.0
+offset_top = 80.0
+offset_right = 628.0
+offset_bottom = 187.0
+theme_override_font_sizes/font_size = 60
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="StageCaption" type="Label" parent="Hud/Columns/StageCard/StageContent/StageHeader"]
-layout_mode = 2
+[node name="PayoutCaption" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 720.0
+offset_top = 4.0
+offset_right = 881.0
+offset_bottom = 49.0
 theme_override_font_sizes/font_size = 28
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StageValue" type="Label" parent="Hud/Columns/StageCard/StageContent"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 56
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MultiplierCard" type="PanelContainer" parent="Hud/Columns"]
-custom_minimum_size = Vector2(300, 164)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MultiplierContent" type="VBoxContainer" parent="Hud/Columns/MultiplierCard"]
-layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="MultiplierHeader" type="HBoxContainer" parent="Hud/Columns/MultiplierCard/MultiplierContent"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="MultiplierIcon" type="TextureRect" parent="Hud/Columns/MultiplierCard/MultiplierContent/MultiplierHeader"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-
-[node name="MultiplierCaption" type="Label" parent="Hud/Columns/MultiplierCard/MultiplierContent/MultiplierHeader"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MultiplierValue" type="Label" parent="Hud/Columns/MultiplierCard/MultiplierContent"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 56
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PayoutCard" type="PanelContainer" parent="Hud/Columns"]
-custom_minimum_size = Vector2(300, 164)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PayoutContent" type="VBoxContainer" parent="Hud/Columns/PayoutCard"]
-layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="PayoutHeader" type="HBoxContainer" parent="Hud/Columns/PayoutCard/PayoutContent"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="PayoutIcon" type="TextureRect" parent="Hud/Columns/PayoutCard/PayoutContent/PayoutHeader"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-
-[node name="PayoutCaption" type="Label" parent="Hud/Columns/PayoutCard/PayoutContent/PayoutHeader"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PayoutValue" type="Label" parent="Hud/Columns/PayoutCard/PayoutContent"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 56
+[node name="PayoutValue" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 644.0
+offset_top = 49.0
+offset_right = 978.0
+offset_bottom = 204.0
+theme_override_font_sizes/font_size = 68
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BalanceLabel" type="Label" parent="Hud"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 666.0
-offset_top = 184.0
-offset_right = -64.0
-offset_bottom = 250.0
-grow_horizontal = 2
+anchors_preset = 0
+offset_left = 700.0
+offset_top = 252.0
+offset_right = 1040.0
+offset_bottom = 318.0
 theme_override_font_sizes/font_size = 38
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BalanceIcon" type="TextureRect" parent="Hud"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 690.0
-offset_top = 193.0
-offset_right = -342.0
-offset_bottom = 241.0
-grow_horizontal = 2
+anchors_preset = 0
+offset_left = 716.0
+offset_top = 261.0
+offset_right = 764.0
+offset_bottom = 309.0
 
 [node name="BattleMessage" type="Control" parent="."]
 layout_mode = 1
@@ -248,69 +218,121 @@ script = ExtResource("4_bet_panel")
 
 [node name="Panel" type="PanelContainer" parent="ActionArea/BetPanel"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 470.0
-grow_horizontal = 2
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 44.0
+offset_right = 984.0
+offset_bottom = 484.0
 
-[node name="Margin" type="MarginContainer" parent="ActionArea/BetPanel/Panel"]
+[node name="Content" type="Control" parent="ActionArea/BetPanel/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 36
-theme_override_constants/margin_bottom = 34
 
-[node name="Layout" type="VBoxContainer" parent="ActionArea/BetPanel/Panel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 18
+[node name="ContextRect" type="TextureRect" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 320.0
+offset_top = 0.0
+offset_right = 600.0
+offset_bottom = 250.0
+expand_mode = 1
+stretch_mode = 5
 
-[node name="TitleLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 88)
-layout_mode = 2
-theme_override_font_sizes/font_size = 38
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="ChipsLeft" type="VBoxContainer" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 6.0
+offset_right = 200.0
+offset_bottom = 240.0
+theme_override_constants/separation = 14
 
-[node name="BetRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
-layout_mode = 2
-theme_override_constants/separation = 24
-alignment = 1
+[node name="ChipsRight" type="VBoxContainer" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 720.0
+offset_top = 6.0
+offset_right = 920.0
+offset_bottom = 240.0
+theme_override_constants/separation = 14
 
-[node name="DecreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
-custom_minimum_size = Vector2(148, 112)
-layout_mode = 2
+[node name="DecreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 140.0
+offset_top = 260.0
+offset_right = 250.0
+offset_bottom = 356.0
 theme_override_font_sizes/font_size = 48
 
-[node name="BetLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
-custom_minimum_size = Vector2(464, 112)
-layout_mode = 2
+[node name="BetLabel" type="Label" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 258.0
+offset_right = 640.0
+offset_bottom = 358.0
 theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="IncreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout/BetRow"]
-custom_minimum_size = Vector2(148, 112)
-layout_mode = 2
+[node name="IncreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 670.0
+offset_top = 260.0
+offset_right = 780.0
+offset_bottom = 356.0
 theme_override_font_sizes/font_size = 48
 
-[node name="QuickChipRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
-layout_mode = 2
-theme_override_constants/separation = 16
+[node name="InsufficientRow" type="HBoxContainer" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 358.0
+offset_right = 920.0
+offset_bottom = 392.0
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="InsufficientLabel" type="Label" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
+[node name="InsufficientIcon" type="TextureRect" parent="ActionArea/BetPanel/Panel/Content/InsufficientRow"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+
+[node name="InsufficientLabel" type="Label" parent="ActionArea/BetPanel/Panel/Content/InsufficientRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.45, 0.35, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="InsufficientIcon" type="TextureRect" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
+[node name="TitleLabel" type="Label" parent="ActionArea/BetPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 272.0
+offset_top = 10.0
+offset_right = 712.0
+offset_bottom = 106.0
+theme_override_font_sizes/font_size = 38
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ConfirmButton" type="Button" parent="ActionArea/BetPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 116)
-layout_mode = 2
+[node name="RibbonRect" type="TextureRect" parent="ActionArea/BetPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 272.0
+offset_top = -2.0
+offset_right = 712.0
+offset_bottom = 118.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ConfirmButton" type="Button" parent="ActionArea/BetPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 282.0
+offset_top = 489.0
+offset_right = 702.0
+offset_bottom = 617.0
 theme_override_font_sizes/font_size = 42
 
 [node name="DecisionPanel" type="Control" parent="ActionArea"]
@@ -351,23 +373,21 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -184.0
-offset_bottom = -24.0
+offset_top = -134.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 24
+theme_override_constants/separation = 60
 alignment = 1
 
 [node name="CashoutButton" type="Button" parent="ActionArea/DecisionPanel/Buttons"]
-custom_minimum_size = Vector2(464, 144)
+custom_minimum_size = Vector2(430, 131)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 42
 
 [node name="AdvanceButton" type="Button" parent="ActionArea/DecisionPanel/Buttons"]
-custom_minimum_size = Vector2(464, 144)
+custom_minimum_size = Vector2(430, 131)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 42
 
 [node name="SettlementPanel" type="Control" parent="ActionArea"]
@@ -452,14 +472,11 @@ theme_override_font_sizes/font_size = 34
 
 [node name="LeaderboardEntryButton" type="Button" parent="."]
 visible = false
-custom_minimum_size = Vector2(224, 70)
+custom_minimum_size = Vector2(360, 92)
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -332.0
-offset_top = 405.0
-offset_right = -96.0
-offset_bottom = 475.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 30
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 112.0
+offset_right = 400.0
+offset_bottom = 204.0
+theme_override_font_sizes/font_size = 34

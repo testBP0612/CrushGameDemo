@@ -4,18 +4,13 @@ extends Control
 const PayoutCountUp := preload("res://Scripts/effects/payout_count_up.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
-@onready var stage_card: PanelContainer = $Columns/StageCard
-@onready var multiplier_card: PanelContainer = $Columns/MultiplierCard
-@onready var payout_card: PanelContainer = $Columns/PayoutCard
-@onready var stage_icon: TextureRect = $Columns/StageCard/StageContent/StageHeader/StageIcon
-@onready var stage_caption: Label = $Columns/StageCard/StageContent/StageHeader/StageCaption
-@onready var stage_value: Label = $Columns/StageCard/StageContent/StageValue
-@onready var multiplier_icon: TextureRect = $Columns/MultiplierCard/MultiplierContent/MultiplierHeader/MultiplierIcon
-@onready var multiplier_caption: Label = $Columns/MultiplierCard/MultiplierContent/MultiplierHeader/MultiplierCaption
-@onready var multiplier_value: Label = $Columns/MultiplierCard/MultiplierContent/MultiplierValue
-@onready var payout_icon: TextureRect = $Columns/PayoutCard/PayoutContent/PayoutHeader/PayoutIcon
-@onready var payout_caption: Label = $Columns/PayoutCard/PayoutContent/PayoutHeader/PayoutCaption
-@onready var payout_value: Label = $Columns/PayoutCard/PayoutContent/PayoutValue
+@onready var board_rect: TextureRect = $BoardRect
+@onready var stage_caption: Label = $StageCaption
+@onready var stage_value: Label = $StageValue
+@onready var multiplier_caption: Label = $MultiplierCaption
+@onready var multiplier_value: Label = $MultiplierValue
+@onready var payout_caption: Label = $PayoutCaption
+@onready var payout_value: Label = $PayoutValue
 @onready var balance_label: Label = $BalanceLabel
 @onready var balance_icon: TextureRect = $BalanceIcon
 
@@ -24,20 +19,19 @@ var _has_snapshot := false
 
 
 func _ready() -> void:
-	UiSkin.apply_panel(stage_card, "card")
-	UiSkin.apply_panel(multiplier_card, "card")
-	UiSkin.apply_panel(payout_card, "card")
-	UiSkin.apply_icon(stage_icon, "stage")
-	UiSkin.apply_hud_card_text(stage_caption, "label")
-	UiSkin.apply_hud_card_text(stage_value, "value")
-	UiSkin.apply_icon(multiplier_icon, "multiplier")
-	UiSkin.apply_hud_card_text(multiplier_caption, "label")
-	UiSkin.apply_hud_card_text(multiplier_value, "value")
-	UiSkin.apply_icon(payout_icon, "payout")
-	UiSkin.apply_hud_card_text(payout_caption, "label")
-	UiSkin.apply_hud_card_text(payout_value, "value")
+	var board_ok := UiSkin.apply_art_texture(board_rect, "board")
+	UiSkin.apply_hud_card_text(stage_caption, "board_caption")
+	UiSkin.apply_hud_card_text(stage_value, "board_value")
+	UiSkin.apply_hud_card_text(multiplier_caption, "board_caption")
+	UiSkin.apply_hud_card_text(multiplier_value, "board_value_pink")
+	UiSkin.apply_hud_card_text(payout_caption, "board_tab")
+	UiSkin.apply_hud_card_text(payout_value, "board_value_pink")
 	UiSkin.apply_resource_label(balance_label)
 	UiSkin.apply_icon(balance_icon, "coin")
+	if not board_ok:
+		# 缺看板圖時給數值標籤補底板，維持可讀（缺檔不崩原則）
+		for label: Label in [stage_value, multiplier_value, payout_value]:
+			label.add_theme_stylebox_override("normal", UiSkin.fallback_value_box())
 
 
 func update_snapshot(snapshot: Dictionary) -> void:
@@ -94,4 +88,4 @@ func _caption_from_text(text: String) -> String:
 
 
 func entrance_targets() -> Array[Control]:
-	return [stage_card, multiplier_card, payout_card]
+	return [stage_value, multiplier_value, payout_value]

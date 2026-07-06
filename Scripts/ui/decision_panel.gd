@@ -13,12 +13,21 @@ signal advance_requested
 @onready var hint_label: Label = $RankHint/Margin/HintLabel
 
 var _leaderboard_service
+var _cashout_is_art := false
+var _advance_is_art := false
 
 
 func _ready() -> void:
-	advance_button.text = Data.text("decision_advance")
-	UiSkin.apply_button(cashout_button, "secondary")
-	UiSkin.apply_button(advance_button, "primary")
+	# 撤退/續戰改用 mockup 大圖按鈕（retreat.png / next.png 含烤字）；缺檔退回文字按鈕
+	_cashout_is_art = UiSkin.apply_art_button(cashout_button, "btn_retreat")
+	if not _cashout_is_art:
+		UiSkin.apply_button(cashout_button, "secondary")
+	_advance_is_art = UiSkin.apply_art_button(advance_button, "btn_next")
+	if _advance_is_art:
+		advance_button.text = ""
+	else:
+		advance_button.text = Data.text("decision_advance")
+		UiSkin.apply_button(advance_button, "primary")
 	UiSkin.apply_leaderboard_hint(hint_panel)
 	UiSkin.apply_light_panel_label(hint_label)
 	_install_button_feedback(cashout_button)
@@ -29,9 +38,10 @@ func _ready() -> void:
 
 func update_snapshot(snapshot: Dictionary) -> void:
 	var is_reward_decision := bool(snapshot.get("is_reward_decision", false))
-	cashout_button.text = Data.text("decision_cashout", {
-		"payout": int(snapshot.get("current_payout", 0))
-	})
+	if not _cashout_is_art:
+		cashout_button.text = Data.text("decision_cashout", {
+			"payout": int(snapshot.get("current_payout", 0))
+		})
 	cashout_button.disabled = not is_reward_decision
 	advance_button.visible = bool(snapshot.get("can_advance", false))
 	advance_button.disabled = not is_reward_decision

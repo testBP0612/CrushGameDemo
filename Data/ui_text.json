@@ -12,8 +12,8 @@
     "login_hint_synced": "已同步雲端",
     "profile_mock_display_name": "試玩勇者",
 
-    "hud_stage": "關卡 {stage}/{max}",
-    "hud_multiplier": "倍率 x{multiplier}",
+    "hud_stage": "關卡進度 {stage}/{max}",
+    "hud_multiplier": "目前倍率 x{multiplier}",
     "hud_current_payout": "目前收益 {payout}",
     "hud_balance": "金幣 {balance}",
 
@@ -42,7 +42,7 @@
 
     "best_record": "最佳紀錄 {payout}",
 
-    "lb_button": "排行榜",
+    "lb_button": "玩家排行",
     "lb_title": "排行榜 Top 10",
     "lb_loading": "讀取中...",
     "lb_empty": "目前沒有資料",
