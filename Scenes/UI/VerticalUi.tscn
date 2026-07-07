@@ -419,19 +419,30 @@ layout_mode = 2
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="RewardIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(48, 48)
+[node name="TitleRow" type="HBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="TitleLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+[node name="PawLeft" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/TitleRow"]
+custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
-theme_override_font_sizes/font_size = 58
+size_flags_vertical = 4
+
+[node name="TitleLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/TitleRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 76
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PawRight" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/TitleRow"]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+size_flags_vertical = 4
+
 [node name="BodyLabel" type="RichTextLabel" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 38
+theme_override_font_sizes/normal_font_size = 44
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
@@ -442,28 +453,28 @@ theme_override_constants/separation = 4
 
 [node name="RankLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 
 [node name="BeatenLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 
 [node name="BestLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 
 [node name="LeaderboardButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 
 [node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 108)
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 48
 
 [node name="LeaderboardEntryButton" type="Button" parent="."]
 visible = false

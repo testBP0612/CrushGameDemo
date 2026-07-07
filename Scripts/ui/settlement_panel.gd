@@ -8,11 +8,13 @@ const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 signal acknowledge_requested
 signal leaderboard_requested
 
-@onready var title_label: Label = $Panel/Margin/Layout/TitleLabel
+@onready var title_row: HBoxContainer = $Panel/Margin/Layout/TitleRow
+@onready var title_label: Label = $Panel/Margin/Layout/TitleRow/TitleLabel
+@onready var paw_left: TextureRect = $Panel/Margin/Layout/TitleRow/PawLeft
+@onready var paw_right: TextureRect = $Panel/Margin/Layout/TitleRow/PawRight
 @onready var body_label: RichTextLabel = $Panel/Margin/Layout/BodyLabel
 @onready var play_again_button: Button = $Panel/Margin/Layout/PlayAgainButton
 @onready var panel: PanelContainer = $Panel
-@onready var reward_icon: TextureRect = $Panel/Margin/Layout/RewardIcon
 @onready var stats_box: VBoxContainer = $Panel/Margin/Layout/StatsBox
 @onready var rank_label: Label = $Panel/Margin/Layout/StatsBox/RankLabel
 @onready var beaten_label: Label = $Panel/Margin/Layout/StatsBox/BeatenLabel
@@ -31,14 +33,15 @@ func _ready() -> void:
 	UiSkin.apply_panel(panel, "settle")
 	UiSkin.apply_button(play_again_button, "settle_primary")
 	UiSkin.apply_settle_title(title_label)
-	# 內文深色字，數字用 bbcode 粉紅高亮（見 _accent）
-	body_label.add_theme_color_override("default_color", Color(0.25, 0.2, 0.24, 1.0))
-	UiSkin.apply_light_panel_label(rank_label)
-	UiSkin.apply_light_panel_label(beaten_label)
-	UiSkin.apply_light_panel_label(best_label)
-	# 目標圖：標題上方一顆粉紅掌印
-	UiSkin.apply_icon(reward_icon, "paw")
-	reward_icon.modulate = Color(0.96, 0.25, 0.42, 1.0)
+	# 內文深炭色字，數字用 bbcode 粉紅高亮（見 _accent）
+	body_label.add_theme_color_override("default_color", Color(0.24, 0.19, 0.23, 1.0))
+	# 排行統計為配角：小字、柔和棕灰
+	for stat_label: Label in [rank_label, beaten_label, best_label]:
+		stat_label.add_theme_color_override("font_color", Color(0.5, 0.42, 0.45, 1.0))
+	# 目標圖：標題左右各一顆粉紅掌印
+	for paw: TextureRect in [paw_left, paw_right]:
+		UiSkin.apply_icon(paw, "paw")
+		paw.modulate = Color(0.96, 0.25, 0.42, 1.0)
 	play_again_button.text = Data.text("settle_play_again")
 	leaderboard_button.text = Data.text("lb_view_entry")
 	UiSkin.apply_button(leaderboard_button, "small")
@@ -106,7 +109,7 @@ func _install_button_feedback(button: Button) -> void:
 
 
 func entrance_targets() -> Array[Control]:
-	return [reward_icon, title_label, body_label, stats_box, leaderboard_button, play_again_button]
+	return [title_row, body_label, stats_box, leaderboard_button, play_again_button]
 
 
 func _bind_leaderboard_service(service) -> void:
