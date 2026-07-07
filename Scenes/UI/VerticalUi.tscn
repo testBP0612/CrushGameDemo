@@ -425,7 +425,7 @@ theme_override_constants/separation = 20
 alignment = 1
 
 [node name="PawLeft" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/TitleRow"]
-custom_minimum_size = Vector2(46, 46)
+custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -436,7 +436,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PawRight" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/TitleRow"]
-custom_minimum_size = Vector2(46, 46)
+custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -462,7 +462,7 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="DepthIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/DepthCard/DepthRow"]
-custom_minimum_size = Vector2(34, 34)
+custom_minimum_size = Vector2(54, 54)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -495,7 +495,7 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="BeatenIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/BeatenCard/BeatenRow"]
-custom_minimum_size = Vector2(34, 34)
+custom_minimum_size = Vector2(54, 54)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -528,7 +528,7 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="BestIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/BestCard/BestRow"]
-custom_minimum_size = Vector2(34, 34)
+custom_minimum_size = Vector2(54, 54)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -551,7 +551,7 @@ fit_content = true
 scroll_active = false
 
 [node name="StatsDuo" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 118)
+custom_minimum_size = Vector2(0, 126)
 layout_mode = 2
 
 [node name="DuoRow" type="HBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsDuo"]
@@ -560,7 +560,7 @@ theme_override_constants/separation = 18
 alignment = 1
 
 [node name="RankIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsDuo/DuoRow"]
-custom_minimum_size = Vector2(44, 44)
+custom_minimum_size = Vector2(66, 66)
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -591,7 +591,7 @@ size_flags_vertical = 4
 color = Color(0.85, 0.62, 0.68, 0.6)
 
 [node name="RecordIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsDuo/DuoRow"]
-custom_minimum_size = Vector2(44, 44)
+custom_minimum_size = Vector2(66, 66)
 layout_mode = 2
 size_flags_vertical = 4
 
