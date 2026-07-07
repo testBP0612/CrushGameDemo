@@ -181,6 +181,11 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 			var settle := _sticker_box(CREAM, 44, 10, Color(0.937, 0.42, 0.56, 1.0), Color(0.78, 0.2, 0.36, 0.28))
 			_set_content_margins(settle, 40.0, 6.0, 40.0, 8.0)
 			panel.add_theme_stylebox_override("panel", settle)
+		"stat_card":
+			# 結算統計小卡：淡粉細框（近似 target 的細框/虛線框）
+			var stat := _flat_box(Color(1.0, 0.98, 0.94, 1.0), 20, 3, Color(0.9, 0.66, 0.72, 1.0))
+			_set_content_margins(stat, 10.0, 8.0, 10.0, 8.0)
+			panel.add_theme_stylebox_override("panel", stat)
 		_:
 			var fallback_color := Color(1.0, 0.96, 0.84, 1.0) if style == "leaderboard_me" else CREAM
 			var fallback_shadow := Color(1.0, 0.72, 0.12, 0.32) if style == "leaderboard_me" else Color(0.08, 0.67, 0.62, 0.16)
@@ -201,6 +206,7 @@ static func apply_button(button: Button, style: String) -> void:
 	var radius := 28
 	var content_margin := 52.0
 	var text_outline_size := 8
+	var border_width := 8
 	var skin_path := ""
 	var texture_margins := Vector4(BUTTON_MARGIN, BUTTON_MARGIN, BUTTON_MARGIN, BUTTON_MARGIN)
 	match style:
@@ -232,6 +238,26 @@ static func apply_button(button: Button, style: String) -> void:
 			content_margin = 18.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_TROPHY)
+		"settle_pill":
+			# 結算「查看排行榜」膠囊（撤退版 target：奶油底細框）
+			fallback_color = CREAM
+			font_color = DEEP_NAVY
+			border_color = DEEP_NAVY
+			shadow_color = Color(0.08, 0.67, 0.62, 0.14)
+			radius = 24
+			content_margin = 20.0
+			text_outline_size = 0
+			border_width = 4
+			_apply_button_icon(button, ICON_TROPHY)
+		"settle_link":
+			# 結算「查看排行榜」文字連結（戰敗版 target：無框純文字）
+			fallback_color = Color(0.0, 0.0, 0.0, 0.0)
+			font_color = DEEP_NAVY
+			border_color = Color(0.0, 0.0, 0.0, 0.0)
+			shadow_color = Color(0.0, 0.0, 0.0, 0.0)
+			radius = 0
+			content_margin = 8.0
+			text_outline_size = 0
 		"settle_primary":
 			# ui_target_*_settle 的「再來一局」大鈕：青綠圓角 + 奶油粗描邊
 			fallback_color = TEAL
@@ -292,7 +318,7 @@ static func apply_button(button: Button, style: String) -> void:
 		_:
 			_apply_button_icon(button, ICON_PAW)
 
-	var normal := _skin_or_sticker_box(skin_path, texture_margins, fallback_color, radius, 8, border_color, shadow_color)
+	var normal := _skin_or_sticker_box(skin_path, texture_margins, fallback_color, radius, border_width, border_color, shadow_color)
 	_set_content_margins(normal, content_margin, 12.0, content_margin, 12.0)
 	button.add_theme_stylebox_override("normal", normal)
 

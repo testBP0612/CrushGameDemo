@@ -55,6 +55,17 @@
     "lb_defeat_depth": "本次最深進度：{stage}/{max}",
     "lb_view_entry": "查看排行榜 >",
 
+    "lb_stat_depth_caption": "本次最深進度",
+    "lb_stat_depth_value": "{stage} /{max}",
+    "lb_stat_beaten_caption": "你超越了",
+    "lb_stat_beaten_value": "{percent} 玩家",
+    "lb_stat_best_caption": "目前最佳",
+    "lb_stat_best_value": "第 {rank} 名",
+    "lb_stat_rank_line": "目前排名：第 {rank} 名",
+    "lb_stat_rank_sub": "超過了 {percent} 的玩家",
+    "lb_stat_record_line": "最高紀錄：{payout} 金幣",
+    "lb_stat_record_sub": "再接再厲，突破紀錄！",
+
     "monster_001_name": "史萊姆",
     "monster_002_name": "水靈獸",
     "monster_003_name": "魅影蝠",

@@ -5,46 +5,79 @@ const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
 const SettlementEffect := preload("res://Scripts/effects/settlement_effect.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
+const ACCENT_PINK := "#e8447a"
+const ACCENT_TEAL := "#1f9e94"
+const STAT_TEXT := Color(0.29, 0.23, 0.26, 1.0)
+const STAT_MUTED := Color(0.5, 0.42, 0.45, 1.0)
+
 signal acknowledge_requested
 signal leaderboard_requested
 
+@onready var panel: PanelContainer = $Panel
 @onready var title_row: HBoxContainer = $Panel/Margin/Layout/TitleRow
 @onready var title_label: Label = $Panel/Margin/Layout/TitleRow/TitleLabel
 @onready var paw_left: TextureRect = $Panel/Margin/Layout/TitleRow/PawLeft
 @onready var paw_right: TextureRect = $Panel/Margin/Layout/TitleRow/PawRight
 @onready var body_label: RichTextLabel = $Panel/Margin/Layout/BodyLabel
+# 戰敗版統計：三張並排小卡（target: ui_target_lb_defeat）
+@onready var stats_cards: HBoxContainer = $Panel/Margin/Layout/StatsCards
+@onready var depth_card: PanelContainer = $Panel/Margin/Layout/StatsCards/DepthCard
+@onready var depth_icon: TextureRect = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthIcon
+@onready var depth_caption: Label = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthBox/DepthCaption
+@onready var depth_value: RichTextLabel = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthBox/DepthValue
+@onready var beaten_card: PanelContainer = $Panel/Margin/Layout/StatsCards/BeatenCard
+@onready var beaten_icon: TextureRect = $Panel/Margin/Layout/StatsCards/BeatenCard/BeatenRow/BeatenIcon
+@onready var beaten_caption: Label = $Panel/Margin/Layout/StatsCards/BeatenCard/BeatenRow/BeatenBox/BeatenCaption
+@onready var beaten_value: RichTextLabel = $Panel/Margin/Layout/StatsCards/BeatenCard/BeatenRow/BeatenBox/BeatenValue
+@onready var best_card: PanelContainer = $Panel/Margin/Layout/StatsCards/BestCard
+@onready var best_icon: TextureRect = $Panel/Margin/Layout/StatsCards/BestCard/BestRow/BestIcon
+@onready var best_caption: Label = $Panel/Margin/Layout/StatsCards/BestCard/BestRow/BestBox/BestCaption
+@onready var best_value: RichTextLabel = $Panel/Margin/Layout/StatsCards/BestCard/BestRow/BestBox/BestValue
+# 撤退/通關版統計：雙欄框（target: ui_target_lb_cashout）
+@onready var stats_duo: PanelContainer = $Panel/Margin/Layout/StatsDuo
+@onready var rank_icon: TextureRect = $Panel/Margin/Layout/StatsDuo/DuoRow/RankIcon
+@onready var rank_line: RichTextLabel = $Panel/Margin/Layout/StatsDuo/DuoRow/RankBox/RankLine
+@onready var rank_sub: RichTextLabel = $Panel/Margin/Layout/StatsDuo/DuoRow/RankBox/RankSub
+@onready var record_icon: TextureRect = $Panel/Margin/Layout/StatsDuo/DuoRow/RecordIcon
+@onready var record_line: RichTextLabel = $Panel/Margin/Layout/StatsDuo/DuoRow/RecordBox/RecordLine
+@onready var record_sub: RichTextLabel = $Panel/Margin/Layout/StatsDuo/DuoRow/RecordBox/RecordSub
 @onready var play_again_button: Button = $Panel/Margin/Layout/PlayAgainButton
-@onready var panel: PanelContainer = $Panel
-@onready var stats_box: VBoxContainer = $Panel/Margin/Layout/StatsBox
-@onready var rank_label: Label = $Panel/Margin/Layout/StatsBox/RankLabel
-@onready var beaten_label: Label = $Panel/Margin/Layout/StatsBox/BeatenLabel
-@onready var best_label: Label = $Panel/Margin/Layout/StatsBox/BestLabel
 @onready var leaderboard_button: Button = $Panel/Margin/Layout/LeaderboardButton
 
 var _last_settle_state := ""
 var _leaderboard_service
 var _last_snapshot := {}
 var _rank_step := ""
-var _pending_beaten_percent := 0
-var _pending_result_rank := 0
+var _lb_button_style := ""
 
 
 func _ready() -> void:
 	UiSkin.apply_panel(panel, "settle")
 	UiSkin.apply_button(play_again_button, "settle_primary")
 	UiSkin.apply_settle_title(title_label)
-	# 內文深炭色字，數字用 bbcode 粉紅高亮（見 _accent）
 	body_label.add_theme_color_override("default_color", Color(0.24, 0.19, 0.23, 1.0))
-	# 排行統計為配角：小字、柔和棕灰
-	for stat_label: Label in [rank_label, beaten_label, best_label]:
-		stat_label.add_theme_color_override("font_color", Color(0.5, 0.42, 0.45, 1.0))
-	# 目標圖：標題左右各一顆粉紅掌印
 	for paw: TextureRect in [paw_left, paw_right]:
 		UiSkin.apply_icon(paw, "paw")
 		paw.modulate = Color(0.96, 0.25, 0.42, 1.0)
+	# 統計卡外框與文字（icon 以現有貼紙近似，人類 2026-07-07 裁示）
+	for card: PanelContainer in [depth_card, beaten_card, best_card, stats_duo]:
+		UiSkin.apply_panel(card, "stat_card")
+	UiSkin.apply_icon(depth_icon, "stage")
+	UiSkin.apply_icon(beaten_icon, "paw")
+	UiSkin.apply_icon(best_icon, "trophy")
+	UiSkin.apply_icon(rank_icon, "trophy")
+	UiSkin.apply_icon(record_icon, "coin")
+	for caption: Label in [depth_caption, beaten_caption, best_caption]:
+		caption.add_theme_color_override("font_color", STAT_MUTED)
+	for rich: RichTextLabel in [depth_value, beaten_value, best_value, rank_line, record_line]:
+		rich.add_theme_color_override("default_color", STAT_TEXT)
+	for rich: RichTextLabel in [rank_sub, record_sub]:
+		rich.add_theme_color_override("default_color", STAT_MUTED)
+	depth_caption.text = Data.text("lb_stat_depth_caption")
+	beaten_caption.text = Data.text("lb_stat_beaten_caption")
+	best_caption.text = Data.text("lb_stat_best_caption")
 	play_again_button.text = Data.text("settle_play_again")
 	leaderboard_button.text = Data.text("lb_view_entry")
-	UiSkin.apply_button(leaderboard_button, "small")
 	_install_button_feedback(play_again_button)
 	_install_button_feedback(leaderboard_button)
 	play_again_button.pressed.connect(func() -> void: acknowledge_requested.emit())
@@ -54,9 +87,14 @@ func _ready() -> void:
 func update_snapshot(snapshot: Dictionary) -> void:
 	var state_name := str(snapshot.get("state_name", ""))
 	_last_snapshot = snapshot
-	play_again_button.disabled = not bool(snapshot.get("is_settle", false))
-	stats_box.visible = bool(snapshot.get("is_settle", false))
-	leaderboard_button.visible = bool(snapshot.get("is_settle", false))
+	var is_settle := bool(snapshot.get("is_settle", false))
+	var is_defeat := state_name == "DEFEAT_SETTLE"
+	play_again_button.disabled = not is_settle
+	stats_cards.visible = is_settle and is_defeat
+	stats_duo.visible = is_settle and not is_defeat
+	leaderboard_button.visible = is_settle
+	# target：戰敗版「查看排行榜」是文字連結，撤退版是膠囊
+	_apply_lb_button_style("settle_link" if is_defeat else "settle_pill")
 	_bind_leaderboard_service(snapshot.get("leaderboard_service", null))
 
 	match state_name:
@@ -77,20 +115,36 @@ func update_snapshot(snapshot: Dictionary) -> void:
 			}))
 	_update_leaderboard_stats(state_name, snapshot)
 
-	if bool(snapshot.get("is_settle", false)) and state_name != _last_settle_state:
+	if is_settle and state_name != _last_settle_state:
 		_last_settle_state = state_name
 		_play_settlement_effect(state_name)
-	elif not bool(snapshot.get("is_settle", false)):
+	elif not is_settle:
 		_last_settle_state = ""
 
 
-## 數字粉紅高亮（文案模板仍在 ui_text.json，僅代入值加 bbcode 色標）
+## 內文金額：粉紅高亮（同字級）
 func _accent(value: int) -> String:
-	return "[color=#e8447a]%d[/color]" % value
+	return "[color=%s]%d[/color]" % [ACCENT_PINK, value]
+
+
+## 統計數字：放大 + 上色（target：數字為視覺主角）
+func _big(value: String, color: String = ACCENT_PINK, size: int = 40) -> String:
+	return "[font_size=%d][color=%s]%s[/color][/font_size]" % [size, color, value]
 
 
 func _set_body(text: String) -> void:
 	body_label.text = "[center]%s[/center]" % text
+
+
+func _center(rich: RichTextLabel, text: String) -> void:
+	rich.text = "[center]%s[/center]" % text
+
+
+func _apply_lb_button_style(style: String) -> void:
+	if style == _lb_button_style:
+		return
+	_lb_button_style = style
+	UiSkin.apply_button(leaderboard_button, style)
 
 
 func _play_settlement_effect(state_name: String) -> void:
@@ -109,7 +163,7 @@ func _install_button_feedback(button: Button) -> void:
 
 
 func entrance_targets() -> Array[Control]:
-	return [title_row, body_label, stats_box, leaderboard_button, play_again_button]
+	return [title_row, body_label, stats_cards, stats_duo, play_again_button, leaderboard_button]
 
 
 func _bind_leaderboard_service(service) -> void:
@@ -125,17 +179,21 @@ func _bind_leaderboard_service(service) -> void:
 func _update_leaderboard_stats(state_name: String, snapshot: Dictionary) -> void:
 	if not bool(snapshot.get("is_settle", false)):
 		return
+	var loading := Data.text("lb_loading")
 	if state_name == "DEFEAT_SETTLE":
-		rank_label.text = Data.text("lb_defeat_depth", {
-			"stage": int(snapshot.get("run_deepest_stage", 0)),
+		_center(depth_value, Data.text("lb_stat_depth_value", {
+			"stage": _big(str(int(snapshot.get("run_deepest_stage", 0)))),
 			"max": int(snapshot.get("max_stage", 0))
-		})
+		}))
+		_center(beaten_value, loading)
+		_center(best_value, loading)
 	else:
-		rank_label.text = Data.text("lb_loading")
-	beaten_label.text = Data.text("lb_loading")
-	best_label.text = Data.text("lb_result_personal_best", {
-		"payout": int(snapshot.get("best_payout", 0))
-	})
+		rank_line.text = loading
+		rank_sub.text = ""
+		record_line.text = Data.text("lb_stat_record_line", {
+			"payout": _big(str(int(snapshot.get("best_payout", 0))), ACCENT_PINK, 34)
+		})
+		record_sub.text = Data.text("lb_stat_record_sub")
 	if _leaderboard_service == null:
 		return
 	_rank_step = "result"
@@ -146,20 +204,25 @@ func _update_leaderboard_stats(state_name: String, snapshot: Dictionary) -> void
 func _on_rank_loaded(rank: int, beaten_percent: int) -> void:
 	if not bool(_last_snapshot.get("is_settle", false)):
 		return
+	var is_defeat := str(_last_snapshot.get("state_name", "")) == "DEFEAT_SETTLE"
 	if _rank_step == "result":
-		_pending_result_rank = rank
-		_pending_beaten_percent = beaten_percent
-		if str(_last_snapshot.get("state_name", "")) != "DEFEAT_SETTLE":
-			rank_label.text = Data.text("lb_result_rank", {"rank": rank})
-		beaten_label.text = Data.text("lb_result_beaten", {"percent": beaten_percent})
+		if is_defeat:
+			_center(beaten_value, Data.text("lb_stat_beaten_value", {
+				"percent": _big("%d%%" % beaten_percent, ACCENT_TEAL)
+			}))
+		else:
+			rank_line.text = Data.text("lb_stat_rank_line", {
+				"rank": _big(str(rank), ACCENT_PINK, 34)
+			})
+			rank_sub.text = Data.text("lb_stat_rank_sub", {
+				"percent": "[color=%s]%d%%[/color]" % [ACCENT_PINK, beaten_percent]
+			})
 		_rank_step = "best"
 		if _leaderboard_service != null:
 			_leaderboard_service.request_rank_for(int(_last_snapshot.get("best_payout", 0)))
 	elif _rank_step == "best":
-		if str(_last_snapshot.get("state_name", "")) == "DEFEAT_SETTLE":
-			best_label.text = Data.text("lb_current_best_rank", {"rank": rank})
-		else:
-			best_label.text = Data.text("lb_result_personal_best", {
-				"payout": int(_last_snapshot.get("best_payout", 0))
-			})
+		if is_defeat:
+			_center(best_value, Data.text("lb_stat_best_value", {
+				"rank": _big(str(rank))
+			}))
 		_rank_step = ""
