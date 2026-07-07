@@ -135,6 +135,10 @@ func multiplier_at(stage: int) -> float:
 	return 0.0
 
 
+func multiplier_random_config() -> Dictionary:
+	return _data.get("game_balance", {}).get("multiplier_random", {})
+
+
 func danger_display_config() -> Dictionary:
 	return _data.get("game_balance", {}).get("danger_display", {})
 

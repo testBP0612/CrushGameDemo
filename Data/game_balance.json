@@ -28,6 +28,14 @@
     { "stage": 9, "multiplier": 23.00 },
     { "stage": 10, "multiplier": 38.00 }
   ],
+  "multiplier_random": {
+    "_comment": "D-019 每局隨機倍率盤。enabled=false 時完全走 multiplier_curve 原值（回退路徑）。下注確認時以 multiplier_curve 為基準擲一次本局盤：抖動由 stage_1 線性放大到 stage_max，並強制單調遞增（本關 ≥ 前關 × min_growth_ratio）。success_rate 不連動。",
+    "enabled": true,
+    "jitter_pct_stage_1": 0.10,
+    "jitter_pct_stage_max": 0.30,
+    "min_growth_ratio": 1.15,
+    "round_decimals": 2
+  },
   "danger_display": {
     "_comment": "D-019 危險度分級（取代血條）。依即將挑戰關卡的 success_rate 由上往下取第一個符合（success_rate ≥ min_success_rate）的等級。",
     "max_level": 5,

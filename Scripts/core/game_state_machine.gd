@@ -59,12 +59,17 @@ var _payout_calculator := PayoutCalculatorScript.new()
 var _risk_resolver := RiskResolverScript.new()
 var _bet_charged_this_round := false
 var _settled_this_round := false
+# D-019 本局隨機倍率盤：index 0..max_stage；空陣列＝未擲/停用，一律退回基準曲線。
+# 專用 RNG 與 risk_resolver 的全域隨機流分離，倍率抖動不影響成功率擲骰序列。
+var _run_multiplier_table: Array[float] = []
+var _rng := RandomNumberGenerator.new()
 
 
 func setup(bus: EventBus, score) -> void:
 	event_bus = bus
 	score_service = score
 	randomize()
+	_rng.randomize()
 
 
 func start() -> bool:
@@ -116,6 +121,7 @@ func confirm_bet() -> bool:
 		push_error("Cannot confirm bet: balance is lower than bet.")
 		return false
 
+	_roll_run_multiplier_table()
 	event_bus.bet_confirmed.emit(bet)
 	_set_state(State.CHALLENGE_START)
 	_set_state(State.BATTLE_ATTACK)
@@ -282,6 +288,7 @@ func _set_state(next_state: State) -> void:
 
 func _enter_betting() -> void:
 	stage = 0
+	_run_multiplier_table.clear()
 	_bet_charged_this_round = false
 	_settled_this_round = false
 	_update_payout()
@@ -343,12 +350,43 @@ func _enter_clear_settle() -> void:
 	event_bus.settled.emit(last_result)
 
 
+## D-019：本局盤查詢——已擲用本局盤，未擲/停用退回基準曲線（enabled=false 回歸路徑）。
+func run_multiplier_at(stage_index: int) -> float:
+	if stage_index >= 0 and stage_index < _run_multiplier_table.size():
+		return _run_multiplier_table[stage_index]
+	return Data.multiplier_at(stage_index)
+
+
+## D-019：每局下注確認時擲一次本局倍率盤。抖動隨關卡由 stage_1 線性放大到
+## stage_max，並以 min_growth_ratio 強制單調遞增（永不倒退）。
+func _roll_run_multiplier_table() -> void:
+	_run_multiplier_table.clear()
+	var config := Data.multiplier_random_config()
+	if not bool(config.get("enabled", false)):
+		return
+
+	var stages := max_stage()
+	var jitter_start := float(config.get("jitter_pct_stage_1", 0.0))
+	var jitter_end := float(config.get("jitter_pct_stage_max", jitter_start))
+	var min_growth := float(config.get("min_growth_ratio", 1.0))
+	var step: float = pow(10.0, -int(config.get("round_decimals", 2)))
+	var previous := Data.multiplier_at(0)
+	_run_multiplier_table.append(previous)
+	for stage_index in range(1, stages + 1):
+		var t := 0.0 if stages <= 1 else float(stage_index - 1) / float(stages - 1)
+		var jitter := lerpf(jitter_start, jitter_end, t)
+		var rolled := Data.multiplier_at(stage_index) * _rng.randf_range(1.0 - jitter, 1.0 + jitter)
+		var final_value := snappedf(maxf(rolled, previous * min_growth), step)
+		_run_multiplier_table.append(final_value)
+		previous = final_value
+
+
 func _update_payout() -> void:
-	current_multiplier = Data.multiplier_at(stage)
-	current_payout = _payout_calculator.current_payout(bet, stage)
+	current_multiplier = run_multiplier_at(stage)
+	current_payout = _payout_calculator.current_payout(bet, current_multiplier)
 	if stage < max_stage():
-		next_stage_multiplier = Data.multiplier_at(stage + 1)
-		next_stage_payout = _payout_calculator.current_payout(bet, stage + 1)
+		next_stage_multiplier = run_multiplier_at(stage + 1)
+		next_stage_payout = _payout_calculator.current_payout(bet, next_stage_multiplier)
 	else:
 		next_stage_multiplier = 0.0
 		next_stage_payout = 0
