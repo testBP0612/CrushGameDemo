@@ -29,10 +29,15 @@ const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
 
 var _current_monster: Dictionary = {}
 var _current_background_path := ""
+# D-019：血條改危險度顯示（程式生成，原血條僅隱藏——傷害節奏演出仍依賴其內部數值）
+var _danger_row: HBoxContainer
+var _danger_caption: Label
+var _danger_icons: HBoxContainer
 
 
 func _ready() -> void:
 	UiSkin.style_monster_status(monster_name_label, monster_hp_bar)
+	_build_danger_display()
 	_configure_background_image()
 	transition_overlay.modulate.a = 0.0
 	show_monster_for_stage(1)
@@ -51,6 +56,7 @@ func show_monster_for_stage(stage_to_challenge: int, update_background := true) 
 	monster.apply_monster(_current_monster)
 	monster_hp_bar.max_value = float(_current_monster.get("display_hp", 0))
 	monster_hp_bar.value = monster_hp_bar.max_value
+	_update_danger_display(stage_to_challenge)
 
 
 func play_attack_sequence(stage_to_challenge: int) -> void:
@@ -152,6 +158,52 @@ func reset_for_betting() -> void:
 	hero.reset_pose()
 	_show_default_background()
 	show_monster_for_stage(1, false)
+
+
+## D-019：血條位置改放危險度列（危險度＋爪印等級）。全程式生成，不動 .tscn。
+func _build_danger_display() -> void:
+	monster_hp_bar.visible = false
+	_danger_row = HBoxContainer.new()
+	_danger_row.name = "DangerRow"
+	_danger_row.position = Vector2(monster_hp_bar.offset_left, monster_hp_bar.offset_top - 10.0)
+	_danger_row.size = Vector2(monster_hp_bar.offset_right - monster_hp_bar.offset_left, 56.0)
+	_danger_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_danger_row.add_theme_constant_override("separation", 14)
+	add_child(_danger_row)
+
+	_danger_caption = Label.new()
+	_danger_caption.name = "DangerCaption"
+	_danger_caption.add_theme_font_size_override("font_size", 32)
+	_danger_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	UiSkin.apply_hud_card_text(_danger_caption, "value")
+	_danger_row.add_child(_danger_caption)
+
+	_danger_icons = HBoxContainer.new()
+	_danger_icons.name = "DangerIcons"
+	_danger_icons.alignment = BoxContainer.ALIGNMENT_CENTER
+	_danger_icons.add_theme_constant_override("separation", 6)
+	_danger_row.add_child(_danger_icons)
+
+
+func _update_danger_display(stage_to_challenge: int) -> void:
+	if _danger_row == null or not is_instance_valid(_danger_row):
+		return
+	var max_level := Data.danger_max_level()
+	if max_level <= 0:
+		_danger_row.visible = false
+		return
+
+	var level := Data.danger_level_at(stage_to_challenge)
+	var icons_ok := UiSkin.fill_danger_icons(_danger_icons, level, max_level, 44.0)
+	_danger_icons.visible = icons_ok
+	if icons_ok:
+		_danger_caption.text = Data.text("monster_danger_caption")
+	else:
+		# 缺爪印貼紙 → 星號文字保底（缺檔不崩，D-004）
+		_danger_caption.text = Data.text("monster_danger_fallback", {
+			"stars": "★".repeat(level) + "☆".repeat(maxi(0, max_level - level))
+		})
+	_danger_row.visible = true
 
 
 func _apply_hit_damage(damage: int) -> void:

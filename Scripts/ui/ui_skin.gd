@@ -483,6 +483,40 @@ static func apply_icon(texture_rect: TextureRect, name: String) -> void:
 	texture_rect.visible = true
 
 
+## D-019 危險度顏色：低危綠 → 高危紅（呈現層參數，等級門檻在 game_balance.json）。
+const DANGER_LOW := Color(0.30, 0.72, 0.35, 1.0)
+const DANGER_HIGH := Color(0.90, 0.16, 0.25, 1.0)
+
+
+static func danger_color(level: int, max_level: int) -> Color:
+	if max_level <= 1:
+		return DANGER_HIGH
+	var t := clampf(float(level - 1) / float(max_level - 1), 0.0, 1.0)
+	return DANGER_LOW.lerp(DANGER_HIGH, t)
+
+
+## D-019 危險度圖示列：以爪印貼紙重繪 level/max_level（亮 level 顆、其餘壓暗）。
+## 回傳 false = 缺圖，呼叫端退回文字顯示（缺檔不崩，D-004）。
+static func fill_danger_icons(row: HBoxContainer, level: int, max_level: int, icon_px: float) -> bool:
+	if row == null or not is_instance_valid(row):
+		return false
+	for child in row.get_children():
+		child.queue_free()
+	var texture := _load_texture(ICON_PAW)
+	if texture == null:
+		return false
+	var active_color := danger_color(level, max_level)
+	for index in range(max_level):
+		var icon := TextureRect.new()
+		icon.texture = texture
+		icon.custom_minimum_size = Vector2(icon_px, icon_px)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.modulate = active_color if index < level else Color(1.0, 1.0, 1.0, 0.28)
+		row.add_child(icon)
+	return true
+
+
 static func _sticker_box(color: Color, radius: int, border_width: int, border_color: Color, shadow_color: Color) -> StyleBoxFlat:
 	var style := _flat_box(color, radius, border_width, border_color)
 	style.shadow_color = shadow_color

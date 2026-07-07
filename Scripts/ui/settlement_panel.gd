@@ -49,9 +49,12 @@ var _leaderboard_service
 var _last_snapshot := {}
 var _rank_step := ""
 var _lb_button_style := ""
+# D-019 FOMO 事後揭示行（撤退：若再過一關可得…／戰敗：上一關落袋…）。程式生成，不動 .tscn。
+var _fomo_label: RichTextLabel
 
 
 func _ready() -> void:
+	_build_fomo_label()
 	UiSkin.apply_panel(panel, "settle")
 	# 文字必須先設好再套樣式：icon 對齊方式依「當下有無文字」決定（空字=置中會疊字）
 	play_again_button.text = Data.text("settle_play_again")
@@ -114,6 +117,7 @@ func update_snapshot(snapshot: Dictionary) -> void:
 			_set_body(Data.text("settle_clear_body", {
 				"payout": _accent(int(snapshot.get("current_payout", 0)))
 			}))
+	_update_fomo_line(state_name, snapshot)
 	_update_leaderboard_stats(state_name, snapshot)
 
 	if is_settle and state_name != _last_settle_state:
@@ -121,6 +125,47 @@ func update_snapshot(snapshot: Dictionary) -> void:
 		_play_settlement_effect(state_name)
 	elif not is_settle:
 		_last_settle_state = ""
+
+
+func _build_fomo_label() -> void:
+	_fomo_label = RichTextLabel.new()
+	_fomo_label.name = "FomoLabel"
+	_fomo_label.bbcode_enabled = true
+	_fomo_label.fit_content = true
+	_fomo_label.scroll_active = false
+	# HBox/VBox 內 RichTextLabel 不給水平 expand 會塌成一字一行（見 2026-07-07 教訓）
+	_fomo_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_fomo_label.add_theme_color_override("default_color", STAT_MUTED)
+	_fomo_label.add_theme_font_size_override("normal_font_size", 30)
+	_fomo_label.visible = false
+	var layout := body_label.get_parent()
+	layout.add_child(_fomo_label)
+	layout.move_child(_fomo_label, body_label.get_index() + 1)
+
+
+## D-019 FOMO 行：撤退＝下一關若過可得多少；戰敗＝上一關收手可帶走多少。
+## 邊界（通關、無下一關、第 1 關即戰死）整行隱藏，不出現空佔位。
+func _update_fomo_line(state_name: String, snapshot: Dictionary) -> void:
+	if _fomo_label == null or not is_instance_valid(_fomo_label):
+		return
+	var fomo_text := ""
+	match state_name:
+		"CASH_OUT_SETTLE":
+			var next_payout := int(snapshot.get("next_stage_payout", 0))
+			if bool(snapshot.get("has_next_stage", false)) and next_payout > 0:
+				fomo_text = Data.text("settle_cashout_fomo", {
+					"next_payout": _accent(next_payout)
+				})
+		"DEFEAT_SETTLE":
+			# stage = 已清關數；0 表示第 1 關就戰死，沒有「上一關落袋」可言
+			var lost_payout := int(snapshot.get("defeat_payout_before_loss", 0))
+			if int(snapshot.get("stage", 0)) > 0 and lost_payout > 0:
+				fomo_text = Data.text("settle_defeat_fomo", {
+					"payout": _accent(lost_payout)
+				})
+	_fomo_label.visible = not fomo_text.is_empty()
+	if _fomo_label.visible:
+		_fomo_label.text = "[center]%s[/center]" % fomo_text
 
 
 ## 內文金額：粉紅高亮（同字級）

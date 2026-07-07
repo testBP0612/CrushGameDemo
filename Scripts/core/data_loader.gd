@@ -135,6 +135,24 @@ func multiplier_at(stage: int) -> float:
 	return 0.0
 
 
+func danger_display_config() -> Dictionary:
+	return _data.get("game_balance", {}).get("danger_display", {})
+
+
+## D-019 危險度分級（取代血條）：依該關 success_rate 由上往下取第一個符合的等級。
+func danger_level_at(stage: int) -> int:
+	var config := danger_display_config()
+	var success_rate := success_rate_at(stage)
+	for entry: Dictionary in config.get("levels", []):
+		if success_rate >= float(entry.get("min_success_rate", 0.0)):
+			return int(entry.get("level", 1))
+	return int(config.get("max_level", 1))
+
+
+func danger_max_level() -> int:
+	return int(danger_display_config().get("max_level", 0))
+
+
 func success_rate_at(stage: int) -> float:
 	var balance_data: Dictionary = _data.get("game_balance", {})
 	for entry: Dictionary in balance_data.get("success_rate_curve", []):

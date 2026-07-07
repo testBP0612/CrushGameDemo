@@ -48,6 +48,10 @@ var bet := 0
 var stage := 0
 var current_payout := 0
 var current_multiplier := 1.0
+# D-019：下一關（未清）的倍率/可得金額，供決策畫面「過關可得」與結算 FOMO 行使用；
+# 已在最終關（無下一關）時為 0.0 / 0，UI 依此隱藏對應資訊。
+var next_stage_multiplier := 0.0
+var next_stage_payout := 0
 var last_result := ""
 var active_monster_stage := 1
 
@@ -342,6 +346,12 @@ func _enter_clear_settle() -> void:
 func _update_payout() -> void:
 	current_multiplier = Data.multiplier_at(stage)
 	current_payout = _payout_calculator.current_payout(bet, stage)
+	if stage < max_stage():
+		next_stage_multiplier = Data.multiplier_at(stage + 1)
+		next_stage_payout = _payout_calculator.current_payout(bet, stage + 1)
+	else:
+		next_stage_multiplier = 0.0
+		next_stage_payout = 0
 
 
 func _clamp_bet(value: int) -> int:

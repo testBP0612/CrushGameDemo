@@ -13,9 +13,12 @@
     "profile_mock_display_name": "試玩勇者",
 
     "hud_stage": "關卡進度 {stage}/{max}",
-    "hud_multiplier": "目前倍率 x{multiplier}",
+    "hud_multiplier": "目前賠率 1賠{multiplier}",
     "hud_current_payout": "目前收益 {payout}",
     "hud_balance": "金幣 {balance}",
+
+    "monster_danger_caption": "危險度",
+    "monster_danger_fallback": "危險度 {stars}",
 
     "bet_panel_title": "下注金額",
     "bet_decrease": "−",
@@ -29,8 +32,10 @@
     "battle_msg_defeat": "你被 {monster} 擊倒了…",
     "battle_msg_max_clear": "全數通關！強制結算",
 
-    "decision_advance": "挑戰下一隻",
-    "decision_cashout": "撤退領取 {payout}",
+    "decision_advance": "過關",
+    "decision_cashout": "落袋為安 {payout}",
+    "decision_next_win": "過關可得 {payout}",
+    "decision_next_odds": "下一關 1賠{multiplier}",
 
     "settle_cashout_title": "撤退成功",
     "settle_cashout_body": "你帶著 {payout} 金幣安全撤離！",
@@ -38,6 +43,8 @@
     "settle_defeat_body": "本局損失 {bet} 金幣。",
     "settle_clear_title": "完美通關",
     "settle_clear_body": "獲得 {payout} 金幣！",
+    "settle_cashout_fomo": "若再過一關，可得 {next_payout}…",
+    "settle_defeat_fomo": "上一關落袋，本可帶走 {payout}…",
     "settle_play_again": "再來一局",
 
     "best_record": "最佳紀錄 {payout}",

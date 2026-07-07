@@ -45,7 +45,7 @@ func update_snapshot(snapshot: Dictionary) -> void:
 		"max": int(snapshot.get("max_stage", 0))
 	}))
 	_set_caption_value(multiplier_caption, multiplier_value, Data.text("hud_multiplier", {
-		"multiplier": snapshot.get("current_multiplier", 1.0)
+		"multiplier": _format_multiplier(float(snapshot.get("current_multiplier", 1.0)))
 	}))
 	payout_caption.text = _caption_from_text(Data.text("hud_current_payout", {"payout": next_payout}))
 	_update_payout_label(next_payout)
@@ -121,6 +121,14 @@ func _apply_payout_label(next_payout: int) -> void:
 
 func _format_payout_text(value: int) -> String:
 	return str(value)
+
+
+## 倍率顯示：最多兩位小數、去尾零（1.0 → 1、1.30 → 1.3），避免「1賠1.0」。
+func _format_multiplier(value: float) -> String:
+	var text := String.num(value, 2)
+	if text.contains("."):
+		text = text.rstrip("0").rstrip(".")
+	return text
 
 
 func _set_caption_value(caption_label: Label, value_label: Label, text: String) -> void:
