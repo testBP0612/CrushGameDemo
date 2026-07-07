@@ -29,5 +29,24 @@
     "entrance_stagger": 0.05,
     "message_appear": 0.18,
     "message_hold": 0.60
+  },
+  "effects": {
+    "coin_burst": {
+      "canvas_layer": 2,
+      "count_base": 8,
+      "count_per_stage": 1,
+      "burst_duration": 0.40,
+      "spawn_stagger": 0.03,
+      "launch_speed": 520.0,
+      "spread_degrees": 70.0,
+      "gravity": 1600.0,
+      "hover_time": 0.10,
+      "fly_duration": 0.35,
+      "fly_stagger": 0.04,
+      "scale_min": 0.18,
+      "scale_max": 0.30,
+      "arrive_fade": 0.08,
+      "max_hold": 1.20
+    }
   }
 }

@@ -98,6 +98,22 @@ func play_monster_death() -> void:
 	monster_death_finished.emit()
 
 
+func monster_canvas_position() -> Vector2:
+	if monster == null or not is_instance_valid(monster):
+		return Vector2.ZERO
+
+	var target: CanvasItem = monster.hit_flash_target()
+	if target != null and is_instance_valid(target):
+		var local_center := Vector2.ZERO
+		if target is Control:
+			local_center = (target as Control).size * 0.5
+		elif target.has_method("get_rect"):
+			local_center = (target.call("get_rect") as Rect2).get_center()
+		return target.get_global_transform_with_canvas() * local_center
+
+	return monster.get_global_transform_with_canvas().origin
+
+
 func play_advance_walk() -> void:
 	await hero.play_walk()
 	advance_walk_finished.emit()

@@ -16,6 +16,10 @@ const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
 var _displayed_payout := 0
 var _has_snapshot := false
+var _payout_hold_active := false
+var _payout_hold_generation := 0
+var _held_payout_pending := false
+var _held_payout_value := 0
 
 
 func _ready() -> void:
@@ -51,6 +55,50 @@ func update_snapshot(snapshot: Dictionary) -> void:
 
 
 func _update_payout_label(next_payout: int) -> void:
+	if _payout_hold_active and _has_snapshot and next_payout != _displayed_payout:
+		_held_payout_pending = true
+		_held_payout_value = next_payout
+		return
+
+	_apply_payout_label(next_payout)
+
+
+func hold_payout_count_up(max_hold: float) -> void:
+	_payout_hold_generation += 1
+	_payout_hold_active = true
+	_held_payout_pending = false
+
+	if max_hold <= 0.0:
+		push_error("Hud payout hold missing positive max_hold.")
+		release_payout_count_up()
+		return
+
+	var generation := _payout_hold_generation
+	get_tree().create_timer(max_hold).timeout.connect(func() -> void:
+		if _payout_hold_active and generation == _payout_hold_generation:
+			release_payout_count_up()
+	)
+
+
+func release_payout_count_up() -> void:
+	if not _payout_hold_active:
+		return
+
+	_payout_hold_active = false
+	_payout_hold_generation += 1
+	if _held_payout_pending:
+		var pending_value := _held_payout_value
+		_held_payout_pending = false
+		_apply_payout_label(pending_value)
+
+
+func payout_anchor_canvas_position() -> Vector2:
+	if payout_value == null or not is_instance_valid(payout_value):
+		return Vector2.ZERO
+	return payout_value.get_global_transform_with_canvas().origin + payout_value.size * 0.5
+
+
+func _apply_payout_label(next_payout: int) -> void:
 	if not _has_snapshot:
 		_displayed_payout = next_payout
 		_has_snapshot = true
@@ -62,6 +110,11 @@ func _update_payout_label(next_payout: int) -> void:
 		return
 
 	var duration := float(Data.animation_timing_config().get("ui", {}).get("payout_count_up", 0.0))
+	if duration <= 0.0:
+		push_error("Hud missing positive ui.payout_count_up duration.")
+		_displayed_payout = next_payout
+		payout_value.text = _format_payout_text(next_payout)
+		return
 	PayoutCountUp.play(payout_value, _displayed_payout, next_payout, duration, _format_payout_text)
 	_displayed_payout = next_payout
 

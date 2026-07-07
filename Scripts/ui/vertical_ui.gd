@@ -88,6 +88,18 @@ func set_profile_auth_state(signed_in: bool, display_name: String) -> void:
 	profile_cloud_icon.visible = signed_in and profile_cloud_icon.texture != null
 
 
+func hold_payout_count_up(max_hold: float) -> void:
+	hud.hold_payout_count_up(max_hold)
+
+
+func release_payout_count_up() -> void:
+	hud.release_payout_count_up()
+
+
+func payout_anchor_canvas_position() -> Vector2:
+	return hud.payout_anchor_canvas_position()
+
+
 func _set_visible_with_entrance(key: String, control: Control, should_show: bool, stagger_targets: Array[Control] = []) -> void:
 	if control == null or not is_instance_valid(control):
 		push_warning("VerticalUi skipped visibility update for invalid control: %s" % key)

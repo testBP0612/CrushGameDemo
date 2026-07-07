@@ -7,6 +7,7 @@ const MockLeaderboardServiceScript := preload("res://Scripts/services/mock_leade
 const FirebaseLeaderboardServiceScript := preload("res://Scripts/services/firebase_leaderboard_service.gd")
 const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
+const CoinBurstScript := preload("res://Scripts/effects/coin_burst.gd")
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
@@ -238,7 +239,7 @@ func _play_presentation_for_state(state_name: String) -> void:
 		"MONSTER_HURT":
 			battle_presenter.play_monster_hurt()
 		"MONSTER_DEATH":
-			battle_presenter.play_monster_death()
+			_play_monster_death_with_coin_burst()
 		"ADVANCE_WALK":
 			battle_presenter.play_advance_walk()
 		"TRANSITION":
@@ -257,6 +258,26 @@ func _play_settlement_sfx(result: String) -> void:
 			audio_service.play_sfx("defeat")
 		"clear":
 			audio_service.play_sfx("clear")
+
+
+func _play_monster_death_with_coin_burst() -> void:
+	var burst := CoinBurstScript.new()
+	add_child(burst)
+	vertical_ui.hold_payout_count_up(burst.max_hold())
+	battle_presenter.play_monster_death()
+
+	var started: bool = burst.play(
+		battle_presenter.monster_canvas_position(),
+		vertical_ui.payout_anchor_canvas_position(),
+		state_machine.active_monster_stage,
+		func() -> void:
+			if vertical_ui != null and is_instance_valid(vertical_ui):
+				vertical_ui.release_payout_count_up()
+	)
+	if not started:
+		vertical_ui.release_payout_count_up()
+		if burst != null and is_instance_valid(burst):
+			burst.queue_free()
 
 
 func _update_view() -> void:
