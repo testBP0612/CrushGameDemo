@@ -31,6 +31,9 @@ var _current_background_path := ""
 var _danger_row: HBoxContainer
 var _danger_caption: Label
 var _danger_icons: HBoxContainer
+# 受擊 punch：多段連擊時先殺前一個 tween 並歸位，避免縮放疊加
+var _punch_tween: Tween
+var _monster_base_scale := Vector2.ONE
 
 
 func _ready() -> void:
@@ -52,6 +55,7 @@ func show_monster_for_stage(stage_to_challenge: int, update_background := true) 
 	var name_key := str(_current_monster.get("name_key", ""))
 	monster_name_label.text = Data.text(name_key)
 	monster.apply_monster(_current_monster)
+	_monster_base_scale = monster.scale
 	monster_hp_bar.max_value = float(_current_monster.get("display_hp", 0))
 	monster_hp_bar.value = monster_hp_bar.max_value
 	_update_danger_display(stage_to_challenge)
@@ -191,7 +195,7 @@ func _update_danger_display(stage_to_challenge: int) -> void:
 		return
 
 	var level := Data.danger_level_at(stage_to_challenge)
-	var icons_ok := UiSkin.fill_danger_icons(_danger_icons, level, max_level, 44.0)
+	var icons_ok := UiSkin.fill_danger_icons(_danger_icons, level, max_level, 53.0)
 	_danger_icons.visible = icons_ok
 	if icons_ok:
 		_danger_caption.text = Data.text("monster_danger_caption")
@@ -213,6 +217,21 @@ func _play_hit_feel() -> void:
 	var duration := float(Data.animation_timing_config().get("monster", {}).get("hurt", 0.0))
 	HitFlash.play(monster.hit_flash_target(), duration)
 	ScreenShake.play(self, duration, 14.0)
+	_play_hit_punch(duration)
+
+
+## 受擊縮放 punch：快速漲 8% 再彈回，補足拿掉傷害數字後的打擊回饋。
+func _play_hit_punch(duration: float) -> void:
+	if duration <= 0.0 or monster == null or not is_instance_valid(monster):
+		return
+	if _punch_tween != null and _punch_tween.is_valid():
+		_punch_tween.kill()
+	monster.scale = _monster_base_scale
+	_punch_tween = create_tween()
+	_punch_tween.tween_property(monster, "scale", _monster_base_scale * 1.08, duration * 0.3)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_punch_tween.tween_property(monster, "scale", _monster_base_scale, duration * 0.7)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 func _configure_background_image() -> void:

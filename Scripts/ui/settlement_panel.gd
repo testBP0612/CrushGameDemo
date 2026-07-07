@@ -55,6 +55,12 @@ var _fomo_label: RichTextLabel
 
 func _ready() -> void:
 	_build_fomo_label()
+	# D-019 微調（2026-07-08 人類指示）：FOMO 行加入後內容變高，看板上緣上移擴容、
+	# 下緣抬高留邊（原 tscn 60/588 → 12/566，免貼底）；統計 icon 放大 1.2 倍。
+	panel.offset_top = 12.0
+	panel.offset_bottom = 566.0
+	for stat_icon: TextureRect in [depth_icon, beaten_icon, best_icon, rank_icon, record_icon]:
+		stat_icon.custom_minimum_size = Vector2(65, 65)
 	UiSkin.apply_panel(panel, "settle")
 	# 文字必須先設好再套樣式：icon 對齊方式依「當下有無文字」決定（空字=置中會疊字）
 	play_again_button.text = Data.text("settle_play_again")

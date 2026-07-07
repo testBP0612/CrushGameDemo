@@ -111,7 +111,7 @@ func _update_next_info(snapshot: Dictionary, is_reward_decision: bool) -> void:
 	var next_stage := int(snapshot.get("stage_to_challenge", 1))
 	var max_level := Data.danger_max_level()
 	var level := Data.danger_level_at(next_stage)
-	var icons_ok := max_level > 0 and UiSkin.fill_danger_icons(_danger_icons, level, max_level, 36.0)
+	var icons_ok := max_level > 0 and UiSkin.fill_danger_icons(_danger_icons, level, max_level, 43.0)
 	_danger_icons.visible = icons_ok
 	if icons_ok:
 		_danger_caption.text = Data.text("monster_danger_caption")
