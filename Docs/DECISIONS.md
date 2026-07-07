@@ -197,3 +197,36 @@
   是正確格式，且直接改善 H5 載入。
 - **影響**：`Art/ART_CONTRACT.md`(v1.5)、`Art/ART_SPEC_SHEET.md`、`Assets/ART_ASSET_MANIFEST.md`
   （背景列）、`Scripts/battle/battle_presenter.gd`、`Assets/final/background_battle_00[1-3].jpg`（新增）。
+
+## D-019：賭場化體驗改版——拿血條、賠率語言、每局隨機倍率盤（回應 Q-007）
+- **問題**：比賽準備階段的體驗強化三題：血條去留、倍率隨機化、成功率顯示策略。
+- **人類決策**（2026-07-07，對話中裁示，照 AI 建議採納）：
+  1. **移除血條顯示，換成危險度指示**：勝負實由 success_rate 在進關瞬間決定，血條是
+	 誤導演出。`MonsterHpBar` 不再顯示，原位置改放危險度等級圖示（資料驅動分級，
+	 `game_balance.json > danger_display` 依該關 success_rate 對映 1–5 級）。
+	 戰鬥演出內部血量邏輯（傷害節奏計算）保留不動。
+  2. **每局隨機倍率盤（漸進成長）**：每局下注確認時以 `multiplier_curve` 為基準擲一次
+	 「本局盤」——每關套隨機抖動、強制單調遞增（`本關 ≥ 前關 × min_growth_ratio`）；
+	 抖動幅度隨關卡線性放大（低關穩、高關瘋）。參數入
+	 `game_balance.json > multiplier_random`（enabled 開關保留回退路徑）。
+	 **success_rate 維持固定不連動**——各局期望值自然浮動是特色不是 bug。
+	 揭示規則：**只揭示下一關倍率**，不提供全曲線預覽。
+	 已知副作用（接受）：排行榜 `best_payout` 運氣成分變大。
+  3. **不顯示精確成功率 %，改博奕語言**：獎金放大（決策畫面主打「過關可得 {金額}」、
+	 賠率格式「1 賠 N」）、風險質化（危險度圖示，承 1）；術語：續戰=「過關」、
+	 撤退=「落袋為安」；結算加 FOMO 事後揭示（撤退：「若再過一關可得…」；
+	 戰敗：「上一關落袋本可帶走…」）。
+  4. **文案契約**：所有句子先按博奕術語寫入 `Data/ui_text.json`（鐵則 6），
+	 **人類保留事後直接改 json 換句子的權利**——程式只認 key 與 `{變數}`，
+	 不得依賴字串內容；已烙字在圖上的按鈕素材（next/retreat.png）文字不在本案範圍，
+	 要換走 Q-ART。
+- **原因**：遊戲核心樂趣是進退抉擇不是打怪；把注意力從假戰鬥移回真賭注。賭場鐵律
+  「放大獎金、隱藏機率」+ FOMO 事後揭示是「再來一局」衝動的主要來源；倍率隨機化
+  解決固定曲線玩兩次就背起來的問題。
+- **實作**：`Codex/20_DECISION_INFO_REVAMP.md`（血條→危險度 + 賠率語言 + FOMO 結算；
+  Codex）→ `Codex/21_RANDOM_MULTIPLIER_TABLE.md`（每局隨機倍率盤；Codex）。
+  卡 20 涉及場景版面，依 D-006 需 Godot 目視驗證。
+- **影響**：`Data/game_balance.json`（+`danger_display`、+`multiplier_random`）、
+  `Data/ui_text.json`、`Scripts/core/game_state_machine.gd`、
+  `Scripts/battle/battle_presenter.gd`、`Scripts/ui/`（決策/結算）、
+  `Scenes/UI/VerticalUi.tscn`（決策區資訊）、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`。

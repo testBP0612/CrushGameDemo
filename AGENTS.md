@@ -50,7 +50,9 @@
 16. `16_LEADERBOARD_UI`（排行榜四接觸點 UI，依 mockup；Codex；需任務 15）✅
 17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）✅
 18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex；stage 10 維持 placeholder）✅（人類 2026-07-06 目視驗收；同 commit 併入 hero_attack 序列圖）
-19. `19_COIN_BURST_ON_MONSTER_DEATH`（怪物死亡爆金幣→吸入收益 UI→數字跳動；Tween sprite 路線，數值入 animation_timing.json；Codex）
+19. `19_COIN_BURST_ON_MONSTER_DEATH`（怪物死亡爆金幣→吸入收益 UI→數字跳動；Tween sprite 路線，數值入 animation_timing.json；Codex）✅（人類 2026-07-07 目視驗收）
+20. `20_DECISION_INFO_REVAMP`（拿血條→危險度、決策賠率語言、FOMO 結算；依 D-019；Codex；文案初稿入 ui_text.json、人類保留改句權）
+21. `21_RANDOM_MULTIPLIER_TABLE`（每局隨機倍率盤，漸進抖動+單調遞增；依 D-019；Codex；建議排在 20 之後）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -78,6 +80,7 @@
 - **D-016** 輕量排行榜式非同步競爭：單局流程不變、只加四個 UI 接觸點與資料回饋；指標單一 `best_payout`；Phase 1 用 Mock（NPC 名單 JSON）、Phase 2 換 Firebase；不做每日挑戰/同種子/模式選擇/即時連線/房間。
 - **D-017** 怪物素材＝動畫序列圖 `bossN_idle`（N=1..9，TexturePacker JSON）置於 `Assets/final/boss/`；stage 10 維持 placeholder；Contract v1.4。
 - **D-018** 不透明全幅背景允許 JPG（`background_battle_00N.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析背景；需透明素材仍限 PNG；Contract v1.5。
+- **D-019** 賭場化體驗改版：血條移除改危險度指示（`danger_display` 資料驅動分級）；每局隨機倍率盤（`multiplier_random`，漸進抖動+單調遞增，success_rate 不連動，只揭示下一關）；不顯示成功率 %，改博奕語言（過關/落袋為安/1 賠 N）+ 結算 FOMO 行；文案一律 `ui_text.json`，人類保留改句權。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md
