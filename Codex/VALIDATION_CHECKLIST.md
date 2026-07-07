@@ -109,6 +109,13 @@
 - [ ] `monsters.json`/manifest 僅資料欄位更新；存在性判斷用 `ResourceLoader.exists()`。
 - [ ] **H5 實機**：九隻動畫正常、整局無卡頓（素材量大，材質/效能務必實測）。
 
+## 里程碑 — 任務 19（怪物死亡爆金幣特效；Codex）
+- [ ] 打死怪物金幣噴出+散落+淡出；死亡→轉場時序與現狀一致（前後對照）。
+- [ ] 數值全讀 `animation_timing.json > effects.coin_burst`（改 json 效果即變，實測）。
+- [ ] fire-and-forget 不阻塞：缺 `icon_coin.png`（ResourceLoader.exists 判斷）→ 無特效但整局可玩不崩。
+- [ ] 高 stage 金幣數 > stage 1；連打多局節點無殘留。
+- [ ] 未改任何 `.tscn`；**H5 實機截圖**（低/高 stage 各一）。
+
 ## 里程碑 9 — 任務 08（素材接入）
 - [ ] `Assets/final/` 齊備素材正確顯示，符合 manifest 檔名/路徑。
 - [ ] **缺檔自動 fallback placeholder，遊戲不崩**（移除某 final 素材重跑驗證）。
