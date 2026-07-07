@@ -33,8 +33,9 @@
   "effects": {
     "coin_burst": {
       "canvas_layer": 2,
-      "count_base": 8,
-      "count_per_stage": 1,
+      "count_base": 6,
+      "count_per_multiplier": 2.0,
+      "count_max": 48,
       "burst_duration": 0.40,
       "spawn_stagger": 0.03,
       "launch_speed": 520.0,

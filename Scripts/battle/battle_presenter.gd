@@ -10,7 +10,6 @@ signal monster_counter_finished
 signal player_hurt_finished
 signal hit_landed
 
-const DamageNumberScript := preload("res://Scripts/effects/damage_number.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
 const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
@@ -24,7 +23,6 @@ const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
 @onready var monster = $Monster
 @onready var monster_name_label: Label = $MonsterNameLabel
 @onready var monster_hp_bar: ProgressBar = $MonsterHpBar
-@onready var damage_number_layer: Node2D = $DamageNumberLayer
 @onready var transition_overlay: ColorRect = $TransitionOverlay
 
 var _current_monster: Dictionary = {}
@@ -85,7 +83,6 @@ func play_attack_sequence(stage_to_challenge: int) -> void:
 		await get_tree().create_timer(delay).timeout
 		await hero.play_attack(monster.global_position)
 		_apply_hit_damage(damage_per_hit)
-		_spawn_damage_number(damage_per_hit, hit_index)
 		hit_landed.emit()
 		_play_hit_feel()
 
@@ -210,16 +207,8 @@ func _apply_hit_damage(damage: int) -> void:
 	monster_hp_bar.value = max(1.0, monster_hp_bar.value - float(damage))
 
 
-func _spawn_damage_number(damage: int, hit_index: int) -> void:
-	var config: Dictionary = Data.battle_sequence_config().get("damage_number", {})
-	var stagger := float(config.get("stagger_between_hits", 0.0))
-	var number := DamageNumberScript.new()
-	number.theme_type_variation = &""
-	number.add_theme_font_size_override("font_size", 42)
-	damage_number_layer.add_child(number)
-	number.play(damage, float(hit_index) * stagger, monster.position + Vector2(0.0, -180.0))
-
-
+# D-019 微調（2026-07-08 人類指示）：傷害數字移除——血條已拿掉，假傷害數值不再顯示；
+# hit flash / 震動等打擊感保留。DamageNumberLayer 節點與 damage_number.gd 模組保留備用。
 func _play_hit_feel() -> void:
 	var duration := float(Data.animation_timing_config().get("monster", {}).get("hurt", 0.0))
 	HitFlash.play(monster.hit_flash_target(), duration)

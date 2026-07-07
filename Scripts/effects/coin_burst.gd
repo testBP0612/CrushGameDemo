@@ -9,7 +9,8 @@ var _on_first_arrival: Callable
 var _rng := RandomNumberGenerator.new()
 
 
-func play(origin_canvas_pos: Vector2, target_canvas_pos: Vector2, stage: int, on_first_arrival: Callable) -> bool:
+## multiplier：擊殺後的目前倍率——倍率越高噴越多（D-019 微調，取代原 stage 線性）。
+func play(origin_canvas_pos: Vector2, target_canvas_pos: Vector2, multiplier: float, on_first_arrival: Callable) -> bool:
 	_on_first_arrival = on_first_arrival
 	_rng.randomize()
 
@@ -28,7 +29,10 @@ func play(origin_canvas_pos: Vector2, target_canvas_pos: Vector2, stage: int, on
 		return false
 
 	layer = int(config.get("canvas_layer", 0))
-	var count: int = int(config.get("count_base", 0)) + int(config.get("count_per_stage", 0)) * maxi(stage, 0)
+	var count: int = int(config.get("count_base", 0)) + int(round(float(config.get("count_per_multiplier", 0.0)) * maxf(multiplier, 0.0)))
+	var count_max := int(config.get("count_max", 0))
+	if count_max > 0:
+		count = mini(count, count_max)
 	if count <= 0:
 		_notify_first_arrival()
 		return false

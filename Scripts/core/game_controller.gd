@@ -269,7 +269,7 @@ func _play_monster_death_with_coin_burst() -> void:
 	var started: bool = burst.play(
 		battle_presenter.monster_canvas_position(),
 		vertical_ui.payout_anchor_canvas_position(),
-		state_machine.active_monster_stage,
+		state_machine.current_multiplier,
 		func() -> void:
 			if vertical_ui != null and is_instance_valid(vertical_ui):
 				vertical_ui.release_payout_count_up()
