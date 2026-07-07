@@ -401,74 +401,69 @@ script = ExtResource("6_settlement_panel")
 
 [node name="Panel" type="PanelContainer" parent="ActionArea/SettlementPanel"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -245.0
-offset_right = 420.0
-offset_bottom = 245.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 60.0
+offset_right = 962.0
+offset_bottom = 588.0
 
 [node name="Margin" type="MarginContainer" parent="ActionArea/SettlementPanel/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 26
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 26
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 10
 
 [node name="Layout" type="VBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="RewardIcon" type="TextureRect" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(54, 54)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 46
+theme_override_font_sizes/font_size = 58
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BodyLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+[node name="BodyLabel" type="RichTextLabel" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-horizontal_alignment = 1
-autowrap_mode = 3
+theme_override_font_sizes/normal_font_size = 38
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
 
 [node name="StatsBox" type="VBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 
 [node name="RankLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 
 [node name="BeatenLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 
 [node name="BestLabel" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 
 [node name="LeaderboardButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 62)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 
 [node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 108)
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 44
 
 [node name="LeaderboardEntryButton" type="Button" parent="."]
 visible = false

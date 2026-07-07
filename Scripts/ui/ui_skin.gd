@@ -116,6 +116,15 @@ static func apply_art_button(button: Button, name: String) -> bool:
 	return true
 
 
+## 結算看板標題（ui_target_*_settle：粉紅大字、無描邊、乾淨）。
+static func apply_settle_title(label: Label) -> void:
+	if label == null or not is_instance_valid(label):
+		return
+	label.remove_theme_stylebox_override("normal")
+	label.add_theme_color_override("font_color", PINK)
+	label.add_theme_constant_override("outline_size", 0)
+
+
 ## 怪物名牌與血條：去掉預設灰主題，改為奶油描邊字 + 粉紅血條（貼齊 mockup 風格）。
 static func style_monster_status(name_label: Label, hp_bar: ProgressBar) -> void:
 	if name_label != null and is_instance_valid(name_label):
@@ -167,6 +176,11 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 			)
 			_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
 			panel.add_theme_stylebox_override("panel", large)
+		"settle":
+			# ui_target_*_settle：奶油底 + 粗粉紅描邊圓角看板
+			var settle := _sticker_box(CREAM, 44, 10, Color(0.937, 0.42, 0.56, 1.0), Color(0.78, 0.2, 0.36, 0.28))
+			_set_content_margins(settle, 40.0, 6.0, 40.0, 8.0)
+			panel.add_theme_stylebox_override("panel", settle)
 		_:
 			var fallback_color := Color(1.0, 0.96, 0.84, 1.0) if style == "leaderboard_me" else CREAM
 			var fallback_shadow := Color(1.0, 0.72, 0.12, 0.32) if style == "leaderboard_me" else Color(0.08, 0.67, 0.62, 0.16)
@@ -218,6 +232,16 @@ static func apply_button(button: Button, style: String) -> void:
 			content_margin = 18.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_TROPHY)
+		"settle_primary":
+			# ui_target_*_settle 的「再來一局」大鈕：青綠圓角 + 奶油粗描邊
+			fallback_color = TEAL
+			font_color = CREAM
+			border_color = Color(0.99, 0.93, 0.82, 1.0)
+			shadow_color = Color(0.03, 0.42, 0.38, 0.4)
+			radius = 40
+			content_margin = 40.0
+			text_outline_size = 4
+			_apply_button_icon(button, ICON_PAW)
 		"trophy_pill":
 			# mockup 左上「玩家排行」粉紅膠囊
 			fallback_color = CHIP_PINK

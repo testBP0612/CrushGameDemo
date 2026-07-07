@@ -9,7 +9,7 @@ signal acknowledge_requested
 signal leaderboard_requested
 
 @onready var title_label: Label = $Panel/Margin/Layout/TitleLabel
-@onready var body_label: Label = $Panel/Margin/Layout/BodyLabel
+@onready var body_label: RichTextLabel = $Panel/Margin/Layout/BodyLabel
 @onready var play_again_button: Button = $Panel/Margin/Layout/PlayAgainButton
 @onready var panel: PanelContainer = $Panel
 @onready var reward_icon: TextureRect = $Panel/Margin/Layout/RewardIcon
@@ -28,14 +28,17 @@ var _pending_result_rank := 0
 
 
 func _ready() -> void:
-	UiSkin.apply_panel(panel, "large")
-	UiSkin.apply_button(play_again_button, "primary_plain")
-	UiSkin.apply_modal_title(title_label)
-	UiSkin.apply_light_panel_label(body_label)
+	UiSkin.apply_panel(panel, "settle")
+	UiSkin.apply_button(play_again_button, "settle_primary")
+	UiSkin.apply_settle_title(title_label)
+	# 內文深色字，數字用 bbcode 粉紅高亮（見 _accent）
+	body_label.add_theme_color_override("default_color", Color(0.25, 0.2, 0.24, 1.0))
 	UiSkin.apply_light_panel_label(rank_label)
 	UiSkin.apply_light_panel_label(beaten_label)
 	UiSkin.apply_light_panel_label(best_label)
-	UiSkin.apply_icon(reward_icon, "cat_can")
+	# 目標圖：標題上方一顆粉紅掌印
+	UiSkin.apply_icon(reward_icon, "paw")
+	reward_icon.modulate = Color(0.96, 0.25, 0.42, 1.0)
 	play_again_button.text = Data.text("settle_play_again")
 	leaderboard_button.text = Data.text("lb_view_entry")
 	UiSkin.apply_button(leaderboard_button, "small")
@@ -56,19 +59,19 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	match state_name:
 		"CASH_OUT_SETTLE":
 			title_label.text = Data.text("settle_cashout_title")
-			body_label.text = Data.text("settle_cashout_body", {
-				"payout": int(snapshot.get("current_payout", 0))
-			})
+			_set_body(Data.text("settle_cashout_body", {
+				"payout": _accent(int(snapshot.get("current_payout", 0)))
+			}))
 		"DEFEAT_SETTLE":
 			title_label.text = Data.text("settle_defeat_title")
-			body_label.text = Data.text("settle_defeat_body", {
-				"bet": int(snapshot.get("bet", 0))
-			})
+			_set_body(Data.text("settle_defeat_body", {
+				"bet": _accent(int(snapshot.get("bet", 0)))
+			}))
 		"CLEAR_SETTLE":
 			title_label.text = Data.text("settle_clear_title")
-			body_label.text = Data.text("settle_clear_body", {
-				"payout": int(snapshot.get("current_payout", 0))
-			})
+			_set_body(Data.text("settle_clear_body", {
+				"payout": _accent(int(snapshot.get("current_payout", 0)))
+			}))
 	_update_leaderboard_stats(state_name, snapshot)
 
 	if bool(snapshot.get("is_settle", false)) and state_name != _last_settle_state:
@@ -76,6 +79,15 @@ func update_snapshot(snapshot: Dictionary) -> void:
 		_play_settlement_effect(state_name)
 	elif not bool(snapshot.get("is_settle", false)):
 		_last_settle_state = ""
+
+
+## 數字粉紅高亮（文案模板仍在 ui_text.json，僅代入值加 bbcode 色標）
+func _accent(value: int) -> String:
+	return "[color=#e8447a]%d[/color]" % value
+
+
+func _set_body(text: String) -> void:
+	body_label.text = "[center]%s[/center]" % text
 
 
 func _play_settlement_effect(state_name: String) -> void:
