@@ -53,6 +53,9 @@ var _lb_button_style := ""
 
 func _ready() -> void:
 	UiSkin.apply_panel(panel, "settle")
+	# 文字必須先設好再套樣式：icon 對齊方式依「當下有無文字」決定（空字=置中會疊字）
+	play_again_button.text = Data.text("settle_play_again")
+	leaderboard_button.text = Data.text("lb_view_entry")
 	UiSkin.apply_button(play_again_button, "settle_primary")
 	UiSkin.apply_settle_title(title_label)
 	body_label.add_theme_color_override("default_color", Color(0.24, 0.19, 0.23, 1.0))
@@ -76,8 +79,6 @@ func _ready() -> void:
 	depth_caption.text = Data.text("lb_stat_depth_caption")
 	beaten_caption.text = Data.text("lb_stat_beaten_caption")
 	best_caption.text = Data.text("lb_stat_best_caption")
-	play_again_button.text = Data.text("settle_play_again")
-	leaderboard_button.text = Data.text("lb_view_entry")
 	_install_button_feedback(play_again_button)
 	_install_button_feedback(leaderboard_button)
 	play_again_button.pressed.connect(func() -> void: acknowledge_requested.emit())
