@@ -86,17 +86,18 @@ func _set_confirm_mode(reset: bool) -> void:
 		return
 	_confirm_mode_initialized = true
 	_is_reset_mode = reset
+	# 注意：icon 對齊依「套樣式當下有無文字」決定，text 必須先設再 apply_button
 	if reset:
 		_confirm_is_art = false
-		UiSkin.apply_button(confirm_button, "primary")
 		confirm_button.text = Data.text("bet_reset_balance")
+		UiSkin.apply_button(confirm_button, "primary")
 		return
 	_confirm_is_art = UiSkin.apply_art_button(confirm_button, "btn_next")
 	if _confirm_is_art:
 		confirm_button.text = ""
 	else:
-		UiSkin.apply_button(confirm_button, "primary")
 		confirm_button.text = Data.text("bet_confirm")
+		UiSkin.apply_button(confirm_button, "primary")
 
 
 func _build_quick_buttons() -> void:

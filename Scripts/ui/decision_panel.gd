@@ -21,6 +21,8 @@ func _ready() -> void:
 	# 撤退/續戰改用 mockup 大圖按鈕（retreat.png / next.png 含烤字）；缺檔退回文字按鈕
 	_cashout_is_art = UiSkin.apply_art_button(cashout_button, "btn_retreat")
 	if not _cashout_is_art:
+		# icon 對齊依套樣式當下有無文字決定：先給文字再套樣式
+		cashout_button.text = Data.text("decision_cashout", {"payout": 0})
 		UiSkin.apply_button(cashout_button, "secondary")
 	_advance_is_art = UiSkin.apply_art_button(advance_button, "btn_next")
 	if _advance_is_art:
