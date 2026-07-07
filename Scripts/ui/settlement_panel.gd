@@ -209,7 +209,7 @@ func _install_button_feedback(button: Button) -> void:
 
 
 func entrance_targets() -> Array[Control]:
-	return [title_row, body_label, stats_cards, stats_duo, play_again_button, leaderboard_button]
+	return [title_row, body_label, _fomo_label, stats_cards, stats_duo, play_again_button, leaderboard_button]
 
 
 func _bind_leaderboard_service(service) -> void:
