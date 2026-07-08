@@ -89,6 +89,70 @@ func _apply_static_text() -> void:
 	start_button.text = Data.text("title_tap_to_start")
 	_update_auth_ui()
 	UiSkin.apply_button(login_button, "login")
+	_style_title_screen()
+
+
+## 標題畫面美術化（夜間 UI 輪 2026-07-08）：戰鬥背景＋暗角、Logo 取代文字標題、
+## 緞帶紀錄、樣式化開始鈕。全程式生成不動 .tscn；素材缺檔逐項退回原樣（D-004）。
+func _style_title_screen() -> void:
+	var background := _title_background_texture()
+	if background != null:
+		var backdrop: Control = title_screen.get_node("TitleBackground")
+		var bg_rect := TextureRect.new()
+		bg_rect.name = "TitleArtBackground"
+		bg_rect.texture = background
+		bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		bg_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+		bg_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.add_child(bg_rect)
+		# 暗角壓一層，讓中央文字/按鈕在花背景上仍可讀
+		var vignette := ColorRect.new()
+		vignette.name = "TitleVignette"
+		vignette.color = Color(0.05, 0.08, 0.16, 0.30)
+		vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+		vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.add_child(vignette)
+
+	var layout := title_label.get_parent() as VBoxContainer
+	if layout != null:
+		layout.alignment = BoxContainer.ALIGNMENT_CENTER
+		layout.add_theme_constant_override("separation", 30)
+		layout.offset_top = -380.0
+		layout.offset_bottom = 380.0
+
+	var logo_texture: Texture2D = UiSkin.art_texture("logo")
+	if logo_texture != null and layout != null:
+		var logo_rect := TextureRect.new()
+		logo_rect.name = "TitleLogo"
+		logo_rect.texture = logo_texture
+		logo_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		logo_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		logo_rect.custom_minimum_size = Vector2(0.0, 380.0)
+		layout.add_child(logo_rect)
+		layout.move_child(logo_rect, 0)
+		title_label.visible = false
+	else:
+		UiSkin.apply_title_label(title_label)
+
+	best_record_label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	UiSkin.apply_ribbon_label(best_record_label)
+	for entry_button: Button in [start_button, login_button]:
+		entry_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		entry_button.custom_minimum_size = Vector2(560.0, entry_button.custom_minimum_size.y)
+	UiSkin.apply_button(start_button, "settle_primary")
+
+
+func _title_background_texture() -> Texture2D:
+	var background_config := Data.background_zones_config()
+	var background_id := str(background_config.get("default_background_id", ""))
+	if background_id.is_empty():
+		return null
+	for extension: String in [".jpg", ".jpeg", ".png"]:
+		var path := "res://Assets/final/%s%s" % [background_id, extension]
+		if ResourceLoader.exists(path, "Texture2D"):
+			return load(path) as Texture2D
+	return null
 
 
 func _on_start_pressed() -> void:
