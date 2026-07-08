@@ -28,6 +28,7 @@ const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
 var _current_monster: Dictionary = {}
 var _current_background_path := ""
 # D-019：血條改危險度顯示（程式生成，原血條僅隱藏——傷害節奏演出仍依賴其內部數值）
+var _danger_panel: PanelContainer
 var _danger_row: HBoxContainer
 var _danger_caption: Label
 var _danger_icons: HBoxContainer
@@ -162,15 +163,21 @@ func reset_for_betting() -> void:
 
 
 ## D-019：血條位置改放危險度列（危險度＋爪印等級）。全程式生成，不動 .tscn。
+## 外層加半透明深色藥丸底板（夜間 UI 輪）——原本裸放在花背景上對比不足。
 func _build_danger_display() -> void:
 	monster_hp_bar.visible = false
+	_danger_panel = PanelContainer.new()
+	_danger_panel.name = "DangerPanel"
+	_danger_panel.position = Vector2(monster_hp_bar.offset_left, monster_hp_bar.offset_top - 12.0)
+	_danger_panel.custom_minimum_size = Vector2(monster_hp_bar.offset_right - monster_hp_bar.offset_left, 64.0)
+	UiSkin.apply_overlay_pill(_danger_panel)
+	add_child(_danger_panel)
+
 	_danger_row = HBoxContainer.new()
 	_danger_row.name = "DangerRow"
-	_danger_row.position = Vector2(monster_hp_bar.offset_left, monster_hp_bar.offset_top - 10.0)
-	_danger_row.size = Vector2(monster_hp_bar.offset_right - monster_hp_bar.offset_left, 56.0)
 	_danger_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	_danger_row.add_theme_constant_override("separation", 14)
-	add_child(_danger_row)
+	_danger_panel.add_child(_danger_row)
 
 	_danger_caption = Label.new()
 	_danger_caption.name = "DangerCaption"
@@ -187,11 +194,11 @@ func _build_danger_display() -> void:
 
 
 func _update_danger_display(stage_to_challenge: int) -> void:
-	if _danger_row == null or not is_instance_valid(_danger_row):
+	if _danger_panel == null or not is_instance_valid(_danger_panel):
 		return
 	var max_level := Data.danger_max_level()
 	if max_level <= 0:
-		_danger_row.visible = false
+		_danger_panel.visible = false
 		return
 
 	var level := Data.danger_level_at(stage_to_challenge)
@@ -204,7 +211,7 @@ func _update_danger_display(stage_to_challenge: int) -> void:
 		_danger_caption.text = Data.text("monster_danger_fallback", {
 			"stars": "★".repeat(level) + "☆".repeat(maxi(0, max_level - level))
 		})
-	_danger_row.visible = true
+	_danger_panel.visible = true
 
 
 func _apply_hit_damage(damage: int) -> void:

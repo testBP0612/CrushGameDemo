@@ -495,6 +495,15 @@ static func danger_color(level: int, max_level: int) -> Color:
 	return DANGER_LOW.lerp(DANGER_HIGH, t)
 
 
+## 戰場浮層藥丸底板：半透明深色圓角，讓文字/圖示在任何花背景上可讀。
+static func apply_overlay_pill(panel: PanelContainer) -> void:
+	if panel == null or not is_instance_valid(panel):
+		return
+	var style := _flat_box(Color(0.07, 0.11, 0.2, 0.55), 26)
+	_set_content_margins(style, 20.0, 6.0, 20.0, 6.0)
+	panel.add_theme_stylebox_override("panel", style)
+
+
 ## D-019 危險度圖示列：以爪印貼紙重繪 level/max_level（亮 level 顆、其餘壓暗）。
 ## 回傳 false = 缺圖，呼叫端退回文字顯示（缺檔不崩，D-004）。
 static func fill_danger_icons(row: HBoxContainer, level: int, max_level: int, icon_px: float) -> bool:
@@ -512,7 +521,7 @@ static func fill_danger_icons(row: HBoxContainer, level: int, max_level: int, ic
 		icon.custom_minimum_size = Vector2(icon_px, icon_px)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.modulate = active_color if index < level else Color(1.0, 1.0, 1.0, 0.28)
+		icon.modulate = active_color if index < level else Color(1.0, 1.0, 1.0, 0.42)
 		row.add_child(icon)
 	return true
 

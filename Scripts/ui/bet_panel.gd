@@ -47,7 +47,22 @@ func _ready() -> void:
 	UiSkin.apply_button(increase_button, "step_increase")
 	UiSkin.apply_number_display(bet_label)
 	UiSkin.apply_icon(insufficient_icon, "warning")
+	# 夜間 UI 輪：警示列原本貼齊面板下緣（26px 字＋34px icon 被下注框陰影壓住），
+	# 上移到插圖下緣、加大、標籤加奶油底板——警示出現時要一眼可見
+	insufficient_row.offset_top = 166.0
+	insufficient_row.offset_bottom = 236.0
+	insufficient_icon.custom_minimum_size = Vector2(46.0, 46.0)
+	insufficient_label.add_theme_font_size_override("font_size", 32)
+	UiSkin.apply_resource_label(insufficient_label)
+	insufficient_label.add_theme_color_override("font_color", Color(0.82, 0.22, 0.18, 1.0))
+	# resource_label 的 54px 左留白是給疊放 icon 用的；這裡 icon 在列內獨立，改回對稱
+	var warning_pill := insufficient_label.get_theme_stylebox("normal")
+	if warning_pill != null:
+		warning_pill.set_content_margin(SIDE_LEFT, 22.0)
 	insufficient_row.visible = false
+	# 確認鈕原 tscn 底緣離 ActionArea 下界僅 3px（貼邊），整體上移
+	confirm_button.offset_top -= 20.0
+	confirm_button.offset_bottom -= 20.0
 	_set_confirm_mode(false)
 	_install_button_feedback(decrease_button)
 	_install_button_feedback(increase_button)
