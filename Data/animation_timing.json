@@ -48,6 +48,14 @@
       "scale_max": 0.30,
       "arrive_fade": 0.08,
       "max_hold": 1.20
+    },
+    "win_banner": {
+      "appear": 0.25,
+      "count_up": 0.90,
+      "min_show": 0.80,
+      "auto_dismiss": 6.0,
+      "fade_out": 0.20,
+      "digit_height": 150.0
     }
   }
 }

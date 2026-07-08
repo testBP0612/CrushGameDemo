@@ -68,6 +68,7 @@
 | `transition.*` | float(s) | 轉場時間。 |
 | `ui.*` | float(s) | UI 動效時間。 |
 | `effects.coin_burst.*` | 混合 | 任務 19 爆金幣參數：`count_base:int` + `count_per_multiplier:float`（金幣數 = base + 該次擊殺後倍率 × 此值）、`count_max:int`（上限）、噴發/滯空/吸入各時長與物理值（`burst_duration`/`launch_speed`/`spread_degrees`/`gravity`/`hover_time`/`fly_duration`/`fly_stagger`/`spawn_stagger`/`scale_min~max`/`arrive_fade`，float）、`canvas_layer:int`、`max_hold:float(s)`（跳數暫扣保底，時間到數字照跳）。 |
+| `effects.win_banner.*` | float(s/px) | 任務 22 大贏插頁參數：`appear` / `count_up` / `min_show` / `auto_dismiss` / `fade_out` 為秒，`digit_height` 為貼紙數字顯示高度(px)。 |
 
 ## ui_text.json
 | 路徑 | 型別 | 說明 |

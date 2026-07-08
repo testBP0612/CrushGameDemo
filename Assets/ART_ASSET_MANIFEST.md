@@ -113,6 +113,22 @@
 
 > 註：D-012 初版曾移除舊框貼圖（`ui_panel_*`、`ui_btn_*`、`ui_chip*`，當時改純程式畫）；Round 3 改用上表全新的 `skin_*` 9-slice 皮膚取得插畫質感（見 D-012 修訂）。
 
+### win banner 金色數字貼紙（任務 22）
+
+| asset_id | file_name | target_path | required | transparent | status | notes |
+|---|---|---|---|---|---|---|
+| windigit_0 | digit_0.png | Assets/final/ui/windigits/ | optional | yes | imported | 大贏插頁 DigitStrip；缺任一張整條 fallback Label |
+| windigit_1 | digit_1.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_2 | digit_2.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_3 | digit_3.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_4 | digit_4.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_5 | digit_5.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_6 | digit_6.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_7 | digit_7.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_8 | digit_8.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_9 | digit_9.png | Assets/final/ui/windigits/ | optional | yes | imported | 同上 |
+| windigit_comma | digit_comma.png | Assets/final/ui/windigits/ | optional | yes | imported | 千分位逗號；同風格貼紙 |
+
 ---
 
 ## Optional / Future（缺圖以 placeholder 呈現，不阻塞 MVP）

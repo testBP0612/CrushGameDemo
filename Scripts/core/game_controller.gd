@@ -8,6 +8,7 @@ const FirebaseLeaderboardServiceScript := preload("res://Scripts/services/fireba
 const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const CoinBurstScript := preload("res://Scripts/effects/coin_burst.gd")
+const WinBannerScript := preload("res://Scripts/effects/win_banner.gd")
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
@@ -28,6 +29,7 @@ var audio_service := AudioServiceScript.new()
 var _run_deepest_stage := 0
 var _defeat_payout_before_loss := 0
 var _last_settlement_payout := 0
+var _active_win_banner: WinBanner
 
 
 func _ready() -> void:
@@ -221,6 +223,7 @@ func _on_balance_reset_pressed() -> void:
 func _on_state_changed(state_name: String) -> void:
 	if state_name == "BETTING":
 		_reset_run_stats()
+		_clear_active_win_banner()
 	elif state_name == "BATTLE_ATTACK":
 		_run_deepest_stage = maxi(_run_deepest_stage, state_machine.active_monster_stage)
 	_try_apply_cloud_balance()
@@ -258,6 +261,7 @@ func _on_settled(result: String) -> void:
 	_play_settlement_sfx(result)
 	_update_best_record_text()
 	_update_view()
+	_show_win_banner_if_needed(result)
 
 
 func _on_attack_sequence_finished(hit_count: int) -> void:
@@ -342,6 +346,31 @@ func _play_monster_death_with_coin_burst() -> void:
 		vertical_ui.release_payout_count_up()
 		if burst != null and is_instance_valid(burst):
 			burst.queue_free()
+
+
+func _show_win_banner_if_needed(result: String) -> void:
+	if result not in ["cash_out", "clear"]:
+		return
+	if _last_settlement_payout <= 0:
+		return
+	_clear_active_win_banner()
+	var banner := WinBannerScript.new()
+	_active_win_banner = banner
+	add_child(banner)
+	banner.dismissed.connect(func() -> void:
+		if _active_win_banner == banner:
+			_active_win_banner = null
+	)
+	if not banner.play(_last_settlement_payout):
+		_active_win_banner = null
+
+
+func _clear_active_win_banner() -> void:
+	if _active_win_banner == null:
+		return
+	if is_instance_valid(_active_win_banner):
+		_active_win_banner.queue_free()
+	_active_win_banner = null
 
 
 func _update_view() -> void:
