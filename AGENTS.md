@@ -53,6 +53,7 @@
 19. `19_COIN_BURST_ON_MONSTER_DEATH`（怪物死亡爆金幣→吸入收益 UI→數字跳動；Tween sprite 路線，數值入 animation_timing.json；Codex）✅（人類 2026-07-07 目視驗收）
 20. `20_DECISION_INFO_REVAMP`（拿血條→危險度、決策賠率語言、FOMO 結算；依 D-019；文案初稿入 ui_text.json、人類保留改句權）✅（人類 2026-07-08 目視驗收）
 21. `21_RANDOM_MULTIPLIER_TABLE`（每局隨機倍率盤，漸進抖動+單調遞增；依 D-019；排在 20 之後）✅（人類 2026-07-08 目視驗收；headless 200 局數值驗證通過）
+22. `22_WIN_BANNER_INTERSTITIAL`（撤退/通關大贏插頁：金色貼紙數字慶祝畫面，點擊任意處繼續；純視覺不動狀態機；數字圖以生成貼紙產出〔D-012 類別〕；Codex）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。

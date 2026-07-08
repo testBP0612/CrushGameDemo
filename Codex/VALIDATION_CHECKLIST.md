@@ -133,6 +133,14 @@
 - [ ] success_rate 查表/擲骰/狀態時序零改動；顯示倍率與計算倍率同源；收益仍 floor。
 - [ ] 不揭示全曲線（只有下一關）；**H5 實機**整局可玩、排行榜寫入正常。
 
+## 里程碑 — 任務 22（大贏插頁：金色數字慶祝畫面；Codex）
+- [ ] 撤退/通關進結算先出插頁（暗底+標題+金色數字 count-up+提示）；點擊後露出結算面板；戰敗無插頁。
+- [ ] 千分位數字正確（3 位/5 位/含 0 三例截圖）；缺 digit 圖 → 文字版 fallback 照常可關不崩。
+- [ ] `min_show` 內點擊無效、`auto_dismiss` 逾時自動收（實測）；插頁存活期間結算按鈕不可被誤觸。
+- [ ] 數值全讀 `animation_timing.json > effects.win_banner`、文案讀 `ui_text.json`（改 json 即變）。
+- [ ] 狀態機/settled 時序零改動；未動 `.tscn`；連打多局無節點殘留。
+- [ ] windigits 十一張入 manifest；風格與現有 UI 家族一致；**H5 實機**觸控可關、無掉幀。
+
 ## 里程碑 9 — 任務 08（素材接入）
 - [ ] `Assets/final/` 齊備素材正確顯示，符合 manifest 檔名/路徑。
 - [ ] **缺檔自動 fallback placeholder，遊戲不崩**（移除某 final 素材重跑驗證）。
