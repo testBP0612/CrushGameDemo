@@ -1,6 +1,7 @@
 {
-  "schema_version": "1.0",
-  "_comment": "Mock leaderboard NPC data for D-016 Phase 1. These are simulated players; Phase 2 replaces the data source with Firebase.",
+  "schema_version": "1.1",
+  "_comment": "Mock leaderboard NPC data (D-016 Phase 1)。D-020：keep_in_production=true 時，正式版（Firebase）也會在 client 端把這些 NPC 併入排行榜與排名計算——比賽 demo 保底，避免空榜。設 false 即回到純雲端資料。",
+  "keep_in_production": true,
   "entries": [
     { "display_name": "小莓騎士", "best_payout": 110 },
     { "display_name": "風鈴法師", "best_payout": 160 },

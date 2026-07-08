@@ -230,3 +230,21 @@
   `Data/ui_text.json`、`Scripts/core/game_state_machine.gd`、
   `Scripts/battle/battle_presenter.gd`、`Scripts/ui/`（決策/結算）、
   `Scenes/UI/VerticalUi.tscn`（決策區資訊）、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`。
+
+## D-020：排行榜 NPC 保底名單於正式版保留（修訂 D-016 §6「Phase 2 上線後移除」）
+- **問題**：比賽 demo 期間真實玩家極少，雲端排行榜近空——空榜比假榜更傷展示效果。
+- **人類決策**（2026-07-08，對話中裁示）：初始 NPC 假資料**即便部署了也要保留在排行榜上**。
+- **實作方式（AI 選型，client 端合併，不寫雲端）**：
+  1. `Data/leaderboard_mock.json` 新增 `keep_in_production: true`（schema 1.1）——
+	 一鍵可關，設 false 即回 D-016 原行為；NPC 名單本身仍是同一份 json。
+  2. `FirebaseLeaderboardService`：登入時把 NPC 名單與 Firestore 資料在 client 端
+	 合併重排名（competition ranking）；排名/超越百分比計算同步併入 NPC 計數。
+	 未登入/橋接缺失/雲端失敗 → 整份退回 Mock 語意（**排行榜永不空**，且未登入
+	 也看得到榜，比原「空列表」體驗更好）。
+  3. `Firebase/web/crush-online.js` 的 `fetchRankFor` 回傳補 `higher/lower/total`
+	 原始計數（向下相容；GDScript 對舊版 bridge 有退化路徑）。
+  4. **不寫任何假資料進 Firestore**：rules 不動、雲端資料保持純真實玩家，移除保底
+	 只需改 json flag。
+- **誠實聲明**：對評審展示時說明榜上混有模擬 NPC（沿用 D-016 §6 的揭露原則）。
+- **影響**：`Data/leaderboard_mock.json`、`Scripts/services/firebase_leaderboard_service.gd`、
+  `Firebase/web/crush-online.js`（需重新部署 hosting 才對舊版 bridge 生效）、`AGENTS.md`。

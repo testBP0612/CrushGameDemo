@@ -81,6 +81,7 @@
 - **D-017** 怪物素材＝動畫序列圖 `bossN_idle`（N=1..9，TexturePacker JSON）置於 `Assets/final/boss/`；stage 10 維持 placeholder；Contract v1.4。
 - **D-018** 不透明全幅背景允許 JPG（`background_battle_00N.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析背景；需透明素材仍限 PNG；Contract v1.5。
 - **D-019** 賭場化體驗改版：血條移除改危險度指示（`danger_display` 資料驅動分級）；每局隨機倍率盤（`multiplier_random`，漸進抖動+單調遞增，success_rate 不連動，只揭示下一關）；不顯示成功率 %，改博奕語言（過關/落袋為安/1 賠 N）+ 結算 FOMO 行；文案一律 `ui_text.json`，人類保留改句權。
+- **D-020** 排行榜 NPC 保底名單正式版保留（修訂 D-016 §6）：`leaderboard_mock.json > keep_in_production` 開啟時 Firebase 版於 client 端合併 NPC 重排名、未登入/失敗退回 Mock 語意；不寫假資料進 Firestore；對評審揭露為模擬資料。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md

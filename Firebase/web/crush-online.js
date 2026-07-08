@@ -149,9 +149,11 @@ window.CrushOnline = {
         const higher = higherSnap.data().count;
         const lower = lowerSnap.data().count;
         const total = totalSnap.data().count;
+        // D-020: 原始計數一併回傳，讓 client 端可把 NPC 保底名單併入排名計算
         cb(JSON.stringify({
           rank: higher + 1,
           beaten_percent: total > 0 ? Math.floor((lower * 100) / total) : 0,
+          higher, lower, total,
         }));
       } catch (e) {
         console.warn("[CrushOnline] fetchRankFor failed:", e.code || e.message);
