@@ -46,6 +46,18 @@ func _ready() -> void:
 	UiSkin.apply_button(decrease_button, "step_decrease")
 	UiSkin.apply_button(increase_button, "step_increase")
 	UiSkin.apply_number_display(bet_label)
+	# 對齊 ui_mockup_battle：下注金額是本畫面視覺主角，加大字級（tscn 60 → 72）
+	bet_label.add_theme_font_size_override("font_size", 72)
+	# 8 檔籌碼（左右各 4）要塞進原本 3 檔的欄高，縮 separation
+	for chip_column: VBoxContainer in [chips_left, chips_right]:
+		chip_column.add_theme_constant_override("separation", 8)
+	# ±/金額列內縮（mockup 比例），避開左右欄第四顆籌碼；金額框 300 寬置中
+	decrease_button.offset_left = 180.0
+	decrease_button.offset_right = 290.0
+	bet_label.offset_left = 310.0
+	bet_label.offset_right = 610.0
+	increase_button.offset_left = 630.0
+	increase_button.offset_right = 740.0
 	UiSkin.apply_icon(insufficient_icon, "warning")
 	# 夜間 UI 輪：警示列原本貼齊面板下緣（26px 字＋34px icon 被下注框陰影壓住），
 	# 上移到插圖下緣、加大、標籤加奶油底板——警示出現時要一眼可見
@@ -138,16 +150,18 @@ func _build_quick_buttons() -> void:
 	for index in unique_amounts.size():
 		var amount := unique_amounts[index]
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(200.0, 64.0)
+		button.custom_minimum_size = Vector2(150.0, 52.0)
 		button.text = str(amount)
-		button.add_theme_font_size_override("font_size", 28)
+		button.add_theme_font_size_override("font_size", 30)
 		button.set_meta("amount", amount)
 		UiSkin.apply_button(button, "chip")
 		_install_button_feedback(button)
 		button.pressed.connect(_on_quick_button_pressed.bind(amount))
 		if index < left_count:
+			button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 			chips_left.add_child(button)
 		else:
+			button.size_flags_horizontal = Control.SIZE_SHRINK_END
 			chips_right.add_child(button)
 			chips_right.move_child(button, 0)
 		_quick_buttons.append(button)
