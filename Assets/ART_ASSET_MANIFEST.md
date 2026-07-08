@@ -62,8 +62,17 @@
 ### UI（可選但建議）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| game_logo | game_logo.png | Assets/final/ | optional | PNG32 | yes | n/a | 標題 Logo | Scenes/UI/TitleScreen | 文字標題 | planned | 美術 | 寬≤720 |
+| game_logo | logo.png | Assets/final/ | optional | PNG32 | yes | n/a | 標題 Logo（標題畫面大圖＋遊戲中右上角） | TitleScreen / VerticalUi TopBar | 文字標題 | imported | 美術 | 實際交付檔名 logo.png（Meow 準快跑！） |
 | ui_panel_style_reference | ui_panel_style_reference.png | Assets/final/ | optional | PNG32 | yes | n/a | UI 風格參考 | （參考用） | 內建樣式 | planned | 美術 | 非必接入 |
+
+### mockup 整圖素材（對齊 ui_mockup_battle，UiSkin art_texture/apply_art_button 載入）
+| asset_id | file_name | target_path | required | transparent | purpose | fallback | status | notes |
+|---|---|---|---|---|---|---|---|---|
+| ui_board | board.png | Assets/final/ui/ | optional | yes | HUD 單板木質看板（取代三欄卡） | 程式 StyleBoxFlat 底板 | imported | 欄位標題由 Label 疊字（ui_text.json） |
+| ui_bet_ribbon | bet_info.png | Assets/final/ui/ | optional | yes | 下注面板「下注內容」緞帶（含烤字） | 粉紅程式緞帶＋文字 | imported | 烤字素材，改字需重出圖 |
+| ui_bet_context | bet_context.png | Assets/final/ui/ | optional | yes | 下注面板中央貓糧插圖 | 自動隱藏 | imported | 裝飾用 |
+| ui_btn_next | next.png | Assets/final/ui/ | optional | yes | 續戰/開始大按鈕（烤字「喵準開始」） | 文字按鈕 primary 樣式 | imported | 烤字素材，改字需重出圖 |
+| ui_btn_retreat | retreat.png | Assets/final/ui/ | optional | yes | 撤退大按鈕（烤字「喵準快逃」） | 文字按鈕 secondary 樣式 | imported | 烤字素材，改字需重出圖 |
 
 ---
 

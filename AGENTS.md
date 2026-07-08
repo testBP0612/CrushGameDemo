@@ -51,8 +51,8 @@
 17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）✅
 18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex；stage 10 維持 placeholder）✅（人類 2026-07-06 目視驗收；同 commit 併入 hero_attack 序列圖）
 19. `19_COIN_BURST_ON_MONSTER_DEATH`（怪物死亡爆金幣→吸入收益 UI→數字跳動；Tween sprite 路線，數值入 animation_timing.json；Codex）✅（人類 2026-07-07 目視驗收）
-20. `20_DECISION_INFO_REVAMP`（拿血條→危險度、決策賠率語言、FOMO 結算；依 D-019；Codex；文案初稿入 ui_text.json、人類保留改句權）
-21. `21_RANDOM_MULTIPLIER_TABLE`（每局隨機倍率盤，漸進抖動+單調遞增；依 D-019；Codex；建議排在 20 之後）
+20. `20_DECISION_INFO_REVAMP`（拿血條→危險度、決策賠率語言、FOMO 結算；依 D-019；文案初稿入 ui_text.json、人類保留改句權）✅（人類 2026-07-08 目視驗收）
+21. `21_RANDOM_MULTIPLIER_TABLE`（每局隨機倍率盤，漸進抖動+單調遞增；依 D-019；排在 20 之後）✅（人類 2026-07-08 目視驗收；headless 200 局數值驗證通過）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。

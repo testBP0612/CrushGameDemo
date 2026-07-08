@@ -54,12 +54,7 @@
 	"lb_loading": "讀取中...",
 	"lb_empty": "目前沒有資料",
 	"lb_close": "關閉",
-	"lb_current_best_rank": "目前最佳：第 {rank} 名",
 	"lb_cashout_rank_hint": "若現在撤退約第 {rank} 名",
-	"lb_result_rank": "目前排名：第 {rank} 名",
-	"lb_result_beaten": "超過 {percent}% 玩家",
-	"lb_result_personal_best": "個人最高：{payout}",
-	"lb_defeat_depth": "本次最深進度：{stage}/{max}",
 	"lb_view_entry": "查看排行榜 >",
 
 	"lb_stat_depth_caption": "本次最深進度",

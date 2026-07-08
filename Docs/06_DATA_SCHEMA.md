@@ -17,8 +17,14 @@
 | `currency.quick_bet_options` | int[] | 下注面板快捷籌碼金額（資料驅動，禁止程式硬湊）。每個值必須落在 `[min_bet, max_bet]` 內。 |
 | `payout.rounding` | string | `floor`（收益取整方式）。 |
 | `payout.base_multiplier_at_stage_0` | float | stage 0 的倍率（1.0）。 |
-| `multiplier_curve[]` | array | `{ stage:int, multiplier:float }`，stage 從 1 起。 |
-| `success_rate_curve[]` | array | `{ stage:int, success_rate:float(0~1) }`，對應「即將挑戰的關卡」。 |
+| `multiplier_curve[]` | array | `{ stage:int, multiplier:float }`，stage 從 1 起。D-019 起為「基準曲線」：`multiplier_random.enabled` 時作為每局隨機盤的輸入。 |
+| `multiplier_random.enabled` | bool | D-019 每局隨機倍率盤開關；false = 完全走 `multiplier_curve` 原值（回歸路徑）。 |
+| `multiplier_random.jitter_pct_stage_1` / `jitter_pct_stage_max` | float | 抖動幅度，由第 1 關線性放大至最終關（如 0.10 → 0.30）。 |
+| `multiplier_random.min_growth_ratio` | float | 單調遞增保底：本關 ≥ 前關 × 此值。 |
+| `multiplier_random.round_decimals` | int | 盤面倍率四捨小數位數。 |
+| `success_rate_curve[]` | array | `{ stage:int, success_rate:float(0~1) }`，對應「即將挑戰的關卡」。D-019：不隨倍率盤連動。 |
+| `danger_display.max_level` | int | D-019 危險度分級數（取代血條顯示）；≤0 時整組隱藏。 |
+| `danger_display.levels[]` | array | `{ min_success_rate:float, level:int }`，依即將挑戰關卡的 success_rate 由上而下取第一個符合者。 |
 | `cashout_rules.loss_mode` | string | 失敗損益模式（`lose_current_payout_and_bet`）。 |
 | `cashout_rules.cashout_returns` | string | 撤退返還對象（`current_payout`）。 |
 | `stage_progression.max_stage` | int | MVP 最多 10 關。 |
@@ -61,6 +67,7 @@
 | `hero.*` / `monster.*` | float(s) | 各角色動畫片段時長。 |
 | `transition.*` | float(s) | 轉場時間。 |
 | `ui.*` | float(s) | UI 動效時間。 |
+| `effects.coin_burst.*` | 混合 | 任務 19 爆金幣參數：`count_base:int` + `count_per_multiplier:float`（金幣數 = base + 該次擊殺後倍率 × 此值）、`count_max:int`（上限）、噴發/滯空/吸入各時長與物理值（`burst_duration`/`launch_speed`/`spread_degrees`/`gravity`/`hover_time`/`fly_duration`/`fly_stagger`/`spawn_stagger`/`scale_min~max`/`arrive_fade`，float）、`canvas_layer:int`、`max_hold:float(s)`（跳數暫扣保底，時間到數字照跳）。 |
 
 ## ui_text.json
 | 路徑 | 型別 | 說明 |
@@ -83,9 +90,10 @@
 
 > 容錯（D-014）：檔案缺失/整檔缺失 → warning + 靜音，遊戲不可壞；即回到 D-008 的無聲狀態。
 
-## leaderboard_mock.json（D-016 Phase 1 新增）
+## leaderboard_mock.json（D-016 Phase 1 新增；D-020 修訂）
 | 路徑 | 型別 | 說明 |
 |---|---|---|
+| `keep_in_production` | bool | D-020：true 時正式版（Firebase）也在 client 端把 NPC 併入榜面與排名計算（保底避免空榜）；false = 回 D-016 原行為（純雲端）。不寫任何假資料進 Firestore。 |
 | `entries[]` | array | Mock 排行榜 NPC 名單，明示為模擬資料。 |
 | `entries[].display_name` | string | NPC 顯示名稱。 |
 | `entries[].best_payout` | int | NPC 歷史最佳單局收益，用於 `best_payout` 排名。 |
