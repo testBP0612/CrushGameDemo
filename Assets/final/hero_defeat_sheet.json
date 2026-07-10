@@ -1,0 +1,9 @@
+{
+  "asset_id": "hero_defeat",
+  "frame_width": 768,
+  "frame_height": 768,
+  "columns": 4,
+  "rows": 3,
+  "frame_count": 12,
+  "fps": 12
+}
