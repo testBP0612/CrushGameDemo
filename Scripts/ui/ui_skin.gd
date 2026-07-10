@@ -125,13 +125,17 @@ static func apply_settle_title(label: Label) -> void:
 	label.add_theme_constant_override("outline_size", 0)
 
 
-## 怪物名牌與血條：去掉預設灰主題，改為奶油描邊字 + 粉紅血條（貼齊 mockup 風格）。
+## 怪物名牌與血條：去掉預設灰主題，改為貼紙風彩字 + 粉紅血條（貼齊 mockup 風格）。
+## 名牌不加底框（人類 2026-07-09 裁示）：粉紅字＋奶油粗描邊＋深藍陰影的遊戲配色。
 static func style_monster_status(name_label: Label, hp_bar: ProgressBar) -> void:
 	if name_label != null and is_instance_valid(name_label):
 		name_label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
-		name_label.add_theme_color_override("font_color", CREAM)
-		name_label.add_theme_color_override("font_outline_color", DEEP_NAVY)
-		name_label.add_theme_constant_override("outline_size", 10)
+		name_label.add_theme_color_override("font_color", CHIP_PINK)
+		name_label.add_theme_color_override("font_outline_color", CREAM)
+		name_label.add_theme_constant_override("outline_size", 12)
+		name_label.add_theme_color_override("font_shadow_color", DEEP_NAVY)
+		name_label.add_theme_constant_override("shadow_offset_x", 3)
+		name_label.add_theme_constant_override("shadow_offset_y", 4)
 	if hp_bar != null and is_instance_valid(hp_bar):
 		var background := _flat_box(Color(1.0, 0.964706, 0.901961, 0.92), 18, 6, DEEP_NAVY)
 		var fill := _flat_box(PINK, 12)
@@ -285,9 +289,10 @@ static func apply_button(button: Button, style: String) -> void:
 			border_color = CHIP_PINK_BORDER
 			shadow_color = Color(0.78, 0.2, 0.36, 0.3)
 			radius = 24
-			content_margin = 10.0
+			content_margin = 16.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_MINUS)
+			button.expand_icon = true
 		"step_increase":
 			# mockup 天藍方形加號鈕
 			fallback_color = STEP_BLUE
@@ -295,9 +300,10 @@ static func apply_button(button: Button, style: String) -> void:
 			border_color = STEP_BLUE_BORDER
 			shadow_color = Color(0.13, 0.5, 0.72, 0.3)
 			radius = 24
-			content_margin = 10.0
+			content_margin = 16.0
 			text_outline_size = 2
 			_apply_button_icon(button, ICON_PLUS)
+			button.expand_icon = true
 		"chip":
 			# mockup 粉紅籌碼藥丸（奶油字）
 			fallback_color = CHIP_PINK

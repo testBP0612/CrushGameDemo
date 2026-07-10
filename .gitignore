@@ -36,6 +36,9 @@ Assets/generated/*
 /validation_screenshots/
 /ValidationScreenshots/
 
+# Claude Code 本機權限檔（launch.json 進 repo、settings.local.json 不進）
+.claude/settings.local.json
+
 # Firebase deploy cache
 Firebase/.firebase/
 

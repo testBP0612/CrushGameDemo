@@ -69,8 +69,11 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	_set_visible_with_entrance("top_bar", top_bar, show_game_ui)
 	_set_visible_with_entrance("hud", hud, show_game_ui, hud.entrance_targets())
 	hud.update_snapshot(snapshot)
-	leaderboard_entry_button.visible = bool(snapshot.get("is_betting", false))
-	leaderboard_entry_button.disabled = not bool(snapshot.get("is_betting", false))
+	# mockup 的「玩家排行」膠囊在關卡進行中也常駐，故決策階段一併顯示（D-021）
+	var leaderboard_available := bool(snapshot.get("is_betting", false)) \
+		or bool(snapshot.get("is_reward_decision", false))
+	leaderboard_entry_button.visible = leaderboard_available
+	leaderboard_entry_button.disabled = not leaderboard_available
 	battle_message.update_snapshot(snapshot)
 
 	_set_visible_with_entrance("bet_panel", bet_panel, bool(snapshot.get("is_betting", false)))
@@ -134,6 +137,8 @@ func _build_leaderboard_panel() -> void:
 func _on_leaderboard_requested() -> void:
 	if _leaderboard_panel == null:
 		return
-	if not (bool(_last_snapshot.get("is_betting", false)) or bool(_last_snapshot.get("is_settle", false))):
+	if not (bool(_last_snapshot.get("is_betting", false)) \
+			or bool(_last_snapshot.get("is_reward_decision", false)) \
+			or bool(_last_snapshot.get("is_settle", false))):
 		return
 	_leaderboard_panel.open(_last_snapshot.get("leaderboard_service", null))
