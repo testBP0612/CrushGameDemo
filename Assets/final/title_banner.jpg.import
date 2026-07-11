@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drjnx4yfd8ydc"
-path="res://.godot/imported/banner.jpg-03438843b0356067ac63101f430649a8.ctex"
+uid="uid://bd6knasne23gx"
+path="res://.godot/imported/title_banner.jpg-d66d6ac07046f984787e6bf53f1ffb6e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/references/GameUI/banner.jpg"
-dest_files=["res://.godot/imported/banner.jpg-03438843b0356067ac63101f430649a8.ctex"]
+source_file="res://Assets/final/title_banner.jpg"
+dest_files=["res://.godot/imported/title_banner.jpg-d66d6ac07046f984787e6bf53f1ffb6e.ctex"]
 
 [params]
 

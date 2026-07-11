@@ -162,6 +162,15 @@ func reset_for_betting() -> void:
 	show_monster_for_stage(1, false)
 
 
+## 任務 23 結算稿只有街景＋結果卡；只切顯示，不碰角色/狀態機資料。
+func set_settlement_presentation(enabled: bool) -> void:
+	hero.visible = not enabled
+	monster.visible = not enabled
+	monster_name_label.visible = not enabled
+	if _danger_panel != null and is_instance_valid(_danger_panel):
+		_danger_panel.visible = not enabled and Data.danger_max_level() > 0
+
+
 ## D-019：血條位置改放危險度列（危險度＋爪印等級）。全程式生成，不動 .tscn。
 ## 外層加半透明深色藥丸底板（夜間 UI 輪）——原本裸放在花背景上對比不足。
 func _build_danger_display() -> void:

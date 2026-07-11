@@ -141,6 +141,14 @@
 - [ ] 狀態機/settled 時序零改動；未動 `.tscn`；連打多局無節點殘留。
 - [ ] windigits 十一張入 manifest；風格與現有 UI 家族一致；**H5 實機**觸控可關、無掉幀。
 
+## 里程碑 — 任務 23（設計師 UI 參考圖視覺對齊；Codex）
+- [x] TITLE 直接使用 `title_banner.jpg`，現有文字 Logo 不重複；互動鈕不遮主要 Logo。
+- [x] BETTING／決策共用上半部，下注、危險度、排名提示與雙按鈕形成同一套粉紅／奶油／青藍街頭卡通語言。
+- [x] 結算時隱藏 HUD／角色，只留街景與中央「結果」米色深藍框面板；內容仍使用既有動態資料。
+- [x] 四組 Godot 實跑 vs 參考圖對照已產出；缺 `title_banner.jpg` 時退回舊背景＋文字 Logo，不崩。
+- [x] H5 540×960 實機完整走過下注→過關決策→撤退→大贏插頁→結算→再來一局；無 console warning/error、無面板殘留。
+- [x] 新文案走 `ui_text.json`、新素材已登記 manifest；所有圖片存在性判斷使用 `ResourceLoader.exists()`。
+
 ## 里程碑 9 — 任務 08（素材接入）
 - [ ] `Assets/final/` 齊備素材正確顯示，符合 manifest 檔名/路徑。
 - [ ] **缺檔自動 fallback placeholder，遊戲不崩**（移除某 final 素材重跑驗證）。

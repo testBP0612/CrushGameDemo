@@ -53,7 +53,7 @@ func _build_next_info() -> void:
 	_info_panel.offset_right = -60.0
 	_info_panel.offset_top = 20.0
 	_info_panel.offset_bottom = 250.0
-	UiSkin.apply_leaderboard_hint(_info_panel)
+	UiSkin.apply_panel(_info_panel, "decision")
 	add_child(_info_panel)
 
 	var layout := VBoxContainer.new()

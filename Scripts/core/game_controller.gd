@@ -9,6 +9,7 @@ const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const CoinBurstScript := preload("res://Scripts/effects/coin_burst.gd")
 const WinBannerScript := preload("res://Scripts/effects/win_banner.gd")
+const TITLE_BANNER_PATH := "res://Assets/final/title_banner.jpg"
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
@@ -94,8 +95,7 @@ func _apply_static_text() -> void:
 	_style_title_screen()
 
 
-## 標題畫面美術化（夜間 UI 輪 2026-07-08）：戰鬥背景＋暗角、Logo 取代文字標題、
-## 緞帶紀錄、樣式化開始鈕。全程式生成不動 .tscn；素材缺檔逐項退回原樣（D-004）。
+## 任務 23：設計師 banner 直接作標題背景；缺檔才退回原戰鬥背景＋文字 Logo（D-004）。
 func _style_title_screen() -> void:
 	var background := _title_background_texture()
 	if background != null:
@@ -108,10 +108,10 @@ func _style_title_screen() -> void:
 		bg_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
 		bg_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		backdrop.add_child(bg_rect)
-		# 暗角壓一層，讓中央文字/按鈕在花背景上仍可讀
+		# 輕壓底部，讓疊放的紀錄與互動鈕在插畫上仍可讀。
 		var vignette := ColorRect.new()
 		vignette.name = "TitleVignette"
-		vignette.color = Color(0.05, 0.08, 0.16, 0.30)
+		vignette.color = Color(0.05, 0.08, 0.16, 0.12)
 		vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
 		vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		backdrop.add_child(vignette)
@@ -119,12 +119,15 @@ func _style_title_screen() -> void:
 	var layout := title_label.get_parent() as VBoxContainer
 	if layout != null:
 		layout.alignment = BoxContainer.ALIGNMENT_CENTER
-		layout.add_theme_constant_override("separation", 30)
-		layout.offset_top = -380.0
-		layout.offset_bottom = 380.0
+		layout.add_theme_constant_override("separation", 18)
+		layout.offset_top = 430.0
+		layout.offset_bottom = 810.0
 
 	var logo_texture: Texture2D = UiSkin.art_texture("logo")
-	if logo_texture != null and layout != null:
+	var banner_in_use := ResourceLoader.exists(TITLE_BANNER_PATH, "Texture2D")
+	if banner_in_use:
+		title_label.visible = false
+	elif logo_texture != null and layout != null:
 		var logo_rect := TextureRect.new()
 		logo_rect.name = "TitleLogo"
 		logo_rect.texture = logo_texture
@@ -146,6 +149,8 @@ func _style_title_screen() -> void:
 
 
 func _title_background_texture() -> Texture2D:
+	if ResourceLoader.exists(TITLE_BANNER_PATH, "Texture2D"):
+		return load(TITLE_BANNER_PATH) as Texture2D
 	var background_config := Data.background_zones_config()
 	var background_id := str(background_config.get("default_background_id", ""))
 	if background_id.is_empty():
@@ -380,6 +385,7 @@ func _update_view() -> void:
 	var state_name := state_machine.state_name()
 	title_screen.visible = state_machine.is_title()
 	vertical_ui.visible = not state_machine.is_title()
+	battle_presenter.set_settlement_presentation(state_machine.is_settle())
 	_update_auth_ui()
 	vertical_ui.update_snapshot(_ui_snapshot(state_name))
 	_update_best_record_text()

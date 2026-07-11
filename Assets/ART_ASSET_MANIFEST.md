@@ -63,6 +63,7 @@
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | game_logo | logo.png | Assets/final/ | optional | PNG32 | yes | n/a | 標題 Logo（標題畫面大圖＋遊戲中右上角） | TitleScreen / VerticalUi TopBar | 文字標題 | imported | 美術 | 實際交付檔名 logo.png（Meow 準快跑！） |
+| title_banner | title_banner.jpg | Assets/final/ | optional | JPG | no | n/a | 任務 23 標題畫面滿版背景（設計師交付） | TitleScreen | background_battle_001＋文字標題 | imported | 設計師 | 1080×1920；圖上已含遊戲 Logo |
 | ui_panel_style_reference | ui_panel_style_reference.png | Assets/final/ | optional | PNG32 | yes | n/a | UI 風格參考 | （參考用） | 內建樣式 | planned | 美術 | 非必接入 |
 
 ### mockup 整圖素材（對齊 ui_mockup_battle，UiSkin art_texture/apply_art_button 載入）

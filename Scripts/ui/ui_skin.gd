@@ -181,10 +181,14 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 			_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
 			panel.add_theme_stylebox_override("panel", large)
 		"settle":
-			# ui_target_*_settle：奶油底 + 粗粉紅描邊圓角看板
-			var settle := _sticker_box(CREAM, 44, 10, Color(0.937, 0.42, 0.56, 1.0), Color(0.78, 0.2, 0.36, 0.28))
+			# result.jpg：奶油底 + 深藍粗描邊中央結果卡。
+			var settle := _sticker_box(CREAM, 44, 10, DEEP_NAVY, Color(0.78, 0.2, 0.36, 0.28))
 			_set_content_margins(settle, 40.0, 6.0, 40.0, 8.0)
 			panel.add_theme_stylebox_override("panel", settle)
+		"decision":
+			var decision := _sticker_box(CREAM, 30, 8, CHIP_PINK, Color(0.78, 0.2, 0.36, 0.24))
+			_set_content_margins(decision, 28.0, 16.0, 28.0, 16.0)
+			panel.add_theme_stylebox_override("panel", decision)
 		"stat_card":
 			# 結算統計小卡：淡粉細框（近似 target 的細框/虛線框）
 			var stat := _flat_box(Color(1.0, 0.98, 0.94, 1.0), 20, 3, Color(0.9, 0.66, 0.72, 1.0))
@@ -620,16 +624,7 @@ static func _load_texture(path: String) -> Texture2D:
 		var imported := load(path) as Texture2D
 		if imported != null:
 			return imported
-
-	if not FileAccess.file_exists(path):
-		return null
-
-	var image := Image.new()
-	var error := image.load(path)
-	if error != OK:
-		push_warning("UiSkin could not load PNG texture: %s" % path)
-		return null
-	return ImageTexture.create_from_image(image)
+	return null
 
 
 static func _set_content_margins(style: StyleBox, left: float, top: float, right: float, bottom: float) -> void:

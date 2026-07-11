@@ -46,6 +46,7 @@
 	"settle_cashout_fomo": "若再過一關，可得 {next_payout}…",
 	"settle_defeat_fomo": "上一關落袋，本可帶走 {payout}…",
 	"settle_play_again": "再來一局",
+	"settle_result_title": "結果",
 
 	"win_banner_title": "恭賀贏得",
 	"win_banner_continue": "點擊任意處繼續",

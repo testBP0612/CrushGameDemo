@@ -51,14 +51,19 @@ var _rank_step := ""
 var _lb_button_style := ""
 # D-019 FOMO 事後揭示行（撤退：若再過一關可得…／戰敗：上一關落袋…）。程式生成，不動 .tscn。
 var _fomo_label: RichTextLabel
+var _outcome_label: Label
 
 
 func _ready() -> void:
 	_build_fomo_label()
+	_build_outcome_label()
 	# D-019 微調（2026-07-08 人類指示）：FOMO 行加入後內容變高，看板上緣上移擴容、
 	# 下緣抬高留邊（原 tscn 60/588 → 12/566，免貼底）；統計 icon 放大 1.2 倍。
-	panel.offset_top = 12.0
-	panel.offset_bottom = 566.0
+	# ActionArea 的全域起點是 y=1300；負 offset 把結果卡移到 result.jpg 的中央區。
+	panel.offset_left = 120.0
+	panel.offset_right = 864.0
+	panel.offset_top = -720.0
+	panel.offset_bottom = 18.0
 	for stat_icon: TextureRect in [depth_icon, beaten_icon, best_icon, rank_icon, record_icon]:
 		stat_icon.custom_minimum_size = Vector2(65, 65)
 	UiSkin.apply_panel(panel, "settle")
@@ -66,7 +71,8 @@ func _ready() -> void:
 	play_again_button.text = Data.text("settle_play_again")
 	leaderboard_button.text = Data.text("lb_view_entry")
 	UiSkin.apply_button(play_again_button, "settle_primary")
-	UiSkin.apply_settle_title(title_label)
+	title_label.text = Data.text("settle_result_title")
+	UiSkin.apply_ribbon_label(title_label)
 	body_label.add_theme_color_override("default_color", Color(0.24, 0.19, 0.23, 1.0))
 	for paw: TextureRect in [paw_left, paw_right]:
 		UiSkin.apply_icon(paw, "paw")
@@ -109,17 +115,17 @@ func update_snapshot(snapshot: Dictionary) -> void:
 
 	match state_name:
 		"CASH_OUT_SETTLE":
-			title_label.text = Data.text("settle_cashout_title")
+			_outcome_label.text = Data.text("settle_cashout_title")
 			_set_body(Data.text("settle_cashout_body", {
 				"payout": _accent(int(snapshot.get("current_payout", 0)))
 			}))
 		"DEFEAT_SETTLE":
-			title_label.text = Data.text("settle_defeat_title")
+			_outcome_label.text = Data.text("settle_defeat_title")
 			_set_body(Data.text("settle_defeat_body", {
 				"bet": _accent(int(snapshot.get("bet", 0)))
 			}))
 		"CLEAR_SETTLE":
-			title_label.text = Data.text("settle_clear_title")
+			_outcome_label.text = Data.text("settle_clear_title")
 			_set_body(Data.text("settle_clear_body", {
 				"payout": _accent(int(snapshot.get("current_payout", 0)))
 			}))
@@ -147,6 +153,17 @@ func _build_fomo_label() -> void:
 	var layout := body_label.get_parent()
 	layout.add_child(_fomo_label)
 	layout.move_child(_fomo_label, body_label.get_index() + 1)
+
+
+func _build_outcome_label() -> void:
+	_outcome_label = Label.new()
+	_outcome_label.name = "OutcomeLabel"
+	_outcome_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_outcome_label.add_theme_font_size_override("font_size", 46)
+	UiSkin.apply_hud_card_text(_outcome_label, "board_value_pink")
+	var layout := body_label.get_parent()
+	layout.add_child(_outcome_label)
+	layout.move_child(_outcome_label, body_label.get_index())
 
 
 ## D-019 FOMO 行：撤退＝下一關若過可得多少；戰敗＝上一關收手可帶走多少。

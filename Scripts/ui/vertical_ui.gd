@@ -17,6 +17,7 @@ signal balance_reset_requested
 @onready var hud: Hud = $Hud
 @onready var top_bar: Control = $TopBar
 @onready var profile_frame: PanelContainer = $TopBar/ProfileFrame
+@onready var profile_avatar_icon: TextureRect = $TopBar/ProfileFrame/ProfileContent/ProfileAvatarIcon
 @onready var profile_cloud_icon: TextureRect = $TopBar/ProfileFrame/ProfileContent/ProfileCloudIcon
 @onready var profile_label: Label = $TopBar/ProfileFrame/ProfileContent/ProfileLabel
 @onready var logo_label: Label = $TopBar/LogoLabel
@@ -40,6 +41,7 @@ var _last_snapshot := {}
 
 func _ready() -> void:
 	UiSkin.apply_panel(profile_frame, "card")
+	UiSkin.apply_icon(profile_avatar_icon, "paw")
 	UiSkin.apply_icon(profile_cloud_icon, "cloud")
 	UiSkin.apply_light_panel_label(profile_label)
 	logo_label.text = Data.text("title_game_name")
@@ -65,7 +67,8 @@ func _ready() -> void:
 func update_snapshot(snapshot: Dictionary) -> void:
 	_last_snapshot = snapshot
 	var state_name := str(snapshot.get("state_name", ""))
-	var show_game_ui := state_name != "TITLE"
+	# result.jpg：結算時只留街景與中央結果卡，上方 HUD/角色由呈現層暫時隱藏。
+	var show_game_ui := state_name != "TITLE" and not bool(snapshot.get("is_settle", false))
 	_set_visible_with_entrance("top_bar", top_bar, show_game_ui)
 	_set_visible_with_entrance("hud", hud, show_game_ui, hud.entrance_targets())
 	hud.update_snapshot(snapshot)
