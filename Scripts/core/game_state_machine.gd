@@ -56,7 +56,9 @@ var next_stage_multiplier := 0.0
 var next_stage_payout := 0
 var last_result := ""
 var active_monster_stage := 1
-var bonus_total := 0
+# D-022 修訂：虎爺獎勵＝本局收益倍率整體翻倍（乘進 current/next multiplier，
+# 顯示與計算同源），延續到結算；一局多次觸發則疊乘。
+var huye_payout_factor := 1.0
 var active_huye_rescue := false
 var last_huye_bonus := 0
 
@@ -166,10 +168,13 @@ func finish_huye_rescue() -> void:
 	if state != State.HUYE_RESCUE:
 		return
 	reveal_huye_result()
-	last_huye_bonus = _stage_increment(stage + 1)
-	bonus_total += last_huye_bonus
+	var factor := maxf(float(Data.huye_event_config().get("payout_factor", 2.0)), 1.0)
 	stage += 1
+	var payout_before_double := _payout_calculator.current_payout(
+		bet, run_multiplier_at(stage) * huye_payout_factor)
+	huye_payout_factor *= factor
 	_update_payout()
+	last_huye_bonus = current_payout - payout_before_double
 	event_bus.huye_triggered.emit(stage, last_huye_bonus)
 	event_bus.stage_advanced.emit(stage, current_multiplier, current_payout)
 	active_huye_rescue = false
@@ -256,12 +261,6 @@ func can_advance() -> bool:
 	return state == State.REWARD_DECISION and stage < max_stage()
 
 
-func pending_huye_bonus() -> int:
-	if not active_huye_rescue:
-		return 0
-	return _stage_increment(stage + 1)
-
-
 ## 任務 24 debug：一次性強制旗標，只在下一次 CHALLENGE_START 消耗。
 func force_huye_next_challenge() -> void:
 	_force_huye_next_challenge = true
@@ -336,7 +335,7 @@ func _set_state(next_state: State) -> void:
 func _enter_betting() -> void:
 	stage = 0
 	_run_multiplier_table.clear()
-	bonus_total = 0
+	huye_payout_factor = 1.0
 	active_huye_rescue = false
 	last_huye_bonus = 0
 	_huye_result_revealed = false
@@ -434,27 +433,14 @@ func _roll_run_multiplier_table() -> void:
 
 
 func _update_payout() -> void:
-	current_multiplier = run_multiplier_at(stage)
-	current_payout = _payout_at(stage)
+	current_multiplier = run_multiplier_at(stage) * huye_payout_factor
+	current_payout = _payout_calculator.current_payout(bet, current_multiplier)
 	if stage < max_stage():
-		next_stage_multiplier = run_multiplier_at(stage + 1)
-		next_stage_payout = _payout_at(stage + 1)
+		next_stage_multiplier = run_multiplier_at(stage + 1) * huye_payout_factor
+		next_stage_payout = _payout_calculator.current_payout(bet, next_stage_multiplier)
 	else:
 		next_stage_multiplier = 0.0
 		next_stage_payout = 0
-
-
-func _base_payout_at(stage_index: int) -> int:
-	return _payout_calculator.current_payout(bet, run_multiplier_at(stage_index))
-
-
-func _payout_at(stage_index: int) -> int:
-	return _base_payout_at(stage_index) + bonus_total
-
-
-func _stage_increment(stage_index: int) -> int:
-	var previous := 0 if stage_index <= 1 else _base_payout_at(stage_index - 1)
-	return maxi(0, _base_payout_at(stage_index) - previous)
 
 
 func _roll_huye_event() -> void:
@@ -466,7 +452,7 @@ func _roll_huye_event() -> void:
 	var config := Data.huye_event_config()
 	if not bool(config.get("enabled", false)):
 		return
-	if str(config.get("reward_mode", "")) != "stage_increment_x2":
+	if str(config.get("reward_mode", "")) != "run_payout_x2":
 		push_error("Unsupported Huye reward_mode; event disabled for this challenge.")
 		return
 	active_huye_rescue = one_shot_force or bool(config.get("force_trigger", false)) or _huye_rng.randf() < clampf(float(config.get("trigger_probability", 0.0)), 0.0, 1.0)

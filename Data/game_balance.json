@@ -38,11 +38,12 @@
   },
   "random_events": {
     "huye": {
-      "_comment": "D-022 虎爺救援事件。每次挑戰用獨立 RNG 擲骰；觸發時跳過勝負骰、強制逆轉勝，並把該關收益增額額外加一份保留至結算。force_trigger 僅供展示/錄影。",
+      "_comment": "D-022（2026-07-11 修訂）虎爺救援事件。每次挑戰用獨立 RNG 擲骰；觸發時跳過勝負骰、強制逆轉勝，並把本局收益倍率整體乘上 payout_factor（顯示與計算同源），延續到結算；多次觸發疊乘。force_trigger 僅供展示/錄影。",
       "enabled": true,
       "trigger_probability": 0.05,
       "force_trigger": false,
-      "reward_mode": "stage_increment_x2"
+      "reward_mode": "run_payout_x2",
+      "payout_factor": 2.0
     }
   },
   "danger_display": {

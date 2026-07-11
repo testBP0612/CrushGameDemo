@@ -26,10 +26,15 @@
    **劇透陷阱**：現況 `finish_attack` 會立即 `result_resolved.emit(is_win)`；虎爺局
    若照發 true，任何對勝利即時反應的監聽者（訊息、UI）都會在逆轉演出前洩底。
    虎爺局的勝負廣播須延後到虎爺現身之後（或改道），「玩家先相信自己輸了」是硬需求。
-3. **該關增額翻倍**：設觸發於第 k 關，`bonus = payout(k) − payout(k−1)`
+3. **該關增額翻倍**：~~設觸發於第 k 關，`bonus = payout(k) − payout(k−1)`
    （k 為本局第一關時前值取 0）。此後
    `current_payout = floor(bet × run_multiplier_at(stage)) + bonus_total`，
-   bonus 為固定加項，保留到撤退/通關結算；戰死照樣全失。一局可多次觸發，累加。
+   bonus 為固定加項，保留到撤退/通關結算；戰死照樣全失。一局可多次觸發，累加。~~
+   **【2026-07-11 D-022 修訂，取代上文】本局收益翻倍**：觸發時
+   `huye_payout_factor ×= payout_factor`（json，預設 2.0），乘進
+   current/next multiplier（顯示與計算同源），
+   `current_payout = floor(bet × run_multiplier × factor)` 延續到結算；
+   多次觸發疊乘；戰死照樣全失。`reward_mode = "run_payout_x2"`。
 4. **收益同源原則（更新版）**：`_update_payout()`（`game_state_machine.gd:384-392`）
    仍是唯一計算點；所有預測值（`next_stage_payout`、決策畫面「過關可得」、
    結算 FOMO 行）一律含 bonus、走同一計算路徑，禁止 UI 各自加。

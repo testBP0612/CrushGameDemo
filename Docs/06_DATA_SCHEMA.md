@@ -35,7 +35,8 @@
 | `random_events.huye.enabled` | bool | D-022 虎爺救援事件總開關；false 時不擲骰、不改原流程。 |
 | `random_events.huye.trigger_probability` | float | 每次發起挑戰的獨立觸發機率。 |
 | `random_events.huye.force_trigger` | bool | 展示/錄影用 debug 開關；true 時每關觸發。 |
-| `random_events.huye.reward_mode` | string | 本卡固定 `stage_increment_x2`：該關 base payout 增額額外加一份，固定保留至本局結算。 |
+| `random_events.huye.reward_mode` | string | D-022 修訂後固定 `run_payout_x2`：本局收益倍率整體乘上 `payout_factor`，延續至結算，多次觸發疊乘。 |
+| `random_events.huye.payout_factor` | float | 觸發時乘進本局倍率的係數（預設 2.0，即收益翻倍）。 |
 
 ## monsters.json
 | 路徑 | 型別 | 說明 |

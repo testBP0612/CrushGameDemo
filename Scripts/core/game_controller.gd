@@ -475,7 +475,7 @@ func _ui_snapshot(state_name: String) -> Dictionary:
 		"current_payout": state_machine.current_payout,
 		"next_stage_multiplier": state_machine.next_stage_multiplier,
 		"next_stage_payout": state_machine.next_stage_payout,
-		"bonus_total": state_machine.bonus_total,
+		"huye_payout_factor": state_machine.huye_payout_factor,
 		"has_next_stage": state_machine.stage < state_machine.max_stage(),
 		"min_bet": int(balance_config.get("min_bet", 0)),
 		"max_bet": int(balance_config.get("max_bet", 0)),
