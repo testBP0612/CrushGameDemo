@@ -63,6 +63,15 @@
 - [ ] 直式比例正確、按鈕可點。
 - [ ] 重整後 local 餘額/紀錄保留。
 
+## 里程碑 — 任務 24（遇見虎爺救援事件；Codex）
+- [x] `force_trigger=true` 完整演出：連擊→反擊慢動作→虎爺壓下→怪物左上旋轉縮小飛出→插頁與對話→爆金幣→決策。
+- [x] 虎爺命中前不廣播勝利、不洩底；命中後強制勝且不消耗原勝負骰。
+- [x] 收益驗證：觸發關增額 x2、後續保留固定 bonus、預測/決策/FOMO/結算同源、戰死歸零。
+- [x] 專屬 RNG 機率統計近 `trigger_probability`；`enabled=false` 回歸原流程。
+- [x] 後續關怪物 position/rotation/scale/visible/modulate 無殘留；缺 `huye.png` 時 fallback 不崩。
+- [x] Godot 關鍵幀（慢動作/壓下/飛出/插頁）與後續怪物截圖已目視確認。
+- [x] H5 匯出實跑完整 force-trigger 演出；素材存在性使用 `ResourceLoader.exists()`。
+
 ## 里程碑 — 任務 11（音效接入，需 D-014 定案後執行）
 - [ ] BGM 開播且 loop；已映射 SFX 事件於對應時機發聲。
 - [ ] 檔名/音量/loop 皆讀 `Data/audio.json`，改參數重啟即生效。

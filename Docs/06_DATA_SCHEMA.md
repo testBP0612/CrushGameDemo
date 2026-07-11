@@ -32,6 +32,10 @@
 | `background_zones.default_background_id` | string | 預設背景（如 BETTING/未涵蓋關卡）。 |
 | `background_zones.fallback_background_id` | string | 某 zone 背景缺檔時優先退用的背景；仍缺則退漸層 placeholder。 |
 | `background_zones.zones[]` | array | `{ from_stage:int, to_stage:int, background_id:string }`，依「即將挑戰的關卡」選背景。可擴充更多 zone。 |
+| `random_events.huye.enabled` | bool | D-022 虎爺救援事件總開關；false 時不擲骰、不改原流程。 |
+| `random_events.huye.trigger_probability` | float | 每次發起挑戰的獨立觸發機率。 |
+| `random_events.huye.force_trigger` | bool | 展示/錄影用 debug 開關；true 時每關觸發。 |
+| `random_events.huye.reward_mode` | string | 本卡固定 `stage_increment_x2`：該關 base payout 增額額外加一份，固定保留至本局結算。 |
 
 ## monsters.json
 | 路徑 | 型別 | 說明 |
@@ -69,6 +73,7 @@
 | `ui.*` | float(s) | UI 動效時間。 |
 | `effects.coin_burst.*` | 混合 | 任務 19 爆金幣參數：`count_base:int` + `count_per_multiplier:float`（金幣數 = base + 該次擊殺後倍率 × 此值）、`count_max:int`（上限）、噴發/滯空/吸入各時長與物理值（`burst_duration`/`launch_speed`/`spread_degrees`/`gravity`/`hover_time`/`fly_duration`/`fly_stagger`/`spawn_stagger`/`scale_min~max`/`arrive_fade`，float）、`canvas_layer:int`、`max_hold:float(s)`（跳數暫扣保底，時間到數字照跳）。 |
 | `effects.win_banner.*` | float(s/px) | 任務 22 大贏插頁參數：`appear` / `count_up` / `min_show` / `auto_dismiss` / `fade_out` 為秒，`digit_height` 為貼紙數字顯示高度(px)。 |
+| `effects.huye_event.*` | float(s/ratio/px) | 任務 24 虎爺逆轉演出：反擊剎車比例/慢速倍率、暗場、虎爺落下、怪物飛出、插頁顯示與自動關閉等參數。 |
 
 ## ui_text.json
 | 路徑 | 型別 | 說明 |
@@ -77,6 +82,7 @@
 | `text.<key>` | string | 文案；`{x}` 為執行期變數。Codex 以 key 取值。 |
 | `text.bet_reset_balance` | string | 餘額低於 `min_bet` 時的一鍵重置按鈕文案（D-007）。 |
 | `text.profile_mock_display_name` | string | MVP mock profile 顯示名稱。 |
+| `text.huye_fallback_label` / `text.huye_banner_continue` | string | 任務 24 虎爺本體缺圖 fallback 文字，以及事件 banner 的繼續提示；其餘資訊已烤在 `huye_event_banner.png`。 |
 
 > 缺 key 時的 fallback：建議回傳 `[key]` 字串以利除錯，並寫入 `OPEN_QUESTIONS.md`。
 

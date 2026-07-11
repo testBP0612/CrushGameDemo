@@ -36,6 +36,15 @@
     "min_growth_ratio": 1.15,
     "round_decimals": 2
   },
+  "random_events": {
+    "huye": {
+      "_comment": "D-022 虎爺救援事件。每次挑戰用獨立 RNG 擲骰；觸發時跳過勝負骰、強制逆轉勝，並把該關收益增額額外加一份保留至結算。force_trigger 僅供展示/錄影。",
+      "enabled": true,
+      "trigger_probability": 0.05,
+      "force_trigger": false,
+      "reward_mode": "stage_increment_x2"
+    }
+  },
   "danger_display": {
     "_comment": "D-019 危險度分級（取代血條）。依即將挑戰關卡的 success_rate 由上往下取第一個符合（success_rate ≥ min_success_rate）的等級。",
     "max_level": 5,

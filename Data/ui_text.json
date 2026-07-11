@@ -51,6 +51,9 @@
 	"win_banner_title": "恭賀贏得",
 	"win_banner_continue": "點擊任意處繼續",
 
+	"huye_fallback_label": "虎爺",
+	"huye_banner_continue": "按任意鍵繼續",
+
 	"best_record": "最佳紀錄 {payout}",
 
 	"lb_button": "玩家排行",

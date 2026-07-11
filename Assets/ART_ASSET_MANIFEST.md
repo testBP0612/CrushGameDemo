@@ -134,9 +134,8 @@
 
 | asset_id | file_name | target_path | required | transparent | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|
-| huye | huye.png | Assets/final/ | required（事件用） | yes | Codex 生成暫代→程式金色圓placeholder | planned | 設計師 | 虎爺本體貼紙，PNG32，建議 700–900px 見方（需壓得住 ~480px 怪物），居高臨下壓下或盤坐雲上，流浪貓街頭 cartoon 家族；Codex 先以生成貼紙暫代（status 標 generated），設計師覆蓋同檔名後改 final |
-| huye_bubble | huye_bubble.png | Assets/final/ui/ | optional | yes | 程式奶油圓角框 | planned | 設計師 | 對話框底圖，**不含文字**（台詞由 ui_text.json 程式疊字） |
-| huye_title | huye_title.png | Assets/final/ui/ | optional | yes | 程式 ribbon 標題 | planned | 設計師 | 「遇見虎爺」彩字大標貼紙，**不含金額數字** |
+| huye | huye.png | Assets/final/ | required（事件用） | yes | Codex 生成暫代→程式金色圓placeholder | generated | 設計師 | 虎爺本體貼紙，PNG32，建議 700–900px 見方（需壓得住 ~480px 怪物），居高臨下壓下或盤坐雲上，流浪貓街頭 cartoon 家族；Codex 先以生成貼紙暫代（status 標 generated），設計師覆蓋同檔名後改 final |
+| huye_event_banner | huye_event_banner.png | Assets/final/ | required（事件插頁） | no | 僅顯示繼續提示 | imported | 設計師 | 任務 24 完整事件 banner；程式滿版寬、依原圖比例顯示並垂直置中，取代舊程式組字插頁 |
 
 ---
 

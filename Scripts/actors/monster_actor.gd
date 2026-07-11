@@ -91,6 +91,52 @@ func play_counter(target_position: Vector2) -> Signal:
 	return tween.finished
 
 
+## D-022：只放慢怪物自身 tween，不改 Engine.time_scale。停在主角前等虎爺落下。
+func play_huye_counter_slow(target_position: Vector2, config: Dictionary) -> Signal:
+	_kill_idle()
+	var normal_duration := _lose_branch_duration("monster_counter_duration")
+	var brake_fraction := clampf(float(config.get("counter_brake_fraction", 0.0)), 0.0, 1.0)
+	var slow_rate := maxf(float(config.get("slow_motion_rate", 0.0)), 0.01)
+	var strike_position := _home_position.lerp(target_position, 0.35)
+	var brake_position := _home_position.lerp(strike_position, brake_fraction)
+	var tween := create_tween()
+	# 虎爺在接近碰撞的位置直接介入，不再等怪物走完整段慢動作路徑。
+	tween.tween_property(self, "position", brake_position, normal_duration / slow_rate)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(float(config.get("slow_hold", 0.0)))
+	return tween.finished
+
+
+func play_huye_fly_out(config: Dictionary) -> Signal:
+	_kill_idle()
+	var duration := float(config.get("monster_fly_duration", 0.0))
+	var target := Vector2(
+		float(config.get("monster_fly_target_x", position.x)),
+		float(config.get("monster_fly_target_y", position.y))
+	)
+	var turns := float(config.get("monster_fly_rotation_turns", 0.0))
+	var end_scale := maxf(float(config.get("monster_fly_end_scale", 0.0)), 0.0)
+	var tween := create_tween()
+	tween.tween_property(self, "position", target, duration).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(self, "rotation", TAU * turns, duration)
+	tween.parallel().tween_property(self, "scale", Vector2.ONE * end_scale, duration)
+	tween.parallel().tween_property(self, "modulate:a", 0.0, duration)
+	tween.tween_callback(func() -> void: visible = false)
+	return tween.finished
+
+
+func reset_after_huye() -> void:
+	_kill_idle()
+	position = _home_position
+	rotation = 0.0
+	scale = Vector2.ONE
+	modulate = Color.WHITE
+	visible = true
+	if _idle_sprite != null:
+		_idle_sprite.modulate = Color.WHITE
+	play_idle()
+
+
 func play_enter() -> Signal:
 	_kill_idle()
 	var duration := _advance_duration("next_monster_enter_duration")

@@ -56,6 +56,34 @@
       "auto_dismiss": 6.0,
       "fade_out": 0.20,
       "digit_height": 150.0
+    },
+    "huye_event": {
+      "counter_brake_fraction": 0.82,
+      "slow_motion_rate": 0.65,
+      "slow_hold": 0.0,
+      "dimmer_fade": 0.16,
+      "dimmer_alpha": 0.58,
+      "huye_drop_duration": 0.12,
+      "huye_start_y": -520.0,
+      "huye_impact_offset_y": -170.0,
+      "huye_display_width": 610.0,
+      "impact_hold": 0.16,
+      "impact_shake_duration": 0.42,
+      "impact_shake_strength": 30.0,
+      "monster_fly_duration": 0.62,
+      "monster_fly_target_x": -360.0,
+      "monster_fly_target_y": 220.0,
+      "monster_fly_rotation_turns": -1.35,
+      "monster_fly_end_scale": 0.12,
+      "pre_banner_delay": 1.00,
+      "banner_appear": 0.24,
+      "banner_min_show": 1.10,
+      "banner_auto_dismiss": 0.0,
+      "banner_fade_out": 0.20,
+      "banner_hint_gap": 18.0,
+      "banner_hint_height": 64.0,
+      "banner_hint_font_size": 30,
+      "banner_hint_outline_size": 5
     }
   }
 }

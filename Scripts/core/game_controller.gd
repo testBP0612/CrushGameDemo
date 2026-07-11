@@ -9,6 +9,7 @@ const AudioServiceScript := preload("res://Scripts/services/audio_service.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const CoinBurstScript := preload("res://Scripts/effects/coin_burst.gd")
 const WinBannerScript := preload("res://Scripts/effects/win_banner.gd")
+const HuyeBannerScript := preload("res://Scripts/effects/huye_banner.gd")
 const TITLE_BANNER_PATH := "res://Assets/final/title_banner.jpg"
 
 @onready var title_screen: Control = $UILayer/TitleScreen
@@ -31,6 +32,7 @@ var _run_deepest_stage := 0
 var _defeat_payout_before_loss := 0
 var _last_settlement_payout := 0
 var _active_win_banner: WinBanner
+var _active_huye_banner: HuyeBanner
 
 
 func _ready() -> void:
@@ -51,6 +53,13 @@ func _ready() -> void:
 		return
 
 	_update_view()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F4:
+		state_machine.force_huye_next_challenge()
+		print("DEBUG: F4 armed Huye rescue for the next challenge.")
+		get_viewport().set_input_as_handled()
 
 
 func _connect_events() -> void:
@@ -84,6 +93,8 @@ func _connect_battle_presenter() -> void:
 	battle_presenter.monster_counter_finished.connect(_on_monster_counter_finished)
 	battle_presenter.player_hurt_finished.connect(_on_player_hurt_finished)
 	battle_presenter.hit_landed.connect(_on_hit_landed)
+	battle_presenter.huye_impact.connect(_on_huye_impact)
+	battle_presenter.huye_rescue_visual_finished.connect(_on_huye_rescue_visual_finished)
 
 
 func _apply_static_text() -> void:
@@ -229,6 +240,7 @@ func _on_state_changed(state_name: String) -> void:
 	if state_name == "BETTING":
 		_reset_run_stats()
 		_clear_active_win_banner()
+		_clear_active_huye_banner()
 	elif state_name == "BATTLE_ATTACK":
 		_run_deepest_stage = maxi(_run_deepest_stage, state_machine.active_monster_stage)
 	_try_apply_cloud_balance()
@@ -303,6 +315,46 @@ func _on_player_hurt_finished() -> void:
 	state_machine.finish_player_hurt()
 
 
+func _on_huye_impact() -> void:
+	audio_service.play_sfx("sfx_huye_appear")
+	state_machine.reveal_huye_result()
+
+
+func _on_huye_rescue_visual_finished() -> void:
+	var banner := HuyeBannerScript.new()
+	_active_huye_banner = banner
+	add_child(banner)
+	banner.dismissed.connect(_on_huye_banner_dismissed)
+	if not banner.play():
+		_active_huye_banner = null
+		_start_huye_coin_burst()
+
+
+func _on_huye_banner_dismissed() -> void:
+	_active_huye_banner = null
+	_start_huye_coin_burst()
+
+
+func _start_huye_coin_burst() -> void:
+	var burst := CoinBurstScript.new()
+	add_child(burst)
+	vertical_ui.hold_payout_count_up(burst.max_hold())
+	var completed := func() -> void:
+		if vertical_ui != null and is_instance_valid(vertical_ui):
+			vertical_ui.release_payout_count_up()
+		state_machine.finish_huye_rescue()
+	var started: bool = burst.play(
+		battle_presenter.huye_coin_origin(),
+		vertical_ui.payout_anchor_canvas_position(),
+		state_machine.run_multiplier_at(state_machine.stage + 1),
+		completed
+	)
+	if not started:
+		if burst != null and is_instance_valid(burst):
+			burst.queue_free()
+		completed.call()
+
+
 func _play_presentation_for_state(state_name: String) -> void:
 	match state_name:
 		"BETTING":
@@ -319,6 +371,8 @@ func _play_presentation_for_state(state_name: String) -> void:
 			battle_presenter.play_transition(state_machine.stage_to_challenge())
 		"MONSTER_COUNTER":
 			battle_presenter.play_monster_counter()
+		"HUYE_RESCUE":
+			battle_presenter.play_huye_rescue()
 		"PLAYER_HURT":
 			battle_presenter.play_player_hurt()
 
@@ -378,6 +432,14 @@ func _clear_active_win_banner() -> void:
 	_active_win_banner = null
 
 
+func _clear_active_huye_banner() -> void:
+	if _active_huye_banner == null:
+		return
+	if is_instance_valid(_active_huye_banner):
+		_active_huye_banner.queue_free()
+	_active_huye_banner = null
+
+
 func _update_view() -> void:
 	if not is_node_ready():
 		return
@@ -413,6 +475,7 @@ func _ui_snapshot(state_name: String) -> Dictionary:
 		"current_payout": state_machine.current_payout,
 		"next_stage_multiplier": state_machine.next_stage_multiplier,
 		"next_stage_payout": state_machine.next_stage_payout,
+		"bonus_total": state_machine.bonus_total,
 		"has_next_stage": state_machine.stage < state_machine.max_stage(),
 		"min_bet": int(balance_config.get("min_bet", 0)),
 		"max_bet": int(balance_config.get("max_bet", 0)),

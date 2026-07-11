@@ -10,6 +10,7 @@ enum State {
 	BETTING,
 	CHALLENGE_START,
 	BATTLE_ATTACK,
+	HUYE_RESCUE,
 	MONSTER_HURT,
 	MONSTER_DEATH,
 	REWARD_DECISION,
@@ -28,6 +29,7 @@ const STATE_NAMES := {
 	State.BETTING: "BETTING",
 	State.CHALLENGE_START: "CHALLENGE_START",
 	State.BATTLE_ATTACK: "BATTLE_ATTACK",
+	State.HUYE_RESCUE: "HUYE_RESCUE",
 	State.MONSTER_HURT: "MONSTER_HURT",
 	State.MONSTER_DEATH: "MONSTER_DEATH",
 	State.REWARD_DECISION: "REWARD_DECISION",
@@ -54,6 +56,9 @@ var next_stage_multiplier := 0.0
 var next_stage_payout := 0
 var last_result := ""
 var active_monster_stage := 1
+var bonus_total := 0
+var active_huye_rescue := false
+var last_huye_bonus := 0
 
 var _payout_calculator := PayoutCalculatorScript.new()
 var _risk_resolver := RiskResolverScript.new()
@@ -63,6 +68,9 @@ var _settled_this_round := false
 # 專用 RNG 與 risk_resolver 的全域隨機流分離，倍率抖動不影響成功率擲骰序列。
 var _run_multiplier_table: Array[float] = []
 var _rng := RandomNumberGenerator.new()
+var _huye_rng := RandomNumberGenerator.new()
+var _huye_result_revealed := false
+var _force_huye_next_challenge := false
 
 
 func setup(bus: EventBus, score) -> void:
@@ -70,6 +78,7 @@ func setup(bus: EventBus, score) -> void:
 	score_service = score
 	randomize()
 	_rng.randomize()
+	_huye_rng.randomize()
 
 
 func start() -> bool:
@@ -134,6 +143,9 @@ func finish_attack() -> void:
 
 	event_bus.attack_finished.emit()
 	var stage_to_challenge := stage + 1
+	if active_huye_rescue:
+		_set_state(State.HUYE_RESCUE)
+		return
 	var is_win := _risk_resolver.resolve(stage_to_challenge)
 	event_bus.result_resolved.emit(is_win)
 
@@ -141,6 +153,30 @@ func finish_attack() -> void:
 		_set_state(State.MONSTER_HURT)
 	else:
 		_set_state(State.MONSTER_COUNTER)
+
+
+func reveal_huye_result() -> void:
+	if state != State.HUYE_RESCUE or _huye_result_revealed:
+		return
+	_huye_result_revealed = true
+	event_bus.result_resolved.emit(true)
+
+
+func finish_huye_rescue() -> void:
+	if state != State.HUYE_RESCUE:
+		return
+	reveal_huye_result()
+	last_huye_bonus = _stage_increment(stage + 1)
+	bonus_total += last_huye_bonus
+	stage += 1
+	_update_payout()
+	event_bus.huye_triggered.emit(stage, last_huye_bonus)
+	event_bus.stage_advanced.emit(stage, current_multiplier, current_payout)
+	active_huye_rescue = false
+	if stage >= max_stage():
+		_set_state(State.CLEAR_SETTLE)
+	else:
+		_set_state(State.REWARD_DECISION)
 
 
 func finish_monster_hurt() -> void:
@@ -220,6 +256,17 @@ func can_advance() -> bool:
 	return state == State.REWARD_DECISION and stage < max_stage()
 
 
+func pending_huye_bonus() -> int:
+	if not active_huye_rescue:
+		return 0
+	return _stage_increment(stage + 1)
+
+
+## 任務 24 debug：一次性強制旗標，只在下一次 CHALLENGE_START 消耗。
+func force_huye_next_challenge() -> void:
+	_force_huye_next_challenge = true
+
+
 func is_title() -> bool:
 	return state == State.TITLE
 
@@ -289,6 +336,10 @@ func _set_state(next_state: State) -> void:
 func _enter_betting() -> void:
 	stage = 0
 	_run_multiplier_table.clear()
+	bonus_total = 0
+	active_huye_rescue = false
+	last_huye_bonus = 0
+	_huye_result_revealed = false
 	_bet_charged_this_round = false
 	_settled_this_round = false
 	_update_payout()
@@ -300,6 +351,7 @@ func _enter_challenge_start() -> void:
 	# 鎖定本回合挑戰的怪物（= 目前已擊敗數 + 1）；整個回合不隨 stage 增減而改變，
 	# 避免勝利訊息在 MONSTER_DEATH 增加 stage 後顯示成下一隻怪物的名字。
 	active_monster_stage = stage + 1
+	_roll_huye_event()
 
 	if _bet_charged_this_round:
 		return
@@ -383,13 +435,50 @@ func _roll_run_multiplier_table() -> void:
 
 func _update_payout() -> void:
 	current_multiplier = run_multiplier_at(stage)
-	current_payout = _payout_calculator.current_payout(bet, current_multiplier)
+	current_payout = _payout_at(stage)
 	if stage < max_stage():
 		next_stage_multiplier = run_multiplier_at(stage + 1)
-		next_stage_payout = _payout_calculator.current_payout(bet, next_stage_multiplier)
+		next_stage_payout = _payout_at(stage + 1)
 	else:
 		next_stage_multiplier = 0.0
 		next_stage_payout = 0
+
+
+func _base_payout_at(stage_index: int) -> int:
+	return _payout_calculator.current_payout(bet, run_multiplier_at(stage_index))
+
+
+func _payout_at(stage_index: int) -> int:
+	return _base_payout_at(stage_index) + bonus_total
+
+
+func _stage_increment(stage_index: int) -> int:
+	var previous := 0 if stage_index <= 1 else _base_payout_at(stage_index - 1)
+	return maxi(0, _base_payout_at(stage_index) - previous)
+
+
+func _roll_huye_event() -> void:
+	active_huye_rescue = false
+	last_huye_bonus = 0
+	_huye_result_revealed = false
+	var one_shot_force := _force_huye_next_challenge
+	_force_huye_next_challenge = false
+	var config := Data.huye_event_config()
+	if not bool(config.get("enabled", false)):
+		return
+	if str(config.get("reward_mode", "")) != "stage_increment_x2":
+		push_error("Unsupported Huye reward_mode; event disabled for this challenge.")
+		return
+	active_huye_rescue = one_shot_force or bool(config.get("force_trigger", false)) or _huye_rng.randf() < clampf(float(config.get("trigger_probability", 0.0)), 0.0, 1.0)
+
+
+func seed_huye_rng(seed_value: int) -> void:
+	_huye_rng.seed = seed_value
+
+
+func roll_huye_for_validation() -> bool:
+	_roll_huye_event()
+	return active_huye_rescue
 
 
 func _clamp_bet(value: int) -> int:

@@ -9,6 +9,8 @@ signal transition_finished
 signal monster_counter_finished
 signal player_hurt_finished
 signal hit_landed
+signal huye_impact
+signal huye_rescue_visual_finished
 
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
@@ -16,6 +18,7 @@ const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
 const BACKGROUND_ASSET_DIR := "res://Assets/final/"
 const BACKGROUND_ASSET_EXTENSIONS := [".jpg", ".jpeg", ".png"]
 const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
+const HUYE_ASSET_PATH := "res://Assets/final/huye.png"
 
 @onready var background_fallback: ColorRect = $Background
 @onready var background_image: TextureRect = $BackgroundImage
@@ -35,6 +38,8 @@ var _danger_icons: HBoxContainer
 # 受擊 punch：多段連擊時先殺前一個 tween 並歸位，避免縮放疊加
 var _punch_tween: Tween
 var _monster_base_scale := Vector2.ONE
+var _monster_hidden_after_huye := false
+var _huye_coin_origin := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -55,6 +60,10 @@ func show_monster_for_stage(stage_to_challenge: int, update_background := true) 
 
 	var name_key := str(_current_monster.get("name_key", ""))
 	monster_name_label.text = Data.text(name_key)
+	_monster_hidden_after_huye = false
+	# 虎爺局結束時 monster.visible=false；BETTING 的 _update_view 跑在本函式之前
+	# （當時旗標未清），這裡必須自行恢復，否則虎爺局撤退後的下注畫面怪物隱形。
+	monster.visible = true
 	monster.apply_monster(_current_monster)
 	_monster_base_scale = monster.scale
 	monster_hp_bar.max_value = float(_current_monster.get("display_hp", 0))
@@ -122,6 +131,10 @@ func monster_canvas_position() -> Vector2:
 	return monster.get_global_transform_with_canvas().origin
 
 
+func huye_coin_origin() -> Vector2:
+	return _huye_coin_origin
+
+
 func play_advance_walk() -> void:
 	await hero.play_walk()
 	advance_walk_finished.emit()
@@ -150,6 +163,96 @@ func play_monster_counter() -> void:
 	monster_counter_finished.emit()
 
 
+func play_huye_rescue() -> void:
+	var config: Dictionary = Data.animation_timing_config().get("effects", {}).get("huye_event", {})
+	if config.is_empty():
+		push_warning("Huye rescue skipped visual: missing animation_timing.effects.huye_event.")
+		huye_impact.emit()
+		huye_rescue_visual_finished.emit()
+		return
+
+	var dimmer := ColorRect.new()
+	dimmer.name = "HuyeDramaticDimmer"
+	dimmer.position = Vector2.ZERO
+	dimmer.size = BATTLE_CANVAS_SIZE
+	dimmer.color = Color(0.02, 0.025, 0.08, 0.0)
+	dimmer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(dimmer)
+	move_child(dimmer, monster.get_index())
+	var dim_tween := create_tween()
+	dim_tween.tween_property(dimmer, "color:a", float(config.get("dimmer_alpha", 0.0)), float(config.get("dimmer_fade", 0.0)))
+
+	await monster.play_huye_counter_slow(hero.global_position, config)
+	# 金幣應從螢幕內的命中位置噴出；不可沿用怪物飛出畫面的終點座標。
+	_huye_coin_origin = monster_canvas_position()
+	var huye := _create_huye_visual(config)
+	add_child(huye)
+	var impact_position := monster_canvas_position() + Vector2(0.0, float(config.get("huye_impact_offset_y", 0.0)))
+	huye.position = Vector2(impact_position.x, float(config.get("huye_start_y", 0.0)))
+	var drop := create_tween()
+	drop.tween_property(huye, "position", impact_position, float(config.get("huye_drop_duration", 0.0)))\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	await drop.finished
+	_play_huye_impact_feel(config)
+	huye_impact.emit()
+	await get_tree().create_timer(float(config.get("impact_hold", 0.0))).timeout
+	await monster.play_huye_fly_out(config)
+	monster.reset_after_huye()
+	_monster_hidden_after_huye = true
+	monster.visible = false
+	var fade := create_tween()
+	fade.tween_property(dimmer, "color:a", 0.0, float(config.get("dimmer_fade", 0.0)))
+	fade.parallel().tween_property(huye, "modulate:a", 0.0, float(config.get("dimmer_fade", 0.0)))
+	await fade.finished
+	dimmer.queue_free()
+	huye.queue_free()
+	await get_tree().create_timer(float(config.get("pre_banner_delay", 0.0))).timeout
+	huye_rescue_visual_finished.emit()
+
+
+func _play_huye_impact_feel(config: Dictionary) -> void:
+	var duration := float(config.get("impact_shake_duration", 0.0))
+	var strength := float(config.get("impact_shake_strength", 0.0))
+	if duration <= 0.0:
+		return
+	HitFlash.play(monster.hit_flash_target(), duration)
+	ScreenShake.play(self, duration, strength)
+	_play_hit_punch(duration)
+
+
+func _create_huye_visual(config: Dictionary) -> Node2D:
+	if ResourceLoader.exists(HUYE_ASSET_PATH, "Texture2D"):
+		var texture := load(HUYE_ASSET_PATH) as Texture2D
+		if texture != null:
+			var sprite := Sprite2D.new()
+			sprite.texture = texture
+			var width := float(config.get("huye_display_width", 0.0))
+			var scale_factor := width / maxf(float(texture.get_width()), 1.0)
+			sprite.scale = Vector2.ONE * scale_factor
+			return sprite
+
+	# 缺圖 fallback：金色圓＋資料驅動文字，不阻塞事件。
+	var fallback := Node2D.new()
+	var circle := Polygon2D.new()
+	var points := PackedVector2Array()
+	var radius := float(config.get("huye_display_width", 0.0)) * 0.36
+	var segments := 24
+	for index in range(segments):
+		points.append(Vector2.RIGHT.rotated(TAU * float(index) / float(segments)) * radius)
+	circle.polygon = points
+	circle.color = Color(1.0, 0.68, 0.08, 1.0)
+	fallback.add_child(circle)
+	var label := Label.new()
+	label.text = Data.text("huye_fallback_label")
+	label.position = Vector2(-radius, -40.0)
+	label.size = Vector2(radius * 2.0, 80.0)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 48)
+	label.add_theme_color_override("font_color", Color(0.10, 0.16, 0.30))
+	fallback.add_child(label)
+	return fallback
+
+
 func play_player_hurt() -> void:
 	await hero.play_hurt()
 	await hero.play_defeat()
@@ -168,7 +271,7 @@ func reset_for_betting() -> void:
 ## 任務 23 結算稿只有街景＋結果卡；只切顯示，不碰角色/狀態機資料。
 func set_settlement_presentation(enabled: bool) -> void:
 	hero.visible = not enabled
-	monster.visible = not enabled
+	monster.visible = not enabled and not _monster_hidden_after_huye
 	monster_name_label.visible = not enabled
 	if _danger_panel != null and is_instance_valid(_danger_panel):
 		_danger_panel.visible = not enabled and Data.danger_max_level() > 0
