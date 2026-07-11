@@ -288,3 +288,29 @@
 	 「危險度」32px 字＋53px 爪印、錨血條上緣 -12、寬度下限 400px）。
 	 戰場浮層本輪唯一保留的改動＝**名牌樣式**（無框粉紅貼紙字，見 b）。
 	 a–e 的迭代記錄保留作為「試過且被否決」的路徑清單。
+
+## D-022：「遇見虎爺」隨機救援事件——敗局強制逆轉＋該關增額翻倍
+- **問題**：比賽準備階段想加一個博奕遊戲式的特殊獎勵事件（FREE GAME 感），提案為
+  「遇見虎爺」：怪物反擊時超慢動作，虎爺從天而降壓飛怪物（卡通式往左上旋轉縮小
+  飛出螢幕），配大字插頁與虎爺對話框，獎勵加倍。
+- **人類決策**（2026-07-11，對話中裁示）：
+  1. **觸發語意＝強制逆轉勝**：每次發起挑戰（下注確認/續戰）時以獨立 RNG 擲一次；
+	 骰中則本關保證上演「怪物反擊 → 虎爺壓飛」逆轉戲，**蓋過原本的勝負骰**，
+	 判定為勝、算過關繼續前進。
+  2. **x2 範圍＝只有該關的增額翻倍**：觸發關的收益增額（本關收益 − 前一關收益）
+	 額外再加一份，之後各關照常成長；bonus 為固定加項保留到結算，戰死照樣全失。
+	 一局內可重複觸發（各自加各自的增額，機率使然罕見）。
+  3. **機率 5%**，入 `game_balance.json`（資料驅動，隨時可調）。
+  4. **附 demo 強制觸發開關**（debug 欄位），供比賽展示/錄影/截圖；另設 `enabled`
+	 總開關作回退路徑（false＝事件不存在，行為與現況相同，仿卡 21 慣例）。
+- **既知副作用（接受）**：期望值小幅上升（可日後在倍率盤參數吸收）；排行榜
+  `best_payout` 運氣成分再放大（D-019 已接受同類副作用）。
+- **實作**：`Codex/24_HUYE_RESCUE_EVENT.md`（Codex）。虎爺骰用獨立 RNG，
+  不得污染 risk_resolver 成功率骰序列與卡 21 倍率盤 `_rng`。
+- **素材**：虎爺貼紙走「生成暫代 → 設計師 git 覆蓋同檔名」模式（title_banner 先例）；
+  規格登記 `Assets/ART_ASSET_MANIFEST.md`，屬既有貼紙類別，不動 ART_CONTRACT。
+- **影響**：`Data/game_balance.json`（+`random_events`）、`Data/animation_timing.json`
+  （+`effects.huye_event`）、`Data/ui_text.json`、`Scripts/core/game_state_machine.gd`、
+  `Scripts/battle/battle_presenter.gd`、`Scripts/effects/`（新演出）、
+  `Assets/ART_ASSET_MANIFEST.md`、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`、
+  `Docs/06_DATA_SCHEMA.md`。

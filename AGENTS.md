@@ -53,8 +53,9 @@
 19. `19_COIN_BURST_ON_MONSTER_DEATH`（怪物死亡爆金幣→吸入收益 UI→數字跳動；Tween sprite 路線，數值入 animation_timing.json；Codex）✅（人類 2026-07-07 目視驗收）
 20. `20_DECISION_INFO_REVAMP`（拿血條→危險度、決策賠率語言、FOMO 結算；依 D-019；文案初稿入 ui_text.json、人類保留改句權）✅（人類 2026-07-08 目視驗收）
 21. `21_RANDOM_MULTIPLIER_TABLE`（每局隨機倍率盤，漸進抖動+單調遞增；依 D-019；排在 20 之後）✅（人類 2026-07-08 目視驗收；headless 200 局數值驗證通過）
-22. `22_WIN_BANNER_INTERSTITIAL`（撤退/通關大贏插頁：金色貼紙數字慶祝畫面，點擊任意處繼續；純視覺不動狀態機；數字圖以生成貼紙產出〔D-012 類別〕；Codex）
+22. `22_WIN_BANNER_INTERSTITIAL`（撤退/通關大贏插頁：金色貼紙數字慶祝畫面，點擊任意處繼續；純視覺不動狀態機；數字圖以生成貼紙產出〔D-012 類別〕；Codex）✅（e0ddf6b 出貨，帳面補記 2026-07-11）
 23. `23_UI_REFERENCE_ALIGNMENT`（設計師四張 UI 參考圖對齊；banner 直接接入、其餘畫面目視調整；Codex）✅（2026-07-10 Godot＋H5 實跑驗收）
+24. `24_HUYE_RESCUE_EVENT`（「遇見虎爺」隨機救援事件：敗局強制逆轉＋該關增額翻倍＋FREE GAME 式插頁；依 D-022；Codex）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -84,6 +85,7 @@
 - **D-018** 不透明全幅背景允許 JPG（`background_battle_00N.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析背景；需透明素材仍限 PNG；Contract v1.5。
 - **D-019** 賭場化體驗改版：血條移除改危險度指示（`danger_display` 資料驅動分級）；每局隨機倍率盤（`multiplier_random`，漸進抖動+單調遞增，success_rate 不連動，只揭示下一關）；不顯示成功率 %，改博奕語言（過關/落袋為安/1 賠 N）+ 結算 FOMO 行；文案一律 `ui_text.json`，人類保留改句權。
 - **D-020** 排行榜 NPC 保底名單正式版保留（修訂 D-016 §6）：`leaderboard_mock.json > keep_in_production` 開啟時 Firebase 版於 client 端合併 NPC 重排名、未登入/失敗退回 Mock 語意；不寫假資料進 Firestore；對評審揭露為模擬資料。
+- **D-022** 「遇見虎爺」隨機救援事件：發起挑戰時獨立 RNG 擲 5%（`game_balance.json > random_events.huye`），骰中則本關強制逆轉勝（蓋過勝負骰），該關收益增額翻倍（bonus 固定加項保留到結算）；含 `force_trigger` demo 開關與 `enabled` 回退路徑；虎爺骰不得污染 risk_resolver 與倍率盤的隨機流。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md
