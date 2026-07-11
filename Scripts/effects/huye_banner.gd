@@ -36,7 +36,8 @@ func _build_tree() -> void:
 	var dimmer := ColorRect.new()
 	dimmer.color = Color(0.025, 0.035, 0.10, 0.82)
 	dimmer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dimmer.mouse_filter = Control.MOUSE_FILTER_STOP
+	# 輸入統一交給全畫面的 _root；遮罩若 STOP 會吃掉滑鼠事件，導致點擊無法關閉。
+	dimmer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(dimmer)
 
 	_modal = Control.new()
@@ -93,6 +94,7 @@ func _arm_dismiss() -> void:
 
 
 func _on_gui_input(event: InputEvent) -> void:
+	# 任意鍵包含滑鼠所有按鍵與觸控；不限定左鍵。
 	if (event is InputEventMouseButton or event is InputEventScreenTouch) and event.pressed:
 		_root.accept_event()
 		if _can_dismiss:

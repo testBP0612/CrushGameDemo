@@ -40,6 +40,8 @@ var _punch_tween: Tween
 var _monster_base_scale := Vector2.ONE
 var _monster_hidden_after_huye := false
 var _huye_coin_origin := Vector2.ZERO
+var _active_huye_visual: Node2D
+var _huye_exit_tween: Tween
 
 
 func _ready() -> void:
@@ -136,6 +138,7 @@ func huye_coin_origin() -> Vector2:
 
 
 func play_advance_walk() -> void:
+	await _fade_out_active_huye()
 	await hero.play_walk()
 	advance_walk_finished.emit()
 
@@ -185,7 +188,9 @@ func play_huye_rescue() -> void:
 	await monster.play_huye_counter_slow(hero.global_position, config)
 	# 金幣應從螢幕內的命中位置噴出；不可沿用怪物飛出畫面的終點座標。
 	_huye_coin_origin = monster_canvas_position()
+	_clear_active_huye()
 	var huye := _create_huye_visual(config)
+	_active_huye_visual = huye
 	add_child(huye)
 	var impact_position := monster_canvas_position() + Vector2(0.0, float(config.get("huye_impact_offset_y", 0.0)))
 	huye.position = Vector2(impact_position.x, float(config.get("huye_start_y", 0.0)))
@@ -195,6 +200,7 @@ func play_huye_rescue() -> void:
 	await drop.finished
 	_play_huye_impact_feel(config)
 	huye_impact.emit()
+	await _play_huye_landing_bounce(huye, config)
 	await get_tree().create_timer(float(config.get("impact_hold", 0.0))).timeout
 	await monster.play_huye_fly_out(config)
 	monster.reset_after_huye()
@@ -202,12 +208,27 @@ func play_huye_rescue() -> void:
 	monster.visible = false
 	var fade := create_tween()
 	fade.tween_property(dimmer, "color:a", 0.0, float(config.get("dimmer_fade", 0.0)))
-	fade.parallel().tween_property(huye, "modulate:a", 0.0, float(config.get("dimmer_fade", 0.0)))
 	await fade.finished
 	dimmer.queue_free()
-	huye.queue_free()
-	await get_tree().create_timer(float(config.get("pre_banner_delay", 0.0))).timeout
+	# 彈跳、怪物飛出與淡出全部演完後，畫面明確停住一整段再開 modal。
+	var pre_banner_delay := float(config.get("pre_banner_delay", 0.0))
+	if pre_banner_delay > 0.0:
+		await get_tree().create_timer(pre_banner_delay).timeout
 	huye_rescue_visual_finished.emit()
+
+
+func _play_huye_landing_bounce(huye: Node2D, config: Dictionary) -> void:
+	var duration := float(config.get("huye_bounce_duration", 0.0))
+	var height := float(config.get("huye_bounce_height", 0.0))
+	if duration <= 0.0 or height <= 0.0 or huye == null or not is_instance_valid(huye):
+		return
+	var landing_position := huye.position
+	var tween := create_tween()
+	tween.tween_property(huye, "position:y", landing_position.y - height, duration * 0.45)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(huye, "position:y", landing_position.y, duration * 0.55)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	await tween.finished
 
 
 func _play_huye_impact_feel(config: Dictionary) -> void:
@@ -263,6 +284,7 @@ func play_player_hurt() -> void:
 
 
 func reset_for_betting() -> void:
+	_clear_active_huye()
 	hero.reset_pose()
 	_show_default_background()
 	show_monster_for_stage(1, false)
@@ -270,11 +292,41 @@ func reset_for_betting() -> void:
 
 ## 任務 23 結算稿只有街景＋結果卡；只切顯示，不碰角色/狀態機資料。
 func set_settlement_presentation(enabled: bool) -> void:
+	if enabled:
+		_fade_out_active_huye()
 	hero.visible = not enabled
 	monster.visible = not enabled and not _monster_hidden_after_huye
 	monster_name_label.visible = not enabled
 	if _danger_panel != null and is_instance_valid(_danger_panel):
 		_danger_panel.visible = not enabled and Data.danger_max_level() > 0
+
+
+func _fade_out_active_huye() -> void:
+	if _active_huye_visual == null or not is_instance_valid(_active_huye_visual):
+		_active_huye_visual = null
+		return
+	if _huye_exit_tween != null and _huye_exit_tween.is_valid():
+		await _huye_exit_tween.finished
+		return
+	var target := _active_huye_visual
+	var config: Dictionary = Data.animation_timing_config().get("effects", {}).get("huye_event", {})
+	_huye_exit_tween = create_tween()
+	_huye_exit_tween.tween_property(target, "modulate:a", 0.0, float(config.get("huye_exit_fade", 0.0)))
+	await _huye_exit_tween.finished
+	if target != null and is_instance_valid(target):
+		target.queue_free()
+	if _active_huye_visual == target:
+		_active_huye_visual = null
+	_huye_exit_tween = null
+
+
+func _clear_active_huye() -> void:
+	if _huye_exit_tween != null and _huye_exit_tween.is_valid():
+		_huye_exit_tween.kill()
+	_huye_exit_tween = null
+	if _active_huye_visual != null and is_instance_valid(_active_huye_visual):
+		_active_huye_visual.queue_free()
+	_active_huye_visual = null
 
 
 ## D-019：血條位置改放危險度列（危險度＋爪印等級）。全程式生成，不動 .tscn。
