@@ -22,7 +22,6 @@ const HERO_DEFEAT_ANIMATION := &"defeat"
 @onready var idle_sprite: AnimatedSprite2D = $IdleSprite
 
 var _home_position := Vector2.ZERO
-var _idle_tween: Tween
 var _walk_tween: Tween
 var _using_idle_sheet := false
 var _has_walk_animation := false
@@ -38,17 +37,11 @@ func _ready() -> void:
 
 
 func play_idle() -> void:
-	_kill_idle()
 	if _using_idle_sheet and idle_sprite.animation != HERO_IDLE_ANIMATION:
 		idle_sprite.play(HERO_IDLE_ANIMATION)
-	var duration := _hero_duration("idle_loop")
-	_idle_tween = create_tween().set_loops()
-	_idle_tween.tween_property(self, "position:y", _home_position.y - 12.0, duration * 0.5)
-	_idle_tween.tween_property(self, "position:y", _home_position.y, duration * 0.5)
 
 
 func play_attack(target_position: Vector2) -> Signal:
-	_kill_idle()
 	if _using_idle_sheet and _has_attack_animation:
 		idle_sprite.play(HERO_ATTACK_ANIMATION)
 	var duration := _hero_duration("attack")
@@ -80,7 +73,6 @@ func play_attack(target_position: Vector2) -> Signal:
 
 
 func play_hurt() -> Signal:
-	_kill_idle()
 	var duration := _hero_duration("hurt")
 	var tween := create_tween()
 	if _using_idle_sheet:
@@ -99,7 +91,6 @@ func play_hurt() -> Signal:
 
 
 func play_defeat() -> Signal:
-	_kill_idle()
 	var duration := _hero_duration("defeat")
 	if _using_idle_sheet and _has_defeat_animation:
 		idle_sprite.play(HERO_DEFEAT_ANIMATION)
@@ -111,7 +102,6 @@ func play_defeat() -> Signal:
 
 
 func play_walk() -> Signal:
-	_kill_idle()
 	_kill_walk_tween()
 	if _using_idle_sheet and _has_walk_animation:
 		idle_sprite.play(HERO_WALK_ANIMATION)
@@ -137,19 +127,12 @@ func _kill_walk_tween() -> void:
 
 
 func reset_pose() -> void:
-	_kill_idle()
 	position = _home_position
 	rotation = 0.0
 	modulate = Color.WHITE
 	if _using_idle_sheet:
 		idle_sprite.modulate = Color.WHITE
 	play_idle()
-
-
-func _kill_idle() -> void:
-	if _idle_tween != null:
-		_idle_tween.kill()
-		_idle_tween = null
 
 
 func _configure_idle_visual() -> void:

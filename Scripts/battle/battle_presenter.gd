@@ -153,6 +153,9 @@ func play_monster_counter() -> void:
 func play_player_hurt() -> void:
 	await hero.play_hurt()
 	await hero.play_defeat()
+	var delay := float(Data.battle_sequence_config().get("result_resolution", {}).get("lose_branch", {}).get("defeat_settle_delay", 0.0))
+	if delay > 0.0:
+		await get_tree().create_timer(delay).timeout
 	player_hurt_finished.emit()
 
 

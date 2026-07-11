@@ -60,8 +60,12 @@ func _ready() -> void:
 	# D-019 微調（2026-07-08 人類指示）：FOMO 行加入後內容變高，看板上緣上移擴容、
 	# 下緣抬高留邊（原 tscn 60/588 → 12/566，免貼底）；統計 icon 放大 1.2 倍。
 	# ActionArea 的全域起點是 y=1300；負 offset 把結果卡移到 result.jpg 的中央區。
-	panel.offset_left = 120.0
-	panel.offset_right = 864.0
+	# 2026-07-11：寬度 120/864（744px）在戰敗版 FOMO 行長文案下爆版溢出，
+	# 放寬到 60/924（864px，對稱留邊 60）。注意：offset 是相對 ActionArea 本地座標
+	# （ActionArea 寬度 = 1080 - 48*2 = 984，非全螢幕 1080），先前誤用 1020 導致
+	# 右緣超出 ActionArea 邊界、視覺上偏左未置中。
+	panel.offset_left = 60.0
+	panel.offset_right = 924.0
 	panel.offset_top = -720.0
 	panel.offset_bottom = 18.0
 	for stat_icon: TextureRect in [depth_icon, beaten_icon, best_icon, rank_icon, record_icon]:

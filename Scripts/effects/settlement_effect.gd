@@ -12,12 +12,16 @@ static func play(panel: Control, result: String, duration: float) -> void:
 
 	panel.pivot_offset = panel.size * 0.5
 	panel.modulate = _start_color(result)
-	panel.scale = Vector2(0.92, 0.92)
+	panel.scale = Vector2(0.72, 0.72)
+	panel.rotation_degrees = -4.0
 
 	var tween := panel.create_tween()
-	tween.tween_property(panel, "scale", Vector2(1.04, 1.04), duration * 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(panel, "scale", Vector2(1.08, 1.08), duration * 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(panel, "rotation_degrees", 2.0, duration * 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(panel, "modulate", Color.WHITE, duration * 0.65)
-	tween.tween_property(panel, "scale", Vector2.ONE, duration * 0.55)
+	tween.tween_property(panel, "scale", Vector2(0.98, 0.98), duration * 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(panel, "rotation_degrees", 0.0, duration * 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(panel, "scale", Vector2.ONE, duration * 0.2)
 
 
 static func _start_color(result: String) -> Color:
