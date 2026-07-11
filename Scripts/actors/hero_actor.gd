@@ -14,6 +14,10 @@ const HERO_ATTACK_SHEET_PATH := "res://Assets/final/hero_attack.png"
 const HERO_ATTACK_SHEET_META_PATH := "res://Assets/final/hero_attack.json"
 const HERO_ATTACK_ANIMATION := &"attack"
 
+const HERO_DEFEAT_SHEET_PATH := "res://Assets/final/hero_defeat_sheet.png"
+const HERO_DEFEAT_SHEET_META_PATH := "res://Assets/final/hero_defeat_sheet.json"
+const HERO_DEFEAT_ANIMATION := &"defeat"
+
 @onready var body: ColorRect = $Body
 @onready var idle_sprite: AnimatedSprite2D = $IdleSprite
 
@@ -24,6 +28,7 @@ var _using_idle_sheet := false
 var _has_walk_animation := false
 var _has_attack_animation := false
 var _attack_frame_count := 0
+var _has_defeat_animation := false
 
 
 func _ready() -> void:
@@ -96,6 +101,9 @@ func play_hurt() -> Signal:
 func play_defeat() -> Signal:
 	_kill_idle()
 	var duration := _hero_duration("defeat")
+	if _using_idle_sheet and _has_defeat_animation:
+		idle_sprite.play(HERO_DEFEAT_ANIMATION)
+		return get_tree().create_timer(duration).timeout
 	var tween := create_tween()
 	tween.tween_property(self, "rotation_degrees", -18.0, duration)
 	tween.parallel().tween_property(self, "modulate", Color(0.55, 0.55, 0.55, 1.0), duration)
@@ -151,6 +159,7 @@ func _configure_idle_visual() -> void:
 	_has_walk_animation = false
 	_has_attack_animation = false
 	_attack_frame_count = 0
+	_has_defeat_animation = false
 
 	var metadata := _load_sheet_metadata(HERO_IDLE_SHEET_META_PATH)
 	if metadata.is_empty():
@@ -182,6 +191,7 @@ func _configure_idle_visual() -> void:
 
 	_configure_walk_visual(frames)
 	_configure_attack_visual(frames)
+	_configure_defeat_visual(frames)
 
 
 func _configure_walk_visual(frames: SpriteFrames) -> void:
@@ -222,6 +232,31 @@ func _configure_attack_visual(frames: SpriteFrames) -> void:
 
 	_attack_frame_count = frames.get_frame_count(HERO_ATTACK_ANIMATION)
 	_has_attack_animation = true
+
+
+func _configure_defeat_visual(frames: SpriteFrames) -> void:
+	_has_defeat_animation = false
+
+	var metadata := _load_sheet_metadata(HERO_DEFEAT_SHEET_META_PATH)
+	if metadata.is_empty():
+		return
+
+	var texture := _load_sheet_texture(HERO_DEFEAT_SHEET_PATH)
+	if texture == null:
+		return
+
+	if not _is_valid_sheet_metadata(metadata, texture, "hero_defeat"):
+		return
+
+	var duration := _hero_duration("defeat")
+	if duration <= 0.0:
+		return
+
+	_add_sheet_animation(frames, HERO_DEFEAT_ANIMATION, metadata, texture)
+	var frame_count := frames.get_frame_count(HERO_DEFEAT_ANIMATION)
+	frames.set_animation_speed(HERO_DEFEAT_ANIMATION, float(frame_count) / duration)
+	frames.set_animation_loop(HERO_DEFEAT_ANIMATION, false)
+	_has_defeat_animation = true
 
 
 func _add_sheet_animation(frames: SpriteFrames, animation_name: StringName, metadata: Dictionary, texture: Texture2D) -> void:

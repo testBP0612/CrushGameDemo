@@ -32,7 +32,7 @@
 | hero_idle | hero_idle.png | Assets/final/ | required | PNG32 | yes | right | 主角待機 | Scenes/Actors | 色塊(藍) | imported | 美術 | 約420² |
 | hero_attack | hero_attack.png + hero_attack.json | Assets/final/ | required | PNG32 | yes | right | 主角攻擊 | Scenes/Actors | 色塊(藍) | imported | 美術 | TexturePacker JSON；非像素、linear、mipmaps off |
 | hero_hurt | hero_hurt.png | Assets/final/ | required | PNG32 | yes | right | 主角受擊 | Scenes/Actors | 色塊閃紅 | planned | 美術 | — |
-| hero_defeat | hero_defeat.png | Assets/final/ | required | PNG32 | yes | right | 主角戰敗 | Scenes/Actors | 色塊變灰 | planned | 美術 | — |
+| hero_defeat | hero_defeat_sheet.png + hero_defeat_sheet.json | Assets/final/ | required | PNG32 | yes | right | 主角戰敗 | Scenes/Actors | 色塊變灰/旋轉 | imported | 美術 | grid 序列圖（768×768、4×3、12 幀）；non-loop，播放時長依 animation_timing.json hero.defeat |
 
 ### 怪物（stage 1–9 idle 序列圖；stage 10 placeholder）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
