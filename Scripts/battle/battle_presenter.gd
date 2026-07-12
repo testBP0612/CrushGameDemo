@@ -348,6 +348,8 @@ func _build_danger_display() -> void:
 ## 美術版：骷髏橫條 1:1 原尺寸（447x112），金星由 _update_danger_display 疊上；
 ## 怪物名改白字置於橫條上方（骷髏右側），對齊設計稿。
 func _build_risk_art_display(state_texture: Texture2D) -> void:
+	# 血條僅供錨定/內部演出，美術路線也必須藏（舊路線在 _build_danger_pill_display 藏）
+	monster_hp_bar.visible = false
 	var root := Control.new()
 	root.name = "DangerPanel"
 	root.position = Vector2(560.0, 748.0)
@@ -369,8 +371,9 @@ func _build_risk_art_display(state_texture: Texture2D) -> void:
 	_danger_icons.name = "DangerIcons"
 	_danger_icons.alignment = BoxContainer.ALIGNMENT_BEGIN
 	_danger_icons.add_theme_constant_override("separation", 10)
-	_danger_icons.position = Vector2(150.0, 32.0)
-	_danger_icons.size = Vector2(280.0, 48.0)
+	# 橫條實帶（像素掃描）y47..93、x~140..415 → 星列垂直置中於 y70
+	_danger_icons.position = Vector2(150.0, 49.0)
+	_danger_icons.size = Vector2(250.0, 42.0)
 	_danger_icons.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(_danger_icons)
 
