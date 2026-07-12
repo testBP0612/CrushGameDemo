@@ -64,13 +64,36 @@ func _ready() -> void:
 	# 放寬到 60/924（864px，對稱留邊 60）。注意：offset 是相對 ActionArea 本地座標
 	# （ActionArea 寬度 = 1080 - 48*2 = 984，非全螢幕 1080），先前誤用 1020 導致
 	# 右緣超出 ActionArea 邊界、視覺上偏左未置中。
-	panel.offset_left = 60.0
-	panel.offset_right = 924.0
-	panel.offset_top = -720.0
-	panel.offset_bottom = 18.0
+	# 2026-07-12 設計師 result_card.png（905x902，含烙字「結果」緞帶）：
+	# 等比滿版 1040 寬（左右 20px 安全邊距，x/y 縮放同 1.149 無變形），
+	# 元素間距 20px；缺圖退回原程式 settle 樣式＋文字緞帶（D-004）。
+	var card_texture: Texture2D = UiSkin.art_texture("result_card")
+	var card_art_in_use := card_texture != null
+	if card_art_in_use:
+		panel.offset_left = -28.0
+		panel.offset_right = 1012.0
+		panel.offset_top = -880.0
+		panel.offset_bottom = 157.0
+		var card_style := StyleBoxTexture.new()
+		card_style.texture = card_texture
+		# 上邊距吃掉圖內緞帶頭（~205px×1.149），左右/下沿卡片米色本體內緣
+		card_style.content_margin_left = 70.0
+		card_style.content_margin_top = 240.0
+		card_style.content_margin_right = 70.0
+		card_style.content_margin_bottom = 80.0
+		panel.add_theme_stylebox_override("panel", card_style)
+		title_row.visible = false
+		var layout := title_row.get_parent() as VBoxContainer
+		if layout != null:
+			layout.add_theme_constant_override("separation", 20)
+	else:
+		panel.offset_left = 60.0
+		panel.offset_right = 924.0
+		panel.offset_top = -720.0
+		panel.offset_bottom = 18.0
+		UiSkin.apply_panel(panel, "settle")
 	for stat_icon: TextureRect in [depth_icon, beaten_icon, best_icon, rank_icon, record_icon]:
 		stat_icon.custom_minimum_size = Vector2(65, 65)
-	UiSkin.apply_panel(panel, "settle")
 	# 文字必須先設好再套樣式：icon 對齊方式依「當下有無文字」決定（空字=置中會疊字）
 	play_again_button.text = Data.text("settle_play_again")
 	leaderboard_button.text = Data.text("lb_view_entry")
