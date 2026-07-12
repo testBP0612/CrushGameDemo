@@ -232,9 +232,9 @@ script = ExtResource("4_bet_panel")
 [node name="Panel" type="PanelContainer" parent="ActionArea/BetPanel"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 0.0
-offset_top = 24.0
-offset_right = 984.0
+offset_left = -28.0
+offset_top = -109.0
+offset_right = 1012.0
 offset_bottom = 444.0
 
 [node name="Content" type="Control" parent="ActionArea/BetPanel/Panel"]

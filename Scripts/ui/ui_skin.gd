@@ -175,8 +175,9 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 			_set_content_margins(card, 28.0, 20.0, 28.0, 20.0)
 			panel.add_theme_stylebox_override("panel", card)
 		"large":
+			var use_skin := _is_round3_panel(panel, style)
 			var large := _skin_or_sticker_box(
-				SKIN_PANEL if _is_round3_panel(panel, style) else "",
+				SKIN_PANEL if use_skin else "",
 				Vector4(PANEL_MARGIN, PANEL_MARGIN, PANEL_MARGIN, PANEL_MARGIN),
 				CREAM,
 				32,
@@ -184,7 +185,13 @@ static func apply_panel(panel: PanelContainer, style: String) -> void:
 				DEEP_NAVY,
 				Color(0.96, 0.25, 0.42, 0.16)
 			)
-			_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
+			if use_skin:
+				# 2026-07-12 skin_panel 改整張等比顯示（含內建緞帶頭）：上邊距吃掉
+				# 緞帶+透明區（texture 前 ~131px），左右 60 讓 920 寬的內容置中
+				_set_content_margins(large, 60.0, 131.0, 60.0, 28.0)
+			else:
+				# 排行榜面板與缺皮膚 fallback 沿用原邊距
+				_set_content_margins(large, 32.0, 24.0, 32.0, 24.0)
 			panel.add_theme_stylebox_override("panel", large)
 		"settle":
 			# result.jpg：奶油底 + 深藍粗描邊中央結果卡。
