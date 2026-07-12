@@ -16,17 +16,17 @@ signal balance_reset_requested
 
 @onready var hud: Hud = $Hud
 @onready var top_bar: Control = $TopBar
-@onready var profile_frame: PanelContainer = $TopBar/ProfileFrame
-@onready var profile_avatar_icon: TextureRect = $TopBar/ProfileFrame/ProfileContent/ProfileAvatarIcon
-@onready var profile_cloud_icon: TextureRect = $TopBar/ProfileFrame/ProfileContent/ProfileCloudIcon
-@onready var profile_label: Label = $TopBar/ProfileFrame/ProfileContent/ProfileLabel
+@onready var player_id_label: Label = $TopBar/PlayerIdRow/PlayerIdLabel
+@onready var player_cloud_icon: TextureRect = $TopBar/PlayerIdRow/PlayerCloudIcon
+@onready var money_card: TextureRect = $TopBar/MoneyCard
+@onready var money_value: Label = $TopBar/MoneyValue
 @onready var logo_label: Label = $TopBar/LogoLabel
 @onready var logo_rect: TextureRect = $TopBar/LogoRect
 @onready var battle_message: BattleMessage = $BattleMessage
 @onready var bet_panel: BetPanel = $ActionArea/BetPanel
 @onready var decision_panel: DecisionPanel = $ActionArea/DecisionPanel
 @onready var settlement_panel: SettlementPanel = $ActionArea/SettlementPanel
-@onready var leaderboard_entry_button: Button = $LeaderboardEntryButton
+@onready var leaderboard_entry_button: Button = $TopBar/LeaderboardEntryButton
 
 var _visible_state := {
 	"top_bar": false,
@@ -37,13 +37,27 @@ var _visible_state := {
 }
 var _leaderboard_panel: LeaderboardPanel
 var _last_snapshot := {}
+var _money_card_in_use := false
 
 
 func _ready() -> void:
-	UiSkin.apply_panel(profile_frame, "card")
-	UiSkin.apply_icon(profile_avatar_icon, "paw")
-	UiSkin.apply_icon(profile_cloud_icon, "cloud")
-	UiSkin.apply_light_panel_label(profile_label)
+	# 玩家 ID：無框貼紙字（與怪物名牌同款：粉紅字＋奶油描邊＋深藍陰影）
+	player_id_label.add_theme_color_override("font_color", UiSkin.CHIP_PINK)
+	player_id_label.add_theme_color_override("font_outline_color", UiSkin.CREAM)
+	player_id_label.add_theme_constant_override("outline_size", 12)
+	player_id_label.add_theme_color_override("font_shadow_color", UiSkin.DEEP_NAVY)
+	player_id_label.add_theme_constant_override("shadow_offset_x", 2)
+	player_id_label.add_theme_constant_override("shadow_offset_y", 3)
+	UiSkin.apply_icon(player_cloud_icon, "cloud")
+	# money_card.png 缺檔 → 退回舊資源膠囊樣式（D-004）
+	_money_card_in_use = UiSkin.apply_art_texture(money_card, "money_card")
+	if _money_card_in_use:
+		money_value.add_theme_color_override("font_color", UiSkin.BOARD_INK)
+		money_value.add_theme_color_override("font_outline_color", UiSkin.CREAM)
+		money_value.add_theme_constant_override("outline_size", 4)
+	else:
+		money_value.offset_left = 40.0
+		UiSkin.apply_resource_label(money_value)
 	logo_label.text = Data.text("title_game_name")
 	# 有 logo.png 用圖（mockup 右上 Logo），缺檔退回文字標題
 	var logo_ok := UiSkin.apply_art_texture(logo_rect, "logo")
@@ -58,8 +72,12 @@ func _ready() -> void:
 	decision_panel.advance_requested.connect(func() -> void: advance_requested.emit())
 	settlement_panel.acknowledge_requested.connect(func() -> void: settle_acknowledged.emit())
 	settlement_panel.leaderboard_requested.connect(_on_leaderboard_requested)
-	leaderboard_entry_button.text = Data.text("lb_button")
-	UiSkin.apply_button(leaderboard_entry_button, "trophy_pill")
+	# ranking_btn.png（頭像＋玩家排行整圖）缺檔 → 退回文字獎盃膠囊（D-004）
+	if UiSkin.apply_art_button(leaderboard_entry_button, "ranking_btn"):
+		leaderboard_entry_button.text = ""
+	else:
+		leaderboard_entry_button.text = Data.text("lb_button")
+		UiSkin.apply_button(leaderboard_entry_button, "trophy_pill")
 	leaderboard_entry_button.pressed.connect(_on_leaderboard_requested)
 	_build_leaderboard_panel()
 
@@ -72,11 +90,12 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	_set_visible_with_entrance("top_bar", top_bar, show_game_ui)
 	_set_visible_with_entrance("hud", hud, show_game_ui, hud.entrance_targets())
 	hud.update_snapshot(snapshot)
-	# mockup 的「玩家排行」膠囊在關卡進行中也常駐，故決策階段一併顯示（D-021）
+	# ranking_btn 含玩家頭像，隨 TopBar 常駐顯示；非下注/決策階段僅禁用點擊
 	var leaderboard_available := bool(snapshot.get("is_betting", false)) \
 		or bool(snapshot.get("is_reward_decision", false))
-	leaderboard_entry_button.visible = leaderboard_available
+	leaderboard_entry_button.visible = show_game_ui
 	leaderboard_entry_button.disabled = not leaderboard_available
+	money_value.text = _format_balance(int(snapshot.get("balance", 0)))
 	battle_message.update_snapshot(snapshot)
 
 	_set_visible_with_entrance("bet_panel", bet_panel, bool(snapshot.get("is_betting", false)))
@@ -90,8 +109,24 @@ func update_snapshot(snapshot: Dictionary) -> void:
 
 
 func set_profile_auth_state(signed_in: bool, display_name: String) -> void:
-	profile_label.text = display_name if signed_in and not display_name.is_empty() else Data.text("profile_mock_display_name")
-	profile_cloud_icon.visible = signed_in and profile_cloud_icon.texture != null
+	player_id_label.text = display_name if signed_in and not display_name.is_empty() else Data.text("profile_mock_display_name")
+	player_cloud_icon.visible = signed_in and player_cloud_icon.texture != null
+
+
+## 錢卡上只放數字（icon 已烙在卡圖上）；千分位便於大數目讀取。
+## 缺卡圖的 fallback 膠囊則沿用舊「金幣 N」文案。
+func _format_balance(balance: int) -> String:
+	if not _money_card_in_use:
+		return Data.text("hud_balance", {"balance": balance})
+	var digits := str(balance)
+	var grouped := ""
+	var count := 0
+	for index in range(digits.length() - 1, -1, -1):
+		grouped = digits[index] + grouped
+		count += 1
+		if count % 3 == 0 and index > 0:
+			grouped = "," + grouped
+	return grouped
 
 
 func hold_payout_count_up(max_hold: float) -> void:

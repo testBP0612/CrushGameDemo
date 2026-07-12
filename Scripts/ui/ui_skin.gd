@@ -42,6 +42,8 @@ const TEX_BET_RIBBON := "res://Assets/final/ui/bet_info.png"
 const TEX_BET_CONTEXT := "res://Assets/final/ui/bet_context.png"
 const TEX_BTN_NEXT := "res://Assets/final/ui/next.png"
 const TEX_BTN_RETREAT := "res://Assets/final/ui/retreat.png"
+const TEX_RANKING_BTN := "res://Assets/final/ui/ranking_btn.png"
+const TEX_MONEY_CARD := "res://Assets/final/ui/money_card.png"
 
 # mockup 色票（看板棕字、粉紅籌碼、藍色加號鈕）
 const BOARD_BROWN := Color(0.47, 0.28, 0.16, 1.0)
@@ -69,6 +71,10 @@ static func art_texture(name: String) -> Texture2D:
 			path = TEX_BTN_NEXT
 		"btn_retreat":
 			path = TEX_BTN_RETREAT
+		"ranking_btn":
+			path = TEX_RANKING_BTN
+		"money_card":
+			path = TEX_MONEY_CARD
 	if path.is_empty():
 		return null
 	return _load_texture(path)

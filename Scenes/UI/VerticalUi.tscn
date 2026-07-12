@@ -21,35 +21,60 @@ script = ExtResource("1_vertical_ui")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 200.0
+offset_bottom = 460.0
 grow_horizontal = 2
 
-[node name="ProfileFrame" type="PanelContainer" parent="TopBar"]
+[node name="PlayerIdRow" type="HBoxContainer" parent="TopBar"]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 40.0
-offset_top = 12.0
+offset_top = 40.0
 offset_right = 430.0
-offset_bottom = 100.0
-
-[node name="ProfileContent" type="HBoxContainer" parent="TopBar/ProfileFrame"]
-layout_mode = 2
-theme_override_constants/separation = 8
+offset_bottom = 92.0
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="ProfileCloudIcon" type="TextureRect" parent="TopBar/ProfileFrame/ProfileContent"]
-visible = false
-custom_minimum_size = Vector2(48, 48)
+[node name="PlayerIdLabel" type="Label" parent="TopBar/PlayerIdRow"]
 layout_mode = 2
-
-[node name="ProfileAvatarIcon" type="TextureRect" parent="TopBar/ProfileFrame/ProfileContent"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-
-[node name="ProfileLabel" type="Label" parent="TopBar/ProfileFrame/ProfileContent"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerCloudIcon" type="TextureRect" parent="TopBar/PlayerIdRow"]
+visible = false
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LeaderboardEntryButton" type="Button" parent="TopBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 98.0
+offset_right = 430.0
+offset_bottom = 338.0
+theme_override_font_sizes/font_size = 34
+
+[node name="MoneyCard" type="TextureRect" parent="TopBar"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 352.0
+offset_right = 556.0
+offset_bottom = 448.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MoneyValue" type="Label" parent="TopBar"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 160.0
+offset_top = 352.0
+offset_right = 540.0
+offset_bottom = 448.0
+theme_override_font_sizes/font_size = 46
 vertical_alignment = 1
 
 [node name="LogoLabel" type="Label" parent="TopBar"]
@@ -77,8 +102,8 @@ stretch_mode = 5
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 330.0
-offset_bottom = 580.0
+offset_top = 462.0
+offset_bottom = 712.0
 grow_horizontal = 2
 script = ExtResource("2_hud")
 
@@ -157,25 +182,6 @@ offset_bottom = 204.0
 theme_override_font_sizes/font_size = 68
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="BalanceLabel" type="Label" parent="Hud"]
-layout_mode = 1
-anchors_preset = 0
-offset_left = 40.0
-offset_top = 252.0
-offset_right = 390.0
-offset_bottom = 318.0
-theme_override_font_sizes/font_size = 38
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BalanceIcon" type="TextureRect" parent="Hud"]
-layout_mode = 1
-anchors_preset = 0
-offset_left = 56.0
-offset_top = 261.0
-offset_right = 104.0
-offset_bottom = 309.0
 
 [node name="BattleMessage" type="Control" parent="."]
 layout_mode = 1
@@ -629,13 +635,3 @@ custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 
-[node name="LeaderboardEntryButton" type="Button" parent="."]
-visible = false
-custom_minimum_size = Vector2(360, 92)
-layout_mode = 1
-anchors_preset = 0
-offset_left = 40.0
-offset_top = 112.0
-offset_right = 400.0
-offset_bottom = 204.0
-theme_override_font_sizes/font_size = 34

@@ -74,6 +74,8 @@
 | ui_bet_context | bet_context.png | Assets/final/ui/ | optional | yes | 下注面板中央貓糧插圖 | 自動隱藏 | imported | 裝飾用 |
 | ui_btn_next | next.png | Assets/final/ui/ | optional | yes | 續戰/開始大按鈕（烤字「喵準開始」） | 文字按鈕 primary 樣式 | imported | 烤字素材，改字需重出圖 |
 | ui_btn_retreat | retreat.png | Assets/final/ui/ | optional | yes | 撤退大按鈕（烤字「喵準快逃」） | 文字按鈕 secondary 樣式 | imported | 烤字素材，改字需重出圖 |
+| ui_ranking_btn | ranking_btn.png | Assets/final/ui/ | optional | yes | 左上角排行榜入口（頭像＋獎盃＋烤字「玩家排行」整圖鈕） | 文字獎盃膠囊 trophy_pill | imported | 設計師交付（2026-07-12）；478×294，取代舊 ProfileFrame＋排行膠囊 |
+| ui_money_card | money_card.png | Assets/final/ui/ | optional | yes | 左上角餘額卡（含零食 icon 底圖，數字程式疊字） | 資源膠囊＋「金幣 N」文案 | imported | 設計師交付（2026-07-12）；430×80，數字千分位由程式格式化 |
 
 ---
 

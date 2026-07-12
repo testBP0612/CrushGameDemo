@@ -11,8 +11,6 @@ const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 @onready var multiplier_value: Label = $MultiplierValue
 @onready var payout_caption: Label = $PayoutCaption
 @onready var payout_value: Label = $PayoutValue
-@onready var balance_label: Label = $BalanceLabel
-@onready var balance_icon: TextureRect = $BalanceIcon
 
 var _displayed_payout := 0
 var _has_snapshot := false
@@ -30,8 +28,6 @@ func _ready() -> void:
 	UiSkin.apply_hud_card_text(multiplier_value, "board_value_pink")
 	UiSkin.apply_hud_card_text(payout_caption, "board_tab")
 	UiSkin.apply_hud_card_text(payout_value, "board_value_pink")
-	UiSkin.apply_resource_label(balance_label)
-	UiSkin.apply_icon(balance_icon, "coin")
 	if not board_ok:
 		# 缺看板圖時給數值標籤補底板，維持可讀（缺檔不崩原則）
 		for label: Label in [stage_value, multiplier_value, payout_value]:
@@ -49,9 +45,6 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	}))
 	payout_caption.text = _caption_from_text(Data.text("hud_current_payout", {"payout": next_payout}))
 	_update_payout_label(next_payout)
-	balance_label.text = Data.text("hud_balance", {
-		"balance": int(snapshot.get("balance", 0))
-	})
 
 
 func _update_payout_label(next_payout: int) -> void:

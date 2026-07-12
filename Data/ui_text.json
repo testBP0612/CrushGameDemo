@@ -10,7 +10,7 @@
 	"login_button": "Google 登入",
 	"logout_button": "登出",
 	"login_hint_synced": "已同步雲端",
-	"profile_mock_display_name": "試玩勇者",
+	"profile_mock_display_name": "冒險小貓",
 
 	"hud_stage": "關卡進度 {stage}/{max}",
 	"hud_multiplier": "目前倍率 x{multiplier}",
