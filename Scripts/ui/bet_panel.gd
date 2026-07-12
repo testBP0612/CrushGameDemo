@@ -46,25 +46,25 @@ func _ready() -> void:
 	UiSkin.apply_button(decrease_button, "step_decrease")
 	UiSkin.apply_button(increase_button, "step_increase")
 	UiSkin.apply_number_display(bet_label)
-	# 對齊 ui_mockup_battle：下注金額是本畫面視覺主角，加大字級（tscn 60 → 80）
-	bet_label.add_theme_font_size_override("font_size", 80)
+	# 對齊設計稿：金額字級 68（原 80 會被中央插圖壓到）
+	bet_label.add_theme_font_size_override("font_size", 68)
 	# 8 檔籌碼（左右各 4）要塞進原本 3 檔的欄高，縮 separation
 	for chip_column: VBoxContainer in [chips_left, chips_right]:
 		chip_column.add_theme_constant_override("separation", 8)
-	# ±/金額列內縮避開左右欄第四顆籌碼；D-021：放大成 mockup 的方形糖果鈕比例
-	# （130x114，與金額框同列同高），垂直座標一併由此處統一控管
-	decrease_button.offset_left = 170.0
-	decrease_button.offset_right = 300.0
-	decrease_button.offset_top = 238.0
-	decrease_button.offset_bottom = 352.0
-	bet_label.offset_left = 320.0
-	bet_label.offset_right = 600.0
-	bet_label.offset_top = 234.0
-	bet_label.offset_bottom = 354.0
-	increase_button.offset_left = 620.0
-	increase_button.offset_right = 750.0
-	increase_button.offset_top = 238.0
-	increase_button.offset_bottom = 352.0
+	# ±/金額列內縮避開左右欄第四顆籌碼；2026-07-12 依設計稿縮小（112x92）
+	# 並整體下移，讓中央貓糧插圖（底 240）不壓到金額文字
+	decrease_button.offset_left = 184.0
+	decrease_button.offset_right = 296.0
+	decrease_button.offset_top = 256.0
+	decrease_button.offset_bottom = 348.0
+	bet_label.offset_left = 316.0
+	bet_label.offset_right = 596.0
+	bet_label.offset_top = 252.0
+	bet_label.offset_bottom = 352.0
+	increase_button.offset_left = 624.0
+	increase_button.offset_right = 736.0
+	increase_button.offset_top = 256.0
+	increase_button.offset_bottom = 348.0
 	UiSkin.apply_icon(insufficient_icon, "warning")
 	# 夜間 UI 輪：警示列原本貼齊面板下緣（26px 字＋34px icon 被下注框陰影壓住），
 	# 上移到插圖下緣、加大、標籤加奶油底板——警示出現時要一眼可見
@@ -79,9 +79,7 @@ func _ready() -> void:
 	if warning_pill != null:
 		warning_pill.set_content_margin(SIDE_LEFT, 22.0)
 	insufficient_row.visible = false
-	# 確認鈕原 tscn 底緣離 ActionArea 下界僅 3px（貼邊），整體上移
-	confirm_button.offset_top -= 20.0
-	confirm_button.offset_bottom -= 20.0
+	# 確認鈕座標以 tscn 為準（滿寬 start.png 長條鈕，與面板保持 20px 間距）
 	_set_confirm_mode(false)
 	_install_button_feedback(decrease_button)
 	_install_button_feedback(increase_button)
@@ -126,7 +124,7 @@ func _set_confirm_mode(reset: bool) -> void:
 		confirm_button.text = Data.text("bet_reset_balance")
 		UiSkin.apply_button(confirm_button, "primary")
 		return
-	_confirm_is_art = UiSkin.apply_art_button(confirm_button, "btn_next")
+	_confirm_is_art = UiSkin.apply_art_button(confirm_button, "btn_start")
 	if _confirm_is_art:
 		confirm_button.text = ""
 	else:
