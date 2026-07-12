@@ -62,8 +62,10 @@
 ### UI（可選但建議）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| game_logo | logo.png | Assets/final/ | optional | PNG32 | yes | n/a | 標題 Logo（標題畫面大圖＋遊戲中右上角） | TitleScreen / VerticalUi TopBar | 文字標題 | imported | 美術 | 實際交付檔名 logo.png（Meow 準快跑！） |
-| title_banner | title_banner.jpg | Assets/final/ | optional | JPG | no | n/a | 任務 23 標題畫面滿版背景（設計師交付） | TitleScreen | background_battle_001＋文字標題 | imported | 設計師 | 1080×1920；圖上已含遊戲 Logo |
+| game_logo | logo.png | Assets/final/ | optional | PNG32 | yes | n/a | 標題 Logo（標題畫面大圖＋遊戲中右上角） | TitleScreen / VerticalUi TopBar | 文字標題 | imported | 美術 | 實際交付檔名 logo.png（Meow 準快跑！）；2026-07-12 換新版 |
+| title_banner | title_banner.jpg | Assets/final/ | optional | JPG | no | n/a | 任務 23 標題畫面滿版背景（設計師交付） | TitleScreen | background_battle_001＋文字標題 | imported | 設計師 | 1080×1920；圖上已含遊戲 Logo；2026-07-12 起被 intro_splash 影片蓋過，僅作缺影片 fallback |
+| intro_splash | intro_splash.ogv | Assets/final/ | optional | OGV 影片 | n/a | n/a | 標題畫面片頭影片（播畢定格末幀） | TitleScreen | title_banner → 戰鬥背景＋文字標題（逐級退） | imported | 設計師 | 2026-07-12 交付；音訊素材另走 Data/audio.json（D-014），不入本清單 |
+| intro_splash_last_frame | intro_splash_last_frame.png | Assets/final/ | optional | PNG | no | n/a | 片頭影片播畢的定格幀 | TitleScreen | 影片停在最後解碼幀 | imported | 設計師 | 與 intro_splash.ogv 成對交付 |
 | ui_panel_style_reference | ui_panel_style_reference.png | Assets/final/ | optional | PNG32 | yes | n/a | UI 風格參考 | （參考用） | 內建樣式 | planned | 美術 | 非必接入 |
 
 ### mockup 整圖素材（對齊 ui_mockup_battle，UiSkin art_texture/apply_art_button 載入）

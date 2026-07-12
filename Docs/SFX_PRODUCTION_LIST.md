@@ -1,16 +1,25 @@
 # SFX 製作清單（給音效產出者：人或 AI 皆可）
 
+> **✅ 完成（2026-07-12，commit b680c88）**：9 個事件音檔全數交付
+> `Assets/final/audio/sfx_*.ogg` 並接上 `Data/audio.json > sfx_events`，
+> 遊戲不再靜音。本檔轉為規格存檔；日後**換音檔**直接覆蓋同檔名 .ogg 即可。
+> 音量微調：整體 `sfx_volume_db`、BGM `bgm.volume_db`（人耳確認仍待人類）。
+>
 > 遊戲風格：可愛貼紙風、貓咪主角 vs 怪物、手機 H5 休閒。音效要**短、Q 彈、卡通**，
 > 不要寫實血腥。狀態對照表見 `Docs/SFX_TODO.md`；本檔只管「要做什麼聲音」。
 > 事件 ID 已鎖定（D-014），**只能做這 9 個，不得擅增**。
+> （例外備註：卡 24 虎爺事件程式呼叫了第 10 個事件 `sfx_huye_appear`，
+> 音檔未製作、audio.json 未列，依 D-014 缺檔靜音；要補聲音時在
+> `sfx_events` 加 `"sfx_huye_appear": "sfx_huye_appear.ogg"` 即接上。）
 
 ## 接入方式（做完照做即接上，不用改程式）
 
 1. 音檔放入 `Assets/final/audio/`，檔名照下表（格式 `.ogg` 優先，`.mp3`/`.wav` 也可）。
-2. 在 `Data/audio.json` 的 `sfx_events` 加一筆映射，例如：
+2. 在 `Data/audio.json` 的 `sfx_events` 加一筆映射，**值是檔名字串**
+   （audio_service 實作直接把值當檔名，物件形式會壞）：
    ```json
    "sfx_events": {
-     "attack_hit": { "file": "sfx_attack_hit.ogg" }
+     "attack_hit": "sfx_attack_hit.ogg"
    }
    ```
    （未列出的事件自動靜音略過，遊戲不會壞。）
@@ -56,23 +65,24 @@
 
 ## 找齊後的完整接入（複製貼上）
 
-檔案全部放進 `Assets/final/audio/`，然後把 `Data/audio.json` 的 `sfx_events` 換成：
+（✅ 已完成——現行 `Data/audio.json` 即為此形式。）檔案全部放進
+`Assets/final/audio/`，然後把 `Data/audio.json` 的 `sfx_events` 換成：
 
 ```json
 "sfx_events": {
-  "attack_hit":    { "file": "sfx_attack_hit.ogg" },
-  "cashout":       { "file": "sfx_cashout.ogg" },
-  "defeat":        { "file": "sfx_defeat.ogg" },
-  "button_click":  { "file": "sfx_button_click.ogg" },
-  "advance":       { "file": "sfx_advance.ogg" },
-  "monster_death": { "file": "sfx_monster_death.ogg" },
-  "bet_confirm":   { "file": "sfx_bet_confirm.ogg" },
-  "clear":         { "file": "sfx_clear.ogg" },
-  "balance_reset": { "file": "sfx_balance_reset.ogg" }
+  "attack_hit":    "sfx_attack_hit.ogg",
+  "cashout":       "sfx_cashout.ogg",
+  "defeat":        "sfx_defeat.ogg",
+  "button_click":  "sfx_button_click.ogg",
+  "advance":       "sfx_advance.ogg",
+  "monster_death": "sfx_monster_death.ogg",
+  "bet_confirm":   "sfx_bet_confirm.ogg",
+  "clear":         "sfx_clear.ogg",
+  "balance_reset": "sfx_balance_reset.ogg"
 }
 ```
 
-（下載到的是 .mp3/.wav 也行，把 `file` 欄位副檔名改成一致即可；只找到部分檔案就只列
+（下載到的是 .mp3/.wav 也行，副檔名改成一致即可；只找到部分檔案就只列
 有的那幾筆，缺的自動靜音不會壞。改完 Godot 編輯器開一次讓它 import，實跑聽一遍。）
 
 ## 通用規格
