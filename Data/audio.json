@@ -6,5 +6,15 @@
     "volume_db": -8.0
   },
   "sfx_volume_db": -4.0,
-  "sfx_events": {}
+  "sfx_events": {
+    "advance": "sfx_advance.ogg",
+    "attack_hit": "sfx_attack_hit.ogg",
+    "balance_reset": "sfx_balance_reset.ogg",
+    "bet_confirm": "sfx_bet_confirm.ogg",
+    "button_click": "sfx_button_click.ogg",
+    "cashout": "sfx_cashout.ogg",
+    "clear": "sfx_clear.ogg",
+    "defeat": "sfx_defeat.ogg",
+    "monster_death": "sfx_monster_death.ogg"
+  }
 }
