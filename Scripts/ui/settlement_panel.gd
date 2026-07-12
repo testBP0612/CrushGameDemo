@@ -20,7 +20,7 @@ signal leaderboard_requested
 @onready var paw_right: TextureRect = $Panel/Margin/Layout/TitleRow/PawRight
 @onready var body_label: RichTextLabel = $Panel/Margin/Layout/BodyLabel
 # 戰敗版統計：三張並排小卡（target: ui_target_lb_defeat）
-@onready var stats_cards: HBoxContainer = $Panel/Margin/Layout/StatsCards
+@onready var stats_cards: VBoxContainer = $Panel/Margin/Layout/StatsCards
 @onready var depth_card: PanelContainer = $Panel/Margin/Layout/StatsCards/DepthCard
 @onready var depth_icon: TextureRect = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthIcon
 @onready var depth_caption: Label = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthBox/DepthCaption
@@ -41,14 +41,16 @@ signal leaderboard_requested
 @onready var record_icon: TextureRect = $Panel/Margin/Layout/StatsDuo/DuoRow/RecordIcon
 @onready var record_line: RichTextLabel = $Panel/Margin/Layout/StatsDuo/DuoRow/RecordBox/RecordLine
 @onready var record_sub: RichTextLabel = $Panel/Margin/Layout/StatsDuo/DuoRow/RecordBox/RecordSub
-@onready var play_again_button: Button = $Panel/Margin/Layout/PlayAgainButton
-@onready var leaderboard_button: Button = $Panel/Margin/Layout/LeaderboardButton
+# 2026-07-12：兩顆按鈕移出結果卡、置於卡框下方（間距 20px）
+@onready var play_again_button: Button = $PlayAgainButton
+@onready var leaderboard_button: Button = $LeaderboardButton
 
 var _last_settle_state := ""
 var _leaderboard_service
 var _last_snapshot := {}
 var _rank_step := ""
 var _lb_button_style := ""
+var _lb_button_is_art := false
 # D-019 FOMO 事後揭示行（撤退：若再過一關可得…／戰敗：上一關落袋…）。程式生成，不動 .tscn。
 var _fomo_label: RichTextLabel
 var _outcome_label: Label
@@ -78,9 +80,9 @@ func _ready() -> void:
 		card_style.texture = card_texture
 		# 上邊距吃掉圖內緞帶頭（~205px×1.149），左右/下沿卡片米色本體內緣
 		card_style.content_margin_left = 70.0
-		card_style.content_margin_top = 240.0
+		card_style.content_margin_top = 230.0
 		card_style.content_margin_right = 70.0
-		card_style.content_margin_bottom = 80.0
+		card_style.content_margin_bottom = 110.0
 		panel.add_theme_stylebox_override("panel", card_style)
 		title_row.visible = false
 		var layout := title_row.get_parent() as VBoxContainer
@@ -96,7 +98,12 @@ func _ready() -> void:
 		stat_icon.custom_minimum_size = Vector2(65, 65)
 	# 文字必須先設好再套樣式：icon 對齊方式依「當下有無文字」決定（空字=置中會疊字）
 	play_again_button.text = Data.text("settle_play_again")
-	leaderboard_button.text = Data.text("lb_view_entry")
+	# 排行榜鈕：ranking_btn_sm.png（642x161 烙字「排行榜」）缺檔退回文字樣式
+	_lb_button_is_art = UiSkin.apply_art_button(leaderboard_button, "ranking_btn_sm")
+	if _lb_button_is_art:
+		leaderboard_button.text = ""
+	else:
+		leaderboard_button.text = Data.text("lb_view_entry")
 	UiSkin.apply_button(play_again_button, "settle_primary")
 	title_label.text = Data.text("settle_result_title")
 	UiSkin.apply_ribbon_label(title_label)
@@ -136,8 +143,9 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	stats_cards.visible = is_settle and is_defeat
 	stats_duo.visible = is_settle and not is_defeat
 	leaderboard_button.visible = is_settle
-	# target：戰敗版「查看排行榜」是文字連結，撤退版是膠囊
-	_apply_lb_button_style("settle_link" if is_defeat else "settle_pill")
+	# target：戰敗版「查看排行榜」是文字連結，撤退版是膠囊（藝術鈕版兩態同圖，不切換）
+	if not _lb_button_is_art:
+		_apply_lb_button_style("settle_link" if is_defeat else "settle_pill")
 	_bind_leaderboard_service(snapshot.get("leaderboard_service", null))
 
 	match state_name:
@@ -223,8 +231,8 @@ func _accent(value: int) -> String:
 	return "[color=%s]%d[/color]" % [ACCENT_PINK, value]
 
 
-## 統計數字：放大 + 上色（target：數字為視覺主角）
-func _big(value: String, color: String = ACCENT_PINK, size: int = 40) -> String:
+## 統計數字：放大 + 上色（target：數字為視覺主角；2026-07-12 手機可讀性 40→50）
+func _big(value: String, color: String = ACCENT_PINK, size: int = 50) -> String:
 	return "[font_size=%d][color=%s]%s[/color][/font_size]" % [size, color, value]
 
 

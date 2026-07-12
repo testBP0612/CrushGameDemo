@@ -450,12 +450,12 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="StatsCards" type="HBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+[node name="StatsCards" type="VBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 20
 
 [node name="DepthCard" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards"]
-custom_minimum_size = Vector2(0, 108)
+custom_minimum_size = Vector2(0, 116)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -477,18 +477,18 @@ alignment = 1
 
 [node name="DepthCaption" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 34
 horizontal_alignment = 1
 
 [node name="DepthValue" type="RichTextLabel" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthBox"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/normal_font_size = 36
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
 [node name="BeatenCard" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards"]
-custom_minimum_size = Vector2(0, 108)
+custom_minimum_size = Vector2(0, 116)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -510,18 +510,18 @@ alignment = 1
 
 [node name="BeatenCaption" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/BeatenCard/BeatenRow/BeatenBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 34
 horizontal_alignment = 1
 
 [node name="BeatenValue" type="RichTextLabel" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/BeatenCard/BeatenRow/BeatenBox"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/normal_font_size = 36
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
 [node name="BestCard" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards"]
-custom_minimum_size = Vector2(0, 108)
+custom_minimum_size = Vector2(0, 116)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -543,12 +543,12 @@ alignment = 1
 
 [node name="BestCaption" type="Label" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/BestCard/BestRow/BestBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 34
 horizontal_alignment = 1
 
 [node name="BestValue" type="RichTextLabel" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards/BestCard/BestRow/BestBox"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/normal_font_size = 36
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
@@ -618,13 +618,21 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 110)
-layout_mode = 2
+[node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = -28.0
+offset_top = 177.0
+offset_right = 1012.0
+offset_bottom = 307.0
 theme_override_font_sizes/font_size = 48
 
-[node name="LeaderboardButton" type="Button" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 46)
-layout_mode = 2
+[node name="LeaderboardButton" type="Button" parent="ActionArea/SettlementPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 171.0
+offset_top = 327.0
+offset_right = 813.0
+offset_bottom = 488.0
 theme_override_font_sizes/font_size = 26
 

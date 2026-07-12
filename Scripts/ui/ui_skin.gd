@@ -45,6 +45,7 @@ const TEX_BTN_START := "res://Assets/final/ui/start.png"
 const TEX_RISK_STATE := "res://Assets/final/ui/risk_state.png"
 const TEX_RISK_STAR := "res://Assets/final/ui/risk_star.png"
 const TEX_RESULT_CARD := "res://Assets/final/ui/result_card.png"
+const TEX_RANKING_BTN_SM := "res://Assets/final/ui/ranking_btn_sm.png"
 const TEX_RANKING_BTN := "res://Assets/final/ui/ranking_btn.png"
 const TEX_MONEY_CARD := "res://Assets/final/ui/money_card.png"
 
@@ -80,6 +81,8 @@ static func art_texture(name: String) -> Texture2D:
 			path = TEX_RISK_STAR
 		"result_card":
 			path = TEX_RESULT_CARD
+		"ranking_btn_sm":
+			path = TEX_RANKING_BTN_SM
 		"ranking_btn":
 			path = TEX_RANKING_BTN
 		"money_card":
