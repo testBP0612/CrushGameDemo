@@ -31,10 +31,12 @@ const HUYE_ASSET_PATH := "res://Assets/final/huye.png"
 var _current_monster: Dictionary = {}
 var _current_background_path := ""
 # D-019：血條改危險度顯示（程式生成，原血條僅隱藏——傷害節奏演出仍依賴其內部數值）
-var _danger_panel: PanelContainer
+var _danger_panel: Control
 var _danger_row: HBoxContainer
 var _danger_caption: Label
 var _danger_icons: HBoxContainer
+var _risk_art_in_use := false
+var _risk_star_texture: Texture2D
 # 受擊 punch：多段連擊時先殺前一個 tween 並歸位，避免縮放疊加
 var _punch_tween: Tween
 var _monster_base_scale := Vector2.ONE
@@ -332,6 +334,56 @@ func _clear_active_huye() -> void:
 ## D-019：血條位置改放危險度列（危險度＋爪印等級）。全程式生成，不動 .tscn。
 ## 外層加半透明深色藥丸底板（夜間 UI 輪）——原本裸放在花背景上對比不足。
 func _build_danger_display() -> void:
+	# 2026-07-12 設計師危險度美術：risk_state（骷髏+深色橫條）+ risk_star（金星）。
+	# 兩張都在才走美術路線；缺任一張退回原程式藥丸+爪印（D-004）。
+	var state_texture: Texture2D = UiSkin.art_texture("risk_state")
+	_risk_star_texture = UiSkin.art_texture("risk_star")
+	_risk_art_in_use = state_texture != null and _risk_star_texture != null
+	if _risk_art_in_use:
+		_build_risk_art_display(state_texture)
+		return
+	_build_danger_pill_display()
+
+
+## 美術版：骷髏橫條 1:1 原尺寸（447x112），金星由 _update_danger_display 疊上；
+## 怪物名改白字置於橫條上方（骷髏右側），對齊設計稿。
+func _build_risk_art_display(state_texture: Texture2D) -> void:
+	var root := Control.new()
+	root.name = "DangerPanel"
+	root.position = Vector2(560.0, 748.0)
+	root.size = Vector2(447.0, 112.0)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(root)
+	_danger_panel = root
+
+	var bar := TextureRect.new()
+	bar.name = "RiskStateBar"
+	bar.texture = state_texture
+	bar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(bar)
+
+	_danger_icons = HBoxContainer.new()
+	_danger_icons.name = "DangerIcons"
+	_danger_icons.alignment = BoxContainer.ALIGNMENT_BEGIN
+	_danger_icons.add_theme_constant_override("separation", 10)
+	_danger_icons.position = Vector2(150.0, 32.0)
+	_danger_icons.size = Vector2(280.0, 48.0)
+	_danger_icons.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(_danger_icons)
+
+	monster_name_label.add_theme_color_override("font_color", Color.WHITE)
+	monster_name_label.add_theme_color_override("font_outline_color", UiSkin.DEEP_NAVY)
+	monster_name_label.add_theme_constant_override("outline_size", 10)
+	monster_name_label.offset_left = 690.0
+	monster_name_label.offset_right = 1007.0
+	monster_name_label.offset_top = 694.0
+	monster_name_label.offset_bottom = 746.0
+
+
+func _build_danger_pill_display() -> void:
 	monster_hp_bar.visible = false
 	_danger_panel = PanelContainer.new()
 	_danger_panel.name = "DangerPanel"
@@ -369,6 +421,19 @@ func _update_danger_display(stage_to_challenge: int) -> void:
 		return
 
 	var level := Data.danger_level_at(stage_to_challenge)
+	if _risk_art_in_use:
+		# 設計稿樣式：只排亮星（level 顆），不畫暗星佔位
+		for child in _danger_icons.get_children():
+			child.queue_free()
+		for index in range(level):
+			var star := TextureRect.new()
+			star.texture = _risk_star_texture
+			star.custom_minimum_size = Vector2(42.0, 42.0)
+			star.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			star.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			_danger_icons.add_child(star)
+		_danger_panel.visible = true
+		return
 	var icons_ok := UiSkin.fill_danger_icons(_danger_icons, level, max_level, 53.0)
 	_danger_icons.visible = icons_ok
 	if icons_ok:
