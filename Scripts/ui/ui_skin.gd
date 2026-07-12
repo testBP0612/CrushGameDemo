@@ -38,7 +38,6 @@ const SKIN_CHIP_ACTIVE := "res://Assets/final/ui/skin_chip_active.png"
 # 對齊 ui_mockup_battle 的整圖美術素材（缺檔一律退回程式樣式，不崩）。
 const TEX_LOGO := "res://Assets/final/logo.png"
 const TEX_BOARD := "res://Assets/final/ui/board.png"
-const TEX_BET_RIBBON := "res://Assets/final/ui/bet_info.png"
 const TEX_BET_CONTEXT := "res://Assets/final/ui/bet_context.png"
 const TEX_BTN_NEXT := "res://Assets/final/ui/next.png"
 const TEX_BTN_RETREAT := "res://Assets/final/ui/retreat.png"
@@ -63,8 +62,6 @@ static func art_texture(name: String) -> Texture2D:
 			path = TEX_LOGO
 		"board":
 			path = TEX_BOARD
-		"bet_ribbon":
-			path = TEX_BET_RIBBON
 		"bet_context":
 			path = TEX_BET_CONTEXT
 		"btn_next":

@@ -70,7 +70,7 @@
 | asset_id | file_name | target_path | required | transparent | purpose | fallback | status | notes |
 |---|---|---|---|---|---|---|---|---|
 | ui_board | board.png | Assets/final/ui/ | optional | yes | HUD 單板木質看板（取代三欄卡） | 程式 StyleBoxFlat 底板 | imported | 欄位標題由 Label 疊字（ui_text.json） |
-| ui_bet_ribbon | bet_info.png | Assets/final/ui/ | optional | yes | 下注面板「下注內容」緞帶（含烤字） | 粉紅程式緞帶＋文字 | imported | 烤字素材，改字需重出圖 |
+| ui_bet_ribbon | bet_info.png | Assets/final/ui/ | optional | yes | 下注面板「下注內容」緞帶（含烤字） | 粉紅程式緞帶＋文字 | retired | **已停用（2026-07-12）**：緞帶與文字已烙進新版 skin_panel.png，程式不再引用；檔案暫留庫存 |
 | ui_bet_context | bet_context.png | Assets/final/ui/ | optional | yes | 下注面板中央貓糧插圖 | 自動隱藏 | imported | 裝飾用 |
 | ui_btn_next | next.png | Assets/final/ui/ | optional | yes | 續戰/開始大按鈕（烤字「喵準開始」） | 文字按鈕 primary 樣式 | imported | 烤字素材，改字需重出圖 |
 | ui_btn_retreat | retreat.png | Assets/final/ui/ | optional | yes | 撤退大按鈕（烤字「喵準快逃」） | 文字按鈕 secondary 樣式 | imported | 烤字素材，改字需重出圖 |
@@ -89,7 +89,7 @@
 | asset_id | file_name | 對應 style | status | notes |
 |---|---|---|---|---|
 | skin_card | skin_card.png | card（HUD 三欄卡） | imported | 奶白+深藍厚描邊 |
-| skin_panel | skin_panel.png | large（下注面板） | imported | 奶白+深藍厚描邊 |
+| skin_panel | skin_panel.png | large（下注面板） | imported | 奶白+深藍厚描邊；2026-07-12 換版含烙字「下注內容」緞帶（取代 bet_info.png），改字需重出圖；缺檔退 flat 時由 TitleLabel 文字補標題 |
 | skin_btn_primary | skin_btn_primary.png | primary（開始挑戰/挑戰下一隻） | imported | 青綠 |
 | skin_btn_secondary | skin_btn_secondary.png | secondary（撤退領取） | imported | 暖橘/桃 |
 | skin_btn_minus | skin_btn_minus.png | step_decrease（−） | imported | 桃紅 |

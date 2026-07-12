@@ -12,7 +12,6 @@ signal balance_reset_requested
 
 @onready var panel: PanelContainer = $Panel
 @onready var title_label: Label = $TitleLabel
-@onready var ribbon_rect: TextureRect = $RibbonRect
 @onready var context_rect: TextureRect = $Panel/Content/ContextRect
 @onready var chips_left: VBoxContainer = $Panel/Content/ChipsLeft
 @onready var chips_right: VBoxContainer = $Panel/Content/ChipsRight
@@ -32,10 +31,11 @@ var _confirm_mode_initialized := false
 
 func _ready() -> void:
 	UiSkin.apply_panel(panel, "large")
-	# 緞帶標題：有 bet_info.png 用圖（含烤字），缺檔退回粉紅文字標題
-	var ribbon_ok := UiSkin.apply_art_texture(ribbon_rect, "bet_ribbon")
-	title_label.visible = not ribbon_ok
-	if not ribbon_ok:
+	# 「下注內容」標題已烙在 skin_panel.png 上（2026-07-12 換圖，bet_info.png 停用）；
+	# 缺皮膚圖時面板退回程式 flat 樣式無字 → 才顯示粉紅文字標題（D-004）
+	var panel_skin_ok := ResourceLoader.exists(UiSkin.SKIN_PANEL, "Texture2D")
+	title_label.visible = not panel_skin_ok
+	if not panel_skin_ok:
 		title_label.text = Data.text("bet_panel_title")
 		UiSkin.apply_ribbon_label(title_label)
 	# 中央貓糧插圖（缺檔自動隱藏）
