@@ -85,6 +85,15 @@
 - [x] 兩個新映射讀 `Data/audio.json`；缺暫代音檔時僅載入期 warning、兩處靜音且遊戲不崩。
 - [x] H5 匯出實跑：音檔存在時兩個事件於正確時機發聲；移除音檔後仍可完成原流程。
 
+## 里程碑 — 任務 26（虎爺事件 BGM；Codex）
+- [x] `HUYE_RESCUE` 起始時主 BGM 依資料淡出，事件 BGM 循環覆蓋慢動作、banner 與獎勵金幣全段。
+- [x] 金幣完成時事件 BGM 淡出、主 BGM 依資料淡入，且從切出位置續播而非歸零。
+- [x] 缺 `bgm_huye.ogg`／未知 event id／重複 play／未啟動 stop 均為 no-op，主流程與主 BGM 不受影響。
+- [x] 連續兩次虎爺事件及事件後撤退、再開局皆無播放器、Tween 或播放位置殘留；`stop_all()` 可完整清除。
+- [x] `huye_appear` 裸事件名與 `sfx_huye_appear.ogg` 映射一致；缺檔靜音不崩。
+- [x] CoinBurst 壞 config 時兩入口均不碰 payout hold，無 `Hud payout hold missing positive max_hold`；正常 config 仍於飛行期間暫扣並在第一枚到達時放行。
+- [x] H5 匯出實跑首次互動解鎖正常；事件音檔存在／缺失兩條路徑皆符合上述行為。
+
 ## 里程碑 — 任務 11（音效接入，需 D-014 定案後執行）
 - [ ] BGM 開播且 loop；已映射 SFX 事件於對應時機發聲。
 - [ ] 檔名/音量/loop 皆讀 `Data/audio.json`，改參數重啟即生效。

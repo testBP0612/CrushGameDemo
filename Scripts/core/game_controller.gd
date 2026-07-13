@@ -385,7 +385,7 @@ func _on_player_hurt_finished() -> void:
 
 
 func _on_huye_impact() -> void:
-	audio_service.play_sfx("sfx_huye_appear")
+	audio_service.play_sfx("huye_appear")
 	state_machine.reveal_huye_result()
 
 
@@ -407,10 +407,12 @@ func _on_huye_banner_dismissed() -> void:
 func _start_huye_coin_burst() -> void:
 	var burst := CoinBurstScript.new()
 	add_child(burst)
-	vertical_ui.hold_payout_count_up(burst.max_hold())
+	# GDScript lambda 會以值捕捉 primitive；用 Dictionary 共享同一份 hold 狀態。
+	var hold_state := {"active": false}
 	var completed := func() -> void:
-		if vertical_ui != null and is_instance_valid(vertical_ui):
+		if bool(hold_state["active"]) and vertical_ui != null and is_instance_valid(vertical_ui):
 			vertical_ui.release_payout_count_up()
+		audio_service.stop_event_bgm()
 		state_machine.finish_huye_rescue()
 	var started: bool = burst.play(
 		battle_presenter.huye_coin_origin(),
@@ -419,6 +421,8 @@ func _start_huye_coin_burst() -> void:
 		completed
 	)
 	if started:
+		hold_state["active"] = true
+		vertical_ui.hold_payout_count_up(burst.max_hold())
 		audio_service.play_sfx("huye_coin_burst")
 	else:
 		if burst != null and is_instance_valid(burst):
@@ -443,6 +447,7 @@ func _play_presentation_for_state(state_name: String) -> void:
 		"MONSTER_COUNTER":
 			battle_presenter.play_monster_counter()
 		"HUYE_RESCUE":
+			audio_service.play_event_bgm("huye")
 			battle_presenter.play_huye_rescue()
 		"PLAYER_HURT":
 			battle_presenter.play_player_hurt()
@@ -461,21 +466,22 @@ func _play_settlement_sfx(result: String) -> void:
 func _play_monster_death_with_coin_burst() -> void:
 	var burst := CoinBurstScript.new()
 	add_child(burst)
-	vertical_ui.hold_payout_count_up(burst.max_hold())
 	battle_presenter.play_monster_death()
 
+	var hold_state := {"active": false}
 	var started: bool = burst.play(
 		battle_presenter.monster_canvas_position(),
 		vertical_ui.payout_anchor_canvas_position(),
 		state_machine.current_multiplier,
 		func() -> void:
-			if vertical_ui != null and is_instance_valid(vertical_ui):
+			if bool(hold_state["active"]) and vertical_ui != null and is_instance_valid(vertical_ui):
 				vertical_ui.release_payout_count_up()
 	)
 	if started:
+		hold_state["active"] = true
+		vertical_ui.hold_payout_count_up(burst.max_hold())
 		audio_service.play_sfx("coin_burst")
 	else:
-		vertical_ui.release_payout_count_up()
 		if burst != null and is_instance_valid(burst):
 			burst.queue_free()
 

@@ -93,6 +93,10 @@
 | `bgm.file` | string | BGM 檔名（相對 `Assets/final/audio/`，如 `bgm_main.mp3`）。 |
 | `bgm.loop` | bool | BGM 是否循環。 |
 | `bgm.volume_db` | float | BGM 音量（dB）。 |
+| `event_bgm.<event_id>.file` | string | 事件 BGM 檔名（相對 `Assets/final/audio/`）；缺檔時不切換，主 BGM 照播。 |
+| `event_bgm.<event_id>.loop` | bool | 事件 BGM 是否循環；虎爺事件必須為 true。 |
+| `event_bgm.<event_id>.volume_db` | float | 事件 BGM 音量（dB）。 |
+| `event_bgm.<event_id>.fade_out` / `fade_in` | float(s) | 切入事件前主 BGM／切回主 BGM 的淡出、淡入秒數；事件收尾淡出沿用 `fade_out`。 |
 | `sfx_volume_db` | float | SFX 統一音量（dB）。 |
 | `sfx_events.<event_id>` | string | 事件→SFX 檔名映射。**只列已有音檔的事件**；未列出的 event_id 一律靜音略過。event_id 全集見 `Docs/SFX_TODO.md`，不得擅增。 |
 
