@@ -72,6 +72,13 @@
 - [x] Godot 關鍵幀（慢動作/壓下/飛出/插頁）與後續怪物截圖已目視確認。
 - [x] H5 匯出實跑完整 force-trigger 演出；素材存在性使用 `ResourceLoader.exists()`。
 
+## 里程碑 — 任務 25（金幣噴發音效獨立事件；Codex）
+- [x] 怪物死亡 CoinBurst 實際開始時只播放一次 `coin_burst`，且不取代既有 `monster_death` 死亡聲。
+- [x] 虎爺獎勵 CoinBurst 實際開始時只播放一次 `huye_coin_burst`，兩個噴發事件不混用。
+- [x] CoinBurst `play()` 回傳 false（缺 config／缺金幣圖／無可生成金幣）時不播放噴發音效，原本視覺 fallback 與流程照常。
+- [x] 兩個新映射讀 `Data/audio.json`；缺暫代音檔時僅載入期 warning、兩處靜音且遊戲不崩。
+- [x] H5 匯出實跑：音檔存在時兩個事件於正確時機發聲；移除音檔後仍可完成原流程。
+
 ## 里程碑 — 任務 11（音效接入，需 D-014 定案後執行）
 - [ ] BGM 開播且 loop；已映射 SFX 事件於對應時機發聲。
 - [ ] 檔名/音量/loop 皆讀 `Data/audio.json`，改參數重啟即生效。

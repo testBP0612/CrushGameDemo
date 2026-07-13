@@ -14,7 +14,9 @@
     "button_click": "sfx_button_click.ogg",
     "cashout": "sfx_cashout.ogg",
     "clear": "sfx_clear.ogg",
+    "coin_burst": "sfx_coin_burst.ogg",
     "defeat": "sfx_defeat.ogg",
+    "huye_coin_burst": "sfx_huye_coin_burst.ogg",
     "monster_death": "sfx_monster_death.ogg"
   }
 }

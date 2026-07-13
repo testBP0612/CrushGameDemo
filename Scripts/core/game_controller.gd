@@ -418,7 +418,9 @@ func _start_huye_coin_burst() -> void:
 		state_machine.run_multiplier_at(state_machine.stage + 1),
 		completed
 	)
-	if not started:
+	if started:
+		audio_service.play_sfx("huye_coin_burst")
+	else:
 		if burst != null and is_instance_valid(burst):
 			burst.queue_free()
 		completed.call()
@@ -470,7 +472,9 @@ func _play_monster_death_with_coin_burst() -> void:
 			if vertical_ui != null and is_instance_valid(vertical_ui):
 				vertical_ui.release_payout_count_up()
 	)
-	if not started:
+	if started:
+		audio_service.play_sfx("coin_burst")
+	else:
 		vertical_ui.release_payout_count_up()
 		if burst != null and is_instance_valid(burst):
 			burst.queue_free()
