@@ -37,9 +37,9 @@ theme_override_font_sizes/font_size = 34
 [node name="PlayerIdRow" type="HBoxContainer" parent="TopBar"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 138.0
+offset_left = 118.0
 offset_top = 20.0
-offset_right = 538.0
+offset_right = 518.0
 offset_bottom = 72.0
 theme_override_constants/separation = 10
 alignment = 1
@@ -81,6 +81,7 @@ theme_override_font_sizes/font_size = 46
 vertical_alignment = 1
 
 [node name="LogoLabel" type="Label" parent="TopBar"]
+visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_left = 620.0
@@ -92,6 +93,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LogoRect" type="TextureRect" parent="TopBar"]
+visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_left = 620.0
@@ -635,4 +637,3 @@ offset_top = 327.0
 offset_right = 813.0
 offset_bottom = 488.0
 theme_override_font_sizes/font_size = 26
-

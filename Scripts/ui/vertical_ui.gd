@@ -58,10 +58,8 @@ func _ready() -> void:
 	else:
 		money_value.offset_left = 40.0
 		UiSkin.apply_resource_label(money_value)
-	logo_label.text = Data.text("title_game_name")
-	# 有 logo.png 用圖（mockup 右上 Logo），缺檔退回文字標題
-	var logo_ok := UiSkin.apply_art_texture(logo_rect, "logo")
-	logo_label.visible = not logo_ok
+	logo_label.visible = false
+	logo_rect.visible = false
 	set_profile_auth_state(false, "")
 	bet_panel.decrease_requested.connect(func() -> void: bet_decrease_requested.emit())
 	bet_panel.increase_requested.connect(func() -> void: bet_increase_requested.emit())
