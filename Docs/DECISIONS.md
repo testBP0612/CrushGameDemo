@@ -320,3 +320,37 @@
   `Scripts/battle/battle_presenter.gd`、`Scripts/effects/`（新演出）、
   `Assets/ART_ASSET_MANIFEST.md`、`AGENTS.md`、`Codex/VALIDATION_CHECKLIST.md`、
   `Docs/06_DATA_SCHEMA.md`。
+
+## D-023：金幣噴發音效獨立事件（修訂 D-019/卡 19 的併檔備註）
+- **問題**：卡 19 當時裁示「金幣聲併入 `monster_death` 音檔，不另增事件」
+  （見 `Docs/SFX_PRODUCTION_LIST.md` 搜尋指南備註）。實際聽感金幣感不足，
+  且虎爺獎勵的金幣噴發（卡 24 復用 CoinBurst）完全無聲。
+- **人類決策**（2026-07-13，對話中裁示）：
+  1. **音效拆分**：`monster_death` 現行音檔保留，專職怪物死亡聲；金幣噴發
+	 獨立為新 SFX 事件。
+  2. **兩個噴發事件**：`coin_burst`（怪物死亡噴發）與 `huye_coin_burst`
+	 （虎爺獎勵噴發，更盛大加長版）——虎爺場的中獎感值得獨立音檔。
+  3. **素材由人類自行蒐集**：程式先接事件與 `audio.json` 映射，缺檔靜音
+	 （D-014 慣例），之後放檔即接上、零程式改動。
+- **影響**：`Scripts/effects/coin_burst.gd` 或 `Scripts/core/game_controller.gd`
+  （播放點）、`Data/audio.json`、`Docs/SFX_PRODUCTION_LIST.md`、
+  `Codex/VALIDATION_CHECKLIST.md`。
+- **實作**：`Codex/25_COIN_BURST_SFX_SPLIT.md`（Codex）。
+
+## D-024：事件型 BGM——虎爺降臨切換專屬 BGM（超出 D-014 九事件範圍的擴充）
+- **問題**：虎爺事件演出偏乾。博奕遊戲 FREE GAME 慣例：觸發特殊事件時
+  切換專屬音樂，事件結束接回主 BGM。
+- **人類決策**（2026-07-13，對話中裁示）：
+  1. **切換語意**：進虎爺事件（慢動作開始）主 BGM 淡出，播虎爺專屬 BGM；
+	 事件收尾（獎勵金幣噴發完成）虎爺 BGM 淡出、主 BGM 淡入。
+  2. **主 BGM 接續原播放進度**（記錄切出位置續播，非從頭重播）。
+  3. **虎爺 BGM 必須可循環**：banner 等玩家點擊、事件時長不定。
+  4. **資料驅動**：`Data/audio.json` 新增頂層 `event_bgm.huye`
+	 （file/loop/volume_db/fade_out/fade_in）。缺檔 → 不切換、主 BGM 照播
+	 （D-004 不崩原則），事件其他演出照常。
+  5. **順手命名統一**：事件 ID `sfx_huye_appear` 改 `huye_appear`
+	 （與其他九事件裸名慣例一致；音檔檔名維持 `sfx_` 前綴）。
+- **影響**：`Scripts/services/audio_service.gd`、`Scripts/core/game_controller.gd`、
+  `Data/audio.json`、`Docs/06_DATA_SCHEMA.md`、`Docs/SFX_PRODUCTION_LIST.md`、
+  `Codex/VALIDATION_CHECKLIST.md`。
+- **實作**：`Codex/26_HUYE_EVENT_BGM.md`（Codex）。

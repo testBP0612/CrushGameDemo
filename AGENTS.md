@@ -56,6 +56,8 @@
 22. `22_WIN_BANNER_INTERSTITIAL`（撤退/通關大贏插頁：金色貼紙數字慶祝畫面，點擊任意處繼續；純視覺不動狀態機；數字圖以生成貼紙產出〔D-012 類別〕；Codex）✅（e0ddf6b 出貨，帳面補記 2026-07-11）
 23. `23_UI_REFERENCE_ALIGNMENT`（設計師四張 UI 參考圖對齊；banner 直接接入、其餘畫面目視調整；Codex）✅（2026-07-10 Godot＋H5 實跑驗收）
 24. `24_HUYE_RESCUE_EVENT`（「遇見虎爺」隨機救援事件：敗局強制逆轉＋該關增額翻倍＋FREE GAME 式插頁；依 D-022；Codex）
+25. `25_COIN_BURST_SFX_SPLIT`（金幣噴發音效獨立事件：coin_burst / huye_coin_burst，monster_death 專職死亡聲；依 D-023；Codex；素材人類自蒐）
+26. `26_HUYE_EVENT_BGM`（虎爺事件 BGM 切換：主 BGM 淡出→事件循環 BGM→接續原進度淡回＋huye_appear 命名統一；依 D-024；Codex；排在 25 之後）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。

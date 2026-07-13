@@ -9,8 +9,10 @@
 > 不要寫實血腥。狀態對照表見 `Docs/SFX_TODO.md`；本檔只管「要做什麼聲音」。
 > 事件 ID 已鎖定（D-014），**只能做這 9 個，不得擅增**。
 > （例外備註：卡 24 虎爺事件程式呼叫了第 10 個事件 `sfx_huye_appear`，
-> 音檔未製作、audio.json 未列，依 D-014 缺檔靜音；要補聲音時在
-> `sfx_events` 加 `"sfx_huye_appear": "sfx_huye_appear.ogg"` 即接上。）
+> 音檔未製作、audio.json 未列，依 D-014 缺檔靜音。
+> **2026-07-13 更新（D-024/卡 26）**：事件 ID 統一改名 `huye_appear`，
+> 並依 D-023/D-024 追加金幣噴發×2 與虎爺 BGM——完整追加清單見文末
+> 「2026-07-13 追加清單」段。）
 
 ## 接入方式（做完照做即接上，不用改程式）
 
@@ -55,7 +57,7 @@
 | `defeat` | `cartoon fail slide whistle`、`sad trombone short`、`descending boing` | 滑稽優先；長度超過 1 秒的剪掉尾巴 |
 | `button_click` | `ui click soft`、`bubble click`、`pop click short` | 越不起眼越好，選最「軟」的那個 |
 | `advance` | `whoosh short`、`swish transition`、`cartoon dash` | 要有「往前衝」的方向感 |
-| `monster_death` | `balloon deflate`、`cartoon poof`、`bubble burst puff` | 洩氣感/泡泡破；此事件與爆金幣同時發生，帶一點金屬碎響也可（金幣聲併入此檔，D-019/卡 19 裁示不另增事件） |
+| `monster_death` | `balloon deflate`、`cartoon poof`、`bubble burst puff` | 洩氣感/泡泡破；~~金幣聲併入此檔（D-019/卡 19）~~ **D-023（2026-07-13）推翻：金幣聲獨立為 `coin_burst` 事件，本檔專職死亡聲**，見文末追加清單 |
 | `bet_confirm` | `poker chip place`、`chip stack click`、`token drop wood` | 籌碼/木桌質感，短促 |
 | `clear` | `victory fanfare short`、`level complete jingle cute` | 1 秒出頭的小號角/鈴鐺；比 cashout 更隆重但別拖 |
 | `balance_reset` | `notification ding neutral`、`soft chime single` | 中性單音，不能有失敗感 |
@@ -96,3 +98,26 @@
 
 只補 ★★★ 三個（`attack_hit` / `cashout` / `defeat`）就能覆蓋「打擊手感 + 贏的爽 + 輸的張力」
 三個核心回饋；比賽 demo 的「完成度感」提升最大的就是這三個。
+
+## 2026-07-13 追加清單（D-023/D-024，素材由人類自行蒐集）
+
+卡 25/26 完成後，以下四檔「放進 `Assets/final/audio/` 同檔名」即接上，零程式改動
+（audio.json 映射由任務卡預登；接檔前缺檔靜音/不切換，遊戲不會壞）。
+
+| event_id | 檔名 | 什麼時候響 | 聲音方向 | 長度 |
+|---|---|---|---|---|
+| `coin_burst` | `sfx_coin_burst.ogg` | 怪物死亡金幣噴出飛向收益欄 | 一把金幣灑落「嘩啦叮鈴」，比 cashout 密集有顆粒感 | 0.8–1.5s |
+| `huye_coin_burst` | `sfx_huye_coin_burst.ogg` | 虎爺獎勵金幣噴發（banner 點掉後） | coin_burst 的盛大加長版：金幣雨＋上揚中獎感 | 1.5–2.5s |
+| `huye_appear` | `sfx_huye_appear.ogg` | 虎爺落地衝擊瞬間（震屏+閃白同拍） | 大鼓/太鼓單擊「咚」＋短虎嘯（偏可愛不猙獰），可疊鑼點添神明感 | 0.6–1.0s |
+| （BGM）`event_bgm.huye` | `bgm_huye.ogg` | 虎爺事件全段（慢動作起至金幣飛完），主 BGM 淡出讓位 | 中式喜慶＋中獎感的**可循環 loop**（banner 等點擊、時長不定，必須無縫循環），8–15 秒一圈 | loop |
+
+搜尋關鍵字（來源同上：freesound CC0 / pixabay / kenney）：
+
+| 檔案 | 搜尋關鍵字 | 挑選要點 |
+|---|---|---|
+| `sfx_coin_burst` | `coin shower`、`coins pouring`、`slot machine coin payout` | 多枚金幣顆粒感；與 monster_death 的 poof 疊播要聽得開 |
+| `sfx_huye_coin_burst` | `coins pouring jackpot`、`big win coins`、`treasure coins long` | 比 coin_burst 明顯更長更密；結尾上揚的優先 |
+| `sfx_huye_appear` | `taiko drum hit`、`big cartoon impact thud`、`tiger roar short`、`gong hit short` | 要夠「重」撐得起 0.42s 震屏；虎嘯挑卡通短吼 |
+| `bgm_huye` | `chinese festival loop`、`taiko percussion loop`、`lion dance drum loop`、`jackpot free spins music loop` | 首尾無縫循環是硬條件；能量要壓過主 BGM 一截 |
+
+授權注意照舊：CC0 最省事，CC-BY 記得在簡報/README 附署名。
