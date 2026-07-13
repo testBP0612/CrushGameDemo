@@ -32,6 +32,15 @@
    `"huye_appear"`；`audio.json > sfx_events` 預登
    `"huye_appear": "sfx_huye_appear.ogg"`（事件裸名、檔名維持 `sfx_` 前綴，
    與九事件慣例一致；音檔尚缺，缺檔靜音）。
+5. **順手項（卡 19 fallback 微調；卡 25 破壞性測試發現，人類 2026-07-13 裁示）**：
+   兩個 coin burst 入口（`_start_huye_coin_burst` 與
+   `_play_monster_death_with_coin_burst`）現況是**先**
+   `hold_payout_count_up(burst.max_hold())` **才** `burst.play()`——config
+   整組壞時 `max_hold()=0` 會先撞 `hud.gd` 的 push_error 防呆。改為
+   **`play()` 回傳 true 才 hold（緊接著播噴發音效，同幀內完成，與第一枚
+   金幣到達之間隔著 tween 無 race）**；false 分支不碰 hold。
+   **`hud.gd:64-67` 的 push_error 防呆保留不動**——它負責抓「config 正常、
+   金幣會噴、卻忘填 max_hold」的真實資料錯誤，不得順手刪。
 
 ## 二、資料驅動欄位（帳面同步 `Docs/06_DATA_SCHEMA.md`）
 
@@ -64,6 +73,9 @@
 - 連續觸發兩關（force_trigger 連打）：切換兩輪無狀態殘留。
 - 虎爺局後撤退進結算、再開下一局：BGM 狀態正常、`stop_all` 無殘留。
 - `huye_appear` 改名後放暫代音檔：虎爺落地衝擊有聲。
+- 順手項驗證：臨時清空 `animation_timing.effects.coin_burst` → 兩處
+  不再觸發 `Hud payout hold missing positive max_hold` 且流程照常走完；
+  還原 config 後正常流程 hold/放行行為與現況一致（金幣飛行期間收益數字暫扣）。
 - H5 匯出版實測一次（audio unlock 路徑，`ResourceLoader` 陷阱照舊注意）。
 - 帳面：`Docs/06_DATA_SCHEMA.md` 補 `event_bgm`、
   `Codex/VALIDATION_CHECKLIST.md` 補「里程碑 — 任務 26」。

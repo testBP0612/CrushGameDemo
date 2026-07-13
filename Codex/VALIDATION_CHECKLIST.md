@@ -6,6 +6,12 @@
 - [ ] 只動了該任務卡範圍內的檔案。
 - [ ] **資源存在性判斷一律用 `ResourceLoader.exists()`，不可用 `FileAccess.file_exists()`**——後者在匯出版對 imported 資源（PNG/MP3…）恆為 false，會讓缺檔 fallback 全部誤觸發（編輯器正常、部署後素材消失；2026-07-04 教訓，raw 檔如 .json 除外）。涉及素材/音訊載入的卡，**必須做一次 H5 匯出實機驗證**，不能只在編輯器目視。
 - [ ] 沒有把數值/文案寫死（皆讀 `Data/*.json`）。
+- [ ] **跑 Godot（尤其 `--editor`/`--import`/匯出）一律用非 sandbox 執行**——sandbox 擋
+  AppData 寫入（editor data/cache 目錄建不出來）會直接 signal 11 crash，長得像記憶體
+  錯誤其實是檔案權限（2026-07-13 卡 25 教訓）。
+- [ ] **臨時測試場景結束前先 `queue_free()` 主場景、等數個 process frame 再 `quit()`**——
+  驗證完立刻 quit 必噴 `ObjectDB instances leaked`／`resources still in use` teardown
+  警告，屬 harness 問題非遊戲洩漏，但會污染驗證輸出（2026-07-13 卡 25 教訓）。
 - [ ] 程式依 `Scripts/` 分層，無單一巨大 script。
 - [ ] 不明確處已寫入 `Docs/OPEN_QUESTIONS.md`。
 - [ ] 已用「完成回報」格式回報。
