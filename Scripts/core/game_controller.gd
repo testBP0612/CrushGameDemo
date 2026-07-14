@@ -526,7 +526,10 @@ func _update_view() -> void:
 	var state_name := state_machine.state_name()
 	title_screen.visible = state_machine.is_title()
 	vertical_ui.visible = not state_machine.is_title()
-	battle_presenter.set_settlement_presentation(state_machine.is_settle())
+	battle_presenter.set_settlement_presentation(
+		state_machine.is_settle(),
+		state_name == "DEFEAT_SETTLE" or state_name == "CASH_OUT_SETTLE"
+	)
 	_update_auth_ui()
 	vertical_ui.update_snapshot(_ui_snapshot(state_name))
 	_update_best_record_text()

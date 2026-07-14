@@ -48,6 +48,10 @@ const TEX_RESULT_CARD := "res://Assets/final/ui/result_card.png"
 const TEX_RANKING_BTN_SM := "res://Assets/final/ui/ranking_btn_sm.png"
 const TEX_RANKING_BTN := "res://Assets/final/ui/ranking_btn.png"
 const TEX_MONEY_CARD := "res://Assets/final/ui/money_card.png"
+const TEX_BET_INPUT := "res://Assets/final/ui/bet_input.png"
+const TEX_REPLAY := "res://Assets/final/ui/replay.png"
+const TEX_ICON_PLUS_BUTTON := "res://Assets/final/ui/icon_plus.png"
+const TEX_ICON_MINUS_BUTTON := "res://Assets/final/ui/icon_minus.png"
 
 # mockup 色票（看板棕字、粉紅籌碼、藍色加號鈕）
 const BOARD_BROWN := Color(0.47, 0.28, 0.16, 1.0)
@@ -87,6 +91,14 @@ static func art_texture(name: String) -> Texture2D:
 			path = TEX_RANKING_BTN
 		"money_card":
 			path = TEX_MONEY_CARD
+		"bet_input":
+			path = TEX_BET_INPUT
+		"replay":
+			path = TEX_REPLAY
+		"icon_plus":
+			path = TEX_ICON_PLUS_BUTTON
+		"icon_minus":
+			path = TEX_ICON_MINUS_BUTTON
 	if path.is_empty():
 		return null
 	return _load_texture(path)
@@ -131,6 +143,28 @@ static func apply_art_button(button: Button, name: String) -> bool:
 	var disabled := normal.duplicate() as StyleBoxTexture
 	disabled.modulate_color = Color(0.55, 0.55, 0.6, 0.8)
 	button.add_theme_stylebox_override("disabled", disabled)
+	return true
+
+
+## 已含完整外框的整圖 icon button。保持貼圖原尺寸，不再疊加程式 StyleBox。
+static func apply_art_icon_button(button: Button, name: String) -> bool:
+	if button == null or not is_instance_valid(button):
+		return false
+	var texture := art_texture(name)
+	if texture == null:
+		return false
+	button.text = ""
+	button.icon = texture
+	button.expand_icon = false
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+		button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	button.add_theme_color_override("icon_normal_color", Color.WHITE)
+	button.add_theme_color_override("icon_hover_color", Color.WHITE)
+	button.add_theme_color_override("icon_pressed_color", Color.WHITE)
+	# disabled 保留不透明，只降低亮度；避免底下的 bet_input 邊緣透出。
+	button.add_theme_color_override("icon_disabled_color", Color(0.68, 0.68, 0.68, 1.0))
+	button.add_theme_color_override("icon_focus_color", Color.WHITE)
 	return true
 
 

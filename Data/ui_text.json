@@ -38,7 +38,7 @@
 	"decision_next_odds": "下一關 x{multiplier} 倍",
 
 	"settle_cashout_title": "撤退成功",
-	"settle_cashout_body": "你帶著 {payout} 金幣安全撤離！",
+	"settle_cashout_body": "本局獲得 {payout}",
 	"settle_defeat_title": "挑戰失敗",
 	"settle_defeat_body": "本局損失 {bet} 金幣。",
 	"settle_clear_title": "完美通關",
@@ -64,26 +64,26 @@
 	"lb_cashout_rank_hint": "若現在撤退約第 {rank} 名",
 	"lb_view_entry": "查看排行榜 >",
 
-	"lb_stat_depth_caption": "本次最深進度",
+	"lb_stat_depth_caption": "本次勇闖",
 	"lb_stat_depth_value": "{stage} /{max}",
 	"lb_stat_beaten_caption": "你超越了",
 	"lb_stat_beaten_value": "{percent} 玩家",
-	"lb_stat_best_caption": "目前最佳",
+	"lb_stat_best_caption": "最佳紀錄",
 	"lb_stat_best_value": "第 {rank} 名",
 	"lb_stat_rank_line": "目前排名：第 {rank} 名",
 	"lb_stat_rank_sub": "超過了 {percent} 的玩家",
 	"lb_stat_record_line": "最高紀錄：{payout} 金幣",
 	"lb_stat_record_sub": "再接再厲，突破紀錄！",
 
-	"monster_001_name": "史萊姆",
-	"monster_002_name": "水靈獸",
-	"monster_003_name": "魅影蝠",
-	"monster_004_name": "炎角獸",
-	"monster_005_name": "血牙狼",
-	"monster_006_name": "黃金石像",
-	"monster_007_name": "深海巨蟹",
-	"monster_008_name": "暗影法師",
-	"monster_009_name": "緋紅妖姬",
-	"monster_010_name": "熔岩魔王"
+	"monster_001_name": "流浪小黃",
+	"monster_002_name": "街頭惡霸",
+	"monster_003_name": "哥布林阿嬤",
+	"monster_004_name": "小哥鴿",
+	"monster_005_name": "大賽鴿",
+	"monster_006_name": "蜥YEE",
+	"monster_007_name": "安鼠之亂",
+	"monster_008_name": "當作我塑膠",
+	"monster_009_name": "社畜哥布林",
+	"monster_010_name": "咪咪冒冒"
   }
 }

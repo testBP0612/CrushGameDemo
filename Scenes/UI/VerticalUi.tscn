@@ -28,9 +28,9 @@ grow_horizontal = 2
 visible = false
 layout_mode = 1
 anchors_preset = 0
-offset_left = 20.0
+offset_left = 40.0
 offset_top = 30.0
-offset_right = 410.0
+offset_right = 430.0
 offset_bottom = 270.0
 theme_override_font_sizes/font_size = 34
 
@@ -63,21 +63,22 @@ mouse_filter = 2
 [node name="MoneyCard" type="TextureRect" parent="TopBar"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 20.0
+offset_left = 40.0
 offset_top = 282.0
-offset_right = 536.0
-offset_bottom = 378.0
+offset_right = 470.0
+offset_bottom = 362.0
 expand_mode = 1
 stretch_mode = 5
 
 [node name="MoneyValue" type="Label" parent="TopBar"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 140.0
+offset_left = 180.0
 offset_top = 282.0
-offset_right = 520.0
-offset_bottom = 378.0
+offset_right = 458.0
+offset_bottom = 362.0
 theme_override_font_sizes/font_size = 46
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LogoLabel" type="Label" parent="TopBar"]
@@ -108,17 +109,17 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 382.0
-offset_bottom = 632.0
+offset_bottom = 667.0
 grow_horizontal = 2
 script = ExtResource("2_hud")
 
 [node name="BoardRect" type="TextureRect" parent="Hud"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 40.0
+offset_left = 61.0
 offset_top = 0.0
-offset_right = 1040.0
-offset_bottom = 242.0
+offset_right = 1018.0
+offset_bottom = 285.0
 expand_mode = 1
 stretch_mode = 5
 
@@ -136,10 +137,10 @@ vertical_alignment = 1
 [node name="StageValue" type="Label" parent="Hud"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 122.0
-offset_top = 80.0
-offset_right = 354.0
-offset_bottom = 187.0
+offset_left = 112.0
+offset_top = 99.0
+offset_right = 343.0
+offset_bottom = 230.0
 theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -158,10 +159,10 @@ vertical_alignment = 1
 [node name="MultiplierValue" type="Label" parent="Hud"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 414.0
-offset_top = 80.0
-offset_right = 628.0
-offset_bottom = 187.0
+offset_left = 396.0
+offset_top = 99.0
+offset_right = 600.0
+offset_bottom = 230.0
 theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -180,10 +181,10 @@ vertical_alignment = 1
 [node name="PayoutValue" type="Label" parent="Hud"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 644.0
-offset_top = 49.0
-offset_right = 978.0
-offset_bottom = 204.0
+offset_left = 621.0
+offset_top = 99.0
+offset_right = 979.0
+offset_bottom = 230.0
 theme_override_font_sizes/font_size = 68
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -216,9 +217,9 @@ autowrap_mode = 3
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 48.0
+offset_left = 40.0
 offset_top = 1300.0
-offset_right = -48.0
+offset_right = -40.0
 offset_bottom = 1920.0
 grow_horizontal = 2
 
@@ -234,9 +235,9 @@ script = ExtResource("4_bet_panel")
 [node name="Panel" type="PanelContainer" parent="ActionArea/BetPanel"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = -28.0
+offset_left = 0.0
 offset_top = -109.0
-offset_right = 1012.0
+offset_right = 1000.0
 offset_bottom = 444.0
 
 [node name="Content" type="Control" parent="ActionArea/BetPanel/Panel"]
@@ -245,10 +246,10 @@ layout_mode = 2
 [node name="ContextRect" type="TextureRect" parent="ActionArea/BetPanel/Panel/Content"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 320.0
-offset_top = 0.0
-offset_right = 600.0
-offset_bottom = 240.0
+offset_left = 271.5
+offset_top = -50.0
+offset_right = 608.5
+offset_bottom = 287.0
 expand_mode = 1
 stretch_mode = 5
 
@@ -269,6 +270,16 @@ offset_top = 24.0
 offset_right = 920.0
 offset_bottom = 258.0
 theme_override_constants/separation = 14
+
+[node name="BetInputRect" type="TextureRect" parent="ActionArea/BetPanel/Panel/Content"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 225.0
+offset_top = 256.0
+offset_right = 655.0
+offset_bottom = 348.0
+expand_mode = 1
+stretch_mode = 5
 
 [node name="DecreaseButton" type="Button" parent="ActionArea/BetPanel/Panel/Content"]
 layout_mode = 1
@@ -334,10 +345,10 @@ vertical_alignment = 1
 [node name="ConfirmButton" type="Button" parent="ActionArea/BetPanel"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 46.0
-offset_top = 464.0
-offset_right = 938.0
-offset_bottom = 610.0
+offset_left = 5.0
+offset_top = 456.0
+offset_right = 995.0
+offset_bottom = 618.0
 theme_override_font_sizes/font_size = 42
 
 [node name="DecisionPanel" type="Control" parent="ActionArea"]
@@ -452,12 +463,12 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="StatsCards" type="VBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
+[node name="StatsCards" type="HBoxContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="DepthCard" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards"]
-custom_minimum_size = Vector2(0, 116)
+custom_minimum_size = Vector2(0, 186)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -490,7 +501,7 @@ fit_content = true
 scroll_active = false
 
 [node name="BeatenCard" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards"]
-custom_minimum_size = Vector2(0, 116)
+custom_minimum_size = Vector2(0, 186)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -523,7 +534,7 @@ fit_content = true
 scroll_active = false
 
 [node name="BestCard" type="PanelContainer" parent="ActionArea/SettlementPanel/Panel/Margin/Layout/StatsCards"]
-custom_minimum_size = Vector2(0, 116)
+custom_minimum_size = Vector2(0, 186)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -623,9 +634,9 @@ scroll_active = false
 [node name="PlayAgainButton" type="Button" parent="ActionArea/SettlementPanel"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = -28.0
+offset_left = 0.0
 offset_top = 177.0
-offset_right = 1012.0
+offset_right = 1000.0
 offset_bottom = 307.0
 theme_override_font_sizes/font_size = 48
 

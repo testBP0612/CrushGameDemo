@@ -22,6 +22,10 @@ var _held_payout_value := 0
 
 func _ready() -> void:
 	var board_ok := UiSkin.apply_art_texture(board_rect, "board")
+	# 正式看板已內含三個欄位標題；缺圖 fallback 時才顯示程式文字。
+	stage_caption.visible = not board_ok
+	multiplier_caption.visible = not board_ok
+	payout_caption.visible = not board_ok
 	UiSkin.apply_hud_card_text(stage_caption, "board_caption")
 	UiSkin.apply_hud_card_text(stage_value, "board_value")
 	UiSkin.apply_hud_card_text(multiplier_caption, "board_caption")

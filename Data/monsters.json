@@ -2,105 +2,105 @@
   "schema_version": "1.0",
   "_comment": "怪物資料。Data 先寫 10 隻；MVP 美術只鎖前 5 隻（monster_001~005），6~10 隻 fallback 用 placeholder_color。stage 對應 game_balance 的 multiplier/success_rate。",
   "monsters": [
-    {
-      "id": "monster_001",
-      "stage": 1,
-      "name_key": "monster_001_name",
-      "display_hp": 90,
-      "attack_hits_range": [3, 3],
-      "placeholder_color": "#7ed957",
-      "art_asset_id": "boss1_idle",
-      "required_for_mvp": true
-    },
-    {
-      "id": "monster_002",
-      "stage": 2,
-      "name_key": "monster_002_name",
-      "display_hp": 125,
-      "attack_hits_range": [3, 4],
-      "placeholder_color": "#5ec5d4",
-      "art_asset_id": "boss2_idle",
-      "required_for_mvp": true
-    },
-    {
-      "id": "monster_003",
-      "stage": 3,
-      "name_key": "monster_003_name",
-      "display_hp": 170,
-      "attack_hits_range": [3, 4],
-      "placeholder_color": "#b083e0",
-      "art_asset_id": "boss3_idle",
-      "required_for_mvp": true
-    },
-    {
-      "id": "monster_004",
-      "stage": 4,
-      "name_key": "monster_004_name",
-      "display_hp": 225,
-      "attack_hits_range": [4, 4],
-      "placeholder_color": "#e08a5b",
-      "art_asset_id": "boss4_idle",
-      "required_for_mvp": true
-    },
-    {
-      "id": "monster_005",
-      "stage": 5,
-      "name_key": "monster_005_name",
-      "display_hp": 295,
-      "attack_hits_range": [4, 5],
-      "placeholder_color": "#e05b7a",
-      "art_asset_id": "boss5_idle",
-      "required_for_mvp": true
-    },
-    {
-      "id": "monster_006",
-      "stage": 6,
-      "name_key": "monster_006_name",
-      "display_hp": 375,
-      "attack_hits_range": [4, 5],
-      "placeholder_color": "#d4c45e",
-      "art_asset_id": "boss6_idle",
-      "required_for_mvp": false
-    },
-    {
-      "id": "monster_007",
-      "stage": 7,
-      "name_key": "monster_007_name",
-      "display_hp": 470,
-      "attack_hits_range": [4, 5],
-      "placeholder_color": "#5e7ad4",
-      "art_asset_id": "boss7_idle",
-      "required_for_mvp": false
-    },
-    {
-      "id": "monster_008",
-      "stage": 8,
-      "name_key": "monster_008_name",
-      "display_hp": 590,
-      "attack_hits_range": [5, 5],
-      "placeholder_color": "#9b5ed4",
-      "art_asset_id": "boss8_idle",
-      "required_for_mvp": false
-    },
-    {
-      "id": "monster_009",
-      "stage": 9,
-      "name_key": "monster_009_name",
-      "display_hp": 735,
-      "attack_hits_range": [5, 5],
-      "placeholder_color": "#d45e9b",
-      "art_asset_id": "boss9_idle",
-      "required_for_mvp": false
-    },
-    {
-      "id": "monster_010",
-      "stage": 10,
-      "name_key": "monster_010_name",
-      "display_hp": 920,
-      "attack_hits_range": [5, 5],
-      "placeholder_color": "#c0392b",
-      "art_asset_id": "monster_010_idle",
-      "required_for_mvp": false
-    }
+	{
+	  "id": "monster_001",
+	  "stage": 1,
+	  "name_key": "monster_001_name",
+	  "display_hp": 90,
+	  "attack_hits_range": [3, 3],
+	  "placeholder_color": "#7ed957",
+	  "art_asset_id": "boss1_idle",
+	  "required_for_mvp": true
+	},
+	{
+	  "id": "monster_002",
+	  "stage": 2,
+	  "name_key": "monster_002_name",
+	  "display_hp": 125,
+	  "attack_hits_range": [3, 4],
+	  "placeholder_color": "#5ec5d4",
+	  "art_asset_id": "boss2_idle",
+	  "required_for_mvp": true
+	},
+	{
+	  "id": "monster_003",
+	  "stage": 3,
+	  "name_key": "monster_003_name",
+	  "display_hp": 170,
+	  "attack_hits_range": [3, 4],
+	  "placeholder_color": "#b083e0",
+	  "art_asset_id": "boss3_idle",
+	  "required_for_mvp": true
+	},
+	{
+	  "id": "monster_004",
+	  "stage": 4,
+	  "name_key": "monster_004_name",
+	  "display_hp": 225,
+	  "attack_hits_range": [4, 4],
+	  "placeholder_color": "#e08a5b",
+	  "art_asset_id": "boss4_idle",
+	  "required_for_mvp": true
+	},
+	{
+	  "id": "monster_005",
+	  "stage": 5,
+	  "name_key": "monster_005_name",
+	  "display_hp": 295,
+	  "attack_hits_range": [4, 5],
+	  "placeholder_color": "#e05b7a",
+	  "art_asset_id": "boss5_idle",
+	  "required_for_mvp": true
+	},
+	{
+	  "id": "monster_006",
+	  "stage": 6,
+	  "name_key": "monster_006_name",
+	  "display_hp": 375,
+	  "attack_hits_range": [4, 5],
+	  "placeholder_color": "#d4c45e",
+	  "art_asset_id": "boss6_idle",
+	  "required_for_mvp": false
+	},
+	{
+	  "id": "monster_007",
+	  "stage": 7,
+	  "name_key": "monster_007_name",
+	  "display_hp": 470,
+	  "attack_hits_range": [4, 5],
+	  "placeholder_color": "#5e7ad4",
+	  "art_asset_id": "boss7_idle",
+	  "required_for_mvp": false
+	},
+	{
+	  "id": "monster_008",
+	  "stage": 8,
+	  "name_key": "monster_008_name",
+	  "display_hp": 590,
+	  "attack_hits_range": [5, 5],
+	  "placeholder_color": "#9b5ed4",
+	  "art_asset_id": "boss8_idle",
+	  "required_for_mvp": false
+	},
+	{
+	  "id": "monster_009",
+	  "stage": 9,
+	  "name_key": "monster_009_name",
+	  "display_hp": 735,
+	  "attack_hits_range": [5, 5],
+	  "placeholder_color": "#d45e9b",
+	  "art_asset_id": "boss9_idle",
+	  "required_for_mvp": false
+	},
+	{
+	  "id": "monster_010",
+	  "stage": 10,
+	  "name_key": "monster_010_name",
+	  "display_hp": 920,
+	  "attack_hits_range": [5, 5],
+	  "placeholder_color": "#c0392b",
+	  "art_asset_id": "monster_010_idle",
+	  "required_for_mvp": false
+	}
   ]
 }

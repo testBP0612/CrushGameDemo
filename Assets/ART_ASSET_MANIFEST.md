@@ -66,6 +66,7 @@
 | title_banner | title_banner.jpg | Assets/final/ | optional | JPG | no | n/a | 任務 23 標題畫面滿版背景（設計師交付） | TitleScreen | background_battle_001＋文字標題 | imported | 設計師 | 1080×1920；圖上已含遊戲 Logo；2026-07-12 起被 intro_splash 影片蓋過，僅作缺影片 fallback |
 | intro_splash | intro_splash.ogv | Assets/final/ | optional | OGV 影片 | n/a | n/a | 標題畫面片頭影片（播畢定格末幀） | TitleScreen | title_banner → 戰鬥背景＋文字標題（逐級退） | imported | 設計師 | 2026-07-12 交付；音訊素材另走 Data/audio.json（D-014），不入本清單 |
 | intro_splash_last_frame | intro_splash_last_frame.png | Assets/final/ | optional | PNG | no | n/a | 片頭影片播畢的定格幀 | TitleScreen | 影片停在最後解碼幀 | imported | 設計師 | 與 intro_splash.ogv 成對交付 |
+| intermission_background | intermission.jpg | Assets/final/ | optional | JPG | no | n/a | 挑戰失敗／撤退成功結算畫面滿版背景 | BattlePresenter | 當前關卡背景 | imported | 設計師 | DEFEAT_SETTLE／CASH_OUT_SETTLE 顯示；下一局進入 BETTING 時強制恢復關卡背景 |
 | ui_panel_style_reference | ui_panel_style_reference.png | Assets/final/ | optional | PNG32 | yes | n/a | UI 風格參考 | （參考用） | 內建樣式 | planned | 美術 | 非必接入 |
 
 ### mockup 整圖素材（對齊 ui_mockup_battle，UiSkin art_texture/apply_art_button 載入）
@@ -78,8 +79,9 @@
 | ui_btn_start | start.png | Assets/final/ui/ | optional | yes | 下注畫面滿寬確認鈕（烤字「喵準開始」，990×162） | 文字按鈕 primary 樣式 | imported | 設計師交付（2026-07-12）；烤字素材，改字需重出圖 |
 | ui_risk_state | risk_state.png | Assets/final/ui/ | optional | yes | 戰場危險度底條（骷髏徽章+深色橫條，447×112，1:1 顯示） | 程式深色藥丸+「危險度」字+爪印 | imported | 設計師交付（2026-07-12）；金星數量由程式疊 risk_star |
 | ui_risk_star | risk_star.png | Assets/final/ui/ | optional | yes | 危險度金星（35×35，顯示 42px） | 同上（缺任一張整組退回舊樣式） | imported | 設計師交付（2026-07-12）；只排亮星不畫暗星（照設計稿） |
-| ui_result_card | result_card.png | Assets/final/ui/ | optional | yes | 結算結果卡（含烙字「結果」緞帶，905×902，等比滿版 1040 寬） | 程式 settle 樣式+文字緞帶 | imported | 設計師交付（2026-07-12）；改緞帶字需重出圖 |
-| ui_ranking_btn_sm | ranking_btn_sm.png | Assets/final/ui/ | optional | yes | 結算畫面「排行榜」鈕（烙字，642×161，1:1 顯示於結果卡下方） | 文字連結/膠囊樣式 | imported | 設計師交付（2026-07-12）；烙字素材，改字需重出圖 |
+| ui_result_card | result_card.png | Assets/final/ui/ | optional | yes | 結算結果卡（含烙字「結果」緞帶，906×905） | 程式 settle 樣式+文字緞帶 | imported | 設計師交付（2026-07-12）；敗局依設計稿填入中央版面，改緞帶字需重出圖 |
+| ui_ranking_btn_sm | ranking_btn_sm.png | Assets/final/ui/ | optional | yes | 結算畫面「排行榜」鈕（烙字，428×130，原尺寸顯示） | 文字連結/膠囊樣式 | imported | 設計師交付（2026-07-12）；烙字素材，改字需重出圖 |
+| ui_btn_replay | replay.png | Assets/final/ui/ | optional | yes | 新版結算畫面「再來一局」鈕（烙字，428×130，原尺寸顯示） | 文字按鈕 primary 樣式 | imported | 設計師交付（2026-07-14）；與 ranking_btn_sm 並排 |
 | ui_btn_retreat | retreat.png | Assets/final/ui/ | optional | yes | 撤退大按鈕（烤字「喵準快逃」） | 文字按鈕 secondary 樣式 | imported | 烤字素材，改字需重出圖 |
 | ui_ranking_btn | ranking_btn.png | Assets/final/ui/ | optional | yes | 左上角排行榜入口（頭像＋獎盃＋烤字「玩家排行」整圖鈕） | 文字獎盃膠囊 trophy_pill | imported | 設計師交付（2026-07-12）；478×294，取代舊 ProfileFrame＋排行膠囊 |
 | ui_money_card | money_card.png | Assets/final/ui/ | optional | yes | 左上角餘額卡（含零食 icon 底圖，數字程式疊字） | 資源膠囊＋「金幣 N」文案 | imported | 設計師交付（2026-07-12）；430×80，數字千分位由程式格式化 |

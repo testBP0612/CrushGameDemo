@@ -15,6 +15,7 @@ signal balance_reset_requested
 @onready var context_rect: TextureRect = $Panel/Content/ContextRect
 @onready var chips_left: VBoxContainer = $Panel/Content/ChipsLeft
 @onready var chips_right: VBoxContainer = $Panel/Content/ChipsRight
+@onready var bet_input_rect: TextureRect = $Panel/Content/BetInputRect
 @onready var decrease_button: Button = $Panel/Content/DecreaseButton
 @onready var bet_label: Label = $Panel/Content/BetLabel
 @onready var increase_button: Button = $Panel/Content/IncreaseButton
@@ -43,28 +44,35 @@ func _ready() -> void:
 	decrease_button.text = ""
 	increase_button.text = ""
 	insufficient_label.text = Data.text("bet_insufficient")
-	UiSkin.apply_button(decrease_button, "step_decrease")
-	UiSkin.apply_button(increase_button, "step_increase")
+	if not UiSkin.apply_art_icon_button(decrease_button, "icon_minus"):
+		UiSkin.apply_button(decrease_button, "step_decrease")
+	if not UiSkin.apply_art_icon_button(increase_button, "icon_plus"):
+		UiSkin.apply_button(increase_button, "step_increase")
+	var bet_input_ok := UiSkin.apply_art_texture(bet_input_rect, "bet_input")
+	# bet_input 延伸至兩顆按鈕下方，按鈕保持在上層，形成設計稿的一體式金額列。
+	bet_label.get_parent().move_child(bet_label, decrease_button.get_index())
 	UiSkin.apply_number_display(bet_label)
+	if bet_input_ok:
+		# bet_input.png 已含完整底框，只保留動態數字樣式。
+		bet_label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
 	# 對齊設計稿：金額字級 68（原 80 會被中央插圖壓到）
 	bet_label.add_theme_font_size_override("font_size", 68)
 	# 8 檔籌碼（左右各 4）要塞進原本 3 檔的欄高，縮 separation
 	for chip_column: VBoxContainer in [chips_left, chips_right]:
 		chip_column.add_theme_constant_override("separation", 8)
-	# ±/金額列內縮避開左右欄第四顆籌碼；2026-07-12 依設計稿縮小（112x92）
-	# 並整體下移，讓中央貓糧插圖（底 240）不壓到金額文字
-	decrease_button.offset_left = 184.0
-	decrease_button.offset_right = 296.0
-	decrease_button.offset_top = 256.0
-	decrease_button.offset_bottom = 348.0
-	bet_label.offset_left = 316.0
-	bet_label.offset_right = 596.0
-	bet_label.offset_top = 252.0
-	bet_label.offset_bottom = 352.0
-	increase_button.offset_left = 624.0
-	increase_button.offset_right = 736.0
-	increase_button.offset_top = 256.0
-	increase_button.offset_bottom = 348.0
+	# 新版 ± 圖已含完整外框，以 124×124 原尺寸對稱排列於金額底圖兩端。
+	decrease_button.offset_left = 158.0
+	decrease_button.offset_right = 282.0
+	decrease_button.offset_top = 240.0
+	decrease_button.offset_bottom = 364.0
+	bet_label.offset_left = 225.0
+	bet_label.offset_right = 655.0
+	bet_label.offset_top = 237.0
+	bet_label.offset_bottom = 367.0
+	increase_button.offset_left = 598.0
+	increase_button.offset_right = 722.0
+	increase_button.offset_top = 240.0
+	increase_button.offset_bottom = 364.0
 	UiSkin.apply_icon(insufficient_icon, "warning")
 	# 夜間 UI 輪：警示列原本貼齊面板下緣（26px 字＋34px icon 被下注框陰影壓住），
 	# 上移到插圖下緣、加大、標籤加奶油底板——警示出現時要一眼可見
@@ -79,7 +87,7 @@ func _ready() -> void:
 	if warning_pill != null:
 		warning_pill.set_content_margin(SIDE_LEFT, 22.0)
 	insufficient_row.visible = false
-	# 確認鈕座標以 tscn 為準（滿寬 start.png 長條鈕，與面板保持 20px 間距）
+	# 確認鈕座標以 tscn 為準（start.png 以設計師交付的 990×162 原尺寸顯示）
 	_set_confirm_mode(false)
 	_install_button_feedback(decrease_button)
 	_install_button_feedback(increase_button)

@@ -19,6 +19,7 @@ const BACKGROUND_ASSET_DIR := "res://Assets/final/"
 const BACKGROUND_ASSET_EXTENSIONS := [".jpg", ".jpeg", ".png"]
 const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
 const HUYE_ASSET_PATH := "res://Assets/final/huye.png"
+const INTERMISSION_BACKGROUND_PATH := "res://Assets/final/intermission.jpg"
 
 @onready var background_fallback: ColorRect = $Background
 @onready var background_image: TextureRect = $BackgroundImage
@@ -44,6 +45,7 @@ var _monster_hidden_after_huye := false
 var _huye_coin_origin := Vector2.ZERO
 var _active_huye_visual: Node2D
 var _huye_exit_tween: Tween
+var _intermission_background_active := false
 
 
 func _ready() -> void:
@@ -288,19 +290,41 @@ func play_player_hurt() -> void:
 func reset_for_betting() -> void:
 	_clear_active_huye()
 	hero.reset_pose()
-	_show_default_background()
+	# 插頁只替換 Texture，關卡背景快取仍可能指向原路徑；下一局必須強制重載。
+	_intermission_background_active = false
+	_show_default_background(true)
 	show_monster_for_stage(1, false)
 
 
 ## 任務 23 結算稿只有街景＋結果卡；只切顯示，不碰角色/狀態機資料。
-func set_settlement_presentation(enabled: bool) -> void:
+func set_settlement_presentation(enabled: bool, use_intermission_background := false) -> void:
 	if enabled:
 		_fade_out_active_huye()
+	if enabled and use_intermission_background:
+		_show_intermission_background()
+	elif _intermission_background_active:
+		_intermission_background_active = false
+		_show_default_background(true)
 	hero.visible = not enabled
 	monster.visible = not enabled and not _monster_hidden_after_huye
 	monster_name_label.visible = not enabled
 	if _danger_panel != null and is_instance_valid(_danger_panel):
 		_danger_panel.visible = not enabled and Data.danger_max_level() > 0
+
+
+func _show_intermission_background() -> void:
+	if _intermission_background_active:
+		return
+	if not ResourceLoader.exists(INTERMISSION_BACKGROUND_PATH, "Texture2D"):
+		push_warning("BattlePresenter intermission background missing; keeping stage background.")
+		return
+	var texture := load(INTERMISSION_BACKGROUND_PATH) as Texture2D
+	if texture == null:
+		push_warning("BattlePresenter intermission background failed to load; keeping stage background.")
+		return
+	background_image.texture = texture
+	background_image.visible = true
+	_intermission_background_active = true
 
 
 func _fade_out_active_huye() -> void:
@@ -489,15 +513,15 @@ func _show_background_for_stage(stage_to_challenge: int) -> void:
 	_apply_background_id(Data.background_id_for_stage(stage_to_challenge))
 
 
-func _show_default_background() -> void:
+func _show_default_background(force_reload := false) -> void:
 	var background_config := Data.background_zones_config()
 	var default_background_id := str(background_config.get("default_background_id", ""))
 	if default_background_id.is_empty():
 		default_background_id = Data.background_id_for_stage(1)
-	_apply_background_id(default_background_id)
+	_apply_background_id(default_background_id, force_reload)
 
 
-func _apply_background_id(background_id: String) -> void:
+func _apply_background_id(background_id: String, force_reload := false) -> void:
 	var resolved_path := _resolve_background_path(background_id)
 	if resolved_path.is_empty():
 		_current_background_path = ""
@@ -506,7 +530,7 @@ func _apply_background_id(background_id: String) -> void:
 		background_fallback.visible = true
 		return
 
-	if resolved_path == _current_background_path:
+	if not force_reload and resolved_path == _current_background_path:
 		return
 
 	var texture := load(resolved_path) as Texture2D

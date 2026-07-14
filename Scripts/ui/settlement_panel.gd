@@ -14,13 +14,15 @@ signal acknowledge_requested
 signal leaderboard_requested
 
 @onready var panel: PanelContainer = $Panel
+@onready var margin: MarginContainer = $Panel/Margin
+@onready var layout: VBoxContainer = $Panel/Margin/Layout
 @onready var title_row: HBoxContainer = $Panel/Margin/Layout/TitleRow
 @onready var title_label: Label = $Panel/Margin/Layout/TitleRow/TitleLabel
 @onready var paw_left: TextureRect = $Panel/Margin/Layout/TitleRow/PawLeft
 @onready var paw_right: TextureRect = $Panel/Margin/Layout/TitleRow/PawRight
 @onready var body_label: RichTextLabel = $Panel/Margin/Layout/BodyLabel
-# 戰敗版統計：三張並排小卡（target: ui_target_lb_defeat）
-@onready var stats_cards: VBoxContainer = $Panel/Margin/Layout/StatsCards
+# 新版結算統計：三張並排小卡（本次勇闖／最佳紀錄／你超越了）
+@onready var stats_cards: HBoxContainer = $Panel/Margin/Layout/StatsCards
 @onready var depth_card: PanelContainer = $Panel/Margin/Layout/StatsCards/DepthCard
 @onready var depth_icon: TextureRect = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthIcon
 @onready var depth_caption: Label = $Panel/Margin/Layout/StatsCards/DepthCard/DepthRow/DepthBox/DepthCaption
@@ -51,6 +53,10 @@ var _last_snapshot := {}
 var _rank_step := ""
 var _lb_button_style := ""
 var _lb_button_is_art := false
+var _play_again_is_art := false
+var _card_art_in_use := false
+var _card_style: StyleBoxTexture
+var _result_layout_active := false
 # D-019 FOMO 事後揭示行（撤退：若再過一關可得…／戰敗：上一關落袋…）。程式生成，不動 .tscn。
 var _fomo_label: RichTextLabel
 var _outcome_label: Label
@@ -70,24 +76,22 @@ func _ready() -> void:
 	# 等比滿版 1040 寬（左右 20px 安全邊距，x/y 縮放同 1.149 無變形），
 	# 元素間距 20px；缺圖退回原程式 settle 樣式＋文字緞帶（D-004）。
 	var card_texture: Texture2D = UiSkin.art_texture("result_card")
-	var card_art_in_use := card_texture != null
-	if card_art_in_use:
+	_card_art_in_use = card_texture != null
+	if _card_art_in_use:
 		panel.offset_left = -28.0
 		panel.offset_right = 1012.0
 		panel.offset_top = -880.0
 		panel.offset_bottom = 157.0
-		var card_style := StyleBoxTexture.new()
-		card_style.texture = card_texture
+		_card_style = StyleBoxTexture.new()
+		_card_style.texture = card_texture
 		# 上邊距吃掉圖內緞帶頭（~205px×1.149），左右/下沿卡片米色本體內緣
-		card_style.content_margin_left = 70.0
-		card_style.content_margin_top = 230.0
-		card_style.content_margin_right = 70.0
-		card_style.content_margin_bottom = 110.0
-		panel.add_theme_stylebox_override("panel", card_style)
+		_card_style.content_margin_left = 70.0
+		_card_style.content_margin_top = 230.0
+		_card_style.content_margin_right = 70.0
+		_card_style.content_margin_bottom = 110.0
+		panel.add_theme_stylebox_override("panel", _card_style)
 		title_row.visible = false
-		var layout := title_row.get_parent() as VBoxContainer
-		if layout != null:
-			layout.add_theme_constant_override("separation", 20)
+		layout.add_theme_constant_override("separation", 20)
 	else:
 		panel.offset_left = 60.0
 		panel.offset_right = 924.0
@@ -98,13 +102,13 @@ func _ready() -> void:
 		stat_icon.custom_minimum_size = Vector2(65, 65)
 	# 文字必須先設好再套樣式：icon 對齊方式依「當下有無文字」決定（空字=置中會疊字）
 	play_again_button.text = Data.text("settle_play_again")
+	UiSkin.apply_button(play_again_button, "settle_primary")
 	# 排行榜鈕：ranking_btn_sm.png（642x161 烙字「排行榜」）缺檔退回文字樣式
 	_lb_button_is_art = UiSkin.apply_art_button(leaderboard_button, "ranking_btn_sm")
 	if _lb_button_is_art:
 		leaderboard_button.text = ""
 	else:
 		leaderboard_button.text = Data.text("lb_view_entry")
-	UiSkin.apply_button(play_again_button, "settle_primary")
 	title_label.text = Data.text("settle_result_title")
 	UiSkin.apply_ribbon_label(title_label)
 	body_label.add_theme_color_override("default_color", Color(0.24, 0.19, 0.23, 1.0))
@@ -128,6 +132,8 @@ func _ready() -> void:
 	depth_caption.text = Data.text("lb_stat_depth_caption")
 	beaten_caption.text = Data.text("lb_stat_beaten_caption")
 	best_caption.text = Data.text("lb_stat_best_caption")
+	# 設計稿欄位順序：本次勇闖、最佳紀錄、你超越了。
+	stats_cards.move_child(best_card, 1)
 	_install_button_feedback(play_again_button)
 	_install_button_feedback(leaderboard_button)
 	play_again_button.pressed.connect(func() -> void: acknowledge_requested.emit())
@@ -139,13 +145,15 @@ func update_snapshot(snapshot: Dictionary) -> void:
 	_last_snapshot = snapshot
 	var is_settle := bool(snapshot.get("is_settle", false))
 	var is_defeat := state_name == "DEFEAT_SETTLE"
+	var uses_result_layout := is_defeat or state_name == "CASH_OUT_SETTLE"
+	_apply_result_layout(uses_result_layout)
 	play_again_button.disabled = not is_settle
-	stats_cards.visible = is_settle and is_defeat
-	stats_duo.visible = is_settle and not is_defeat
+	stats_cards.visible = is_settle and uses_result_layout
+	stats_duo.visible = is_settle and not uses_result_layout
 	leaderboard_button.visible = is_settle
-	# target：戰敗版「查看排行榜」是文字連結，撤退版是膠囊（藝術鈕版兩態同圖，不切換）
+	# 新版失敗／撤退皆使用同一組藝術按鈕；素材缺失才退回程式樣式。
 	if not _lb_button_is_art:
-		_apply_lb_button_style("settle_link" if is_defeat else "settle_pill")
+		_apply_lb_button_style("settle_link" if uses_result_layout else "settle_pill")
 	_bind_leaderboard_service(snapshot.get("leaderboard_service", null))
 
 	match state_name:
@@ -172,6 +180,92 @@ func update_snapshot(snapshot: Dictionary) -> void:
 		_play_settlement_effect(state_name)
 	elif not is_settle:
 		_last_settle_state = ""
+
+
+func _apply_result_layout(enabled: bool) -> void:
+	if enabled == _result_layout_active:
+		return
+	_result_layout_active = enabled
+	if enabled:
+		# 1080×1920 新版結算：906×905 結果卡置中；兩顆 428×130 按鈕並排。
+		panel.offset_left = 22.0
+		panel.offset_top = -510.0
+		panel.offset_right = 978.0
+		panel.offset_bottom = 457.0
+		if _card_style != null:
+			_card_style.content_margin_left = 77.0
+			_card_style.content_margin_top = 205.0
+			_card_style.content_margin_right = 77.0
+			_card_style.content_margin_bottom = 147.0
+		margin.add_theme_constant_override("margin_left", 0)
+		margin.add_theme_constant_override("margin_top", 8)
+		margin.add_theme_constant_override("margin_right", 0)
+		margin.add_theme_constant_override("margin_bottom", 10)
+		layout.alignment = BoxContainer.ALIGNMENT_BEGIN
+		layout.add_theme_constant_override("separation", 18)
+		stats_cards.add_theme_constant_override("separation", 18)
+		for icon: TextureRect in [depth_icon, beaten_icon, best_icon]:
+			icon.visible = false
+		for card: PanelContainer in [depth_card, beaten_card, best_card]:
+			card.custom_minimum_size = Vector2(0.0, 186.0)
+		_outcome_label.add_theme_font_size_override("font_size", 72)
+		body_label.add_theme_font_size_override("normal_font_size", 44)
+		_fomo_label.add_theme_font_size_override("normal_font_size", 44)
+		_play_again_is_art = UiSkin.apply_art_button(play_again_button, "replay")
+		if _play_again_is_art:
+			play_again_button.text = ""
+		else:
+			play_again_button.text = Data.text("settle_play_again")
+			UiSkin.apply_button(play_again_button, "settle_primary")
+		leaderboard_button.offset_left = 64.0
+		leaderboard_button.offset_top = 438.0
+		leaderboard_button.offset_right = 492.0
+		leaderboard_button.offset_bottom = 568.0
+		play_again_button.offset_left = 512.0
+		play_again_button.offset_top = 438.0
+		play_again_button.offset_right = 940.0
+		play_again_button.offset_bottom = 568.0
+	else:
+		if _card_art_in_use:
+			panel.offset_left = -28.0
+			panel.offset_right = 1012.0
+			panel.offset_top = -880.0
+			panel.offset_bottom = 157.0
+			if _card_style != null:
+				_card_style.content_margin_left = 70.0
+				_card_style.content_margin_top = 230.0
+				_card_style.content_margin_right = 70.0
+				_card_style.content_margin_bottom = 110.0
+		else:
+			panel.offset_left = 60.0
+			panel.offset_right = 924.0
+			panel.offset_top = -720.0
+			panel.offset_bottom = 18.0
+		margin.add_theme_constant_override("margin_left", 36)
+		margin.add_theme_constant_override("margin_top", 8)
+		margin.add_theme_constant_override("margin_right", 36)
+		margin.add_theme_constant_override("margin_bottom", 10)
+		layout.alignment = BoxContainer.ALIGNMENT_CENTER
+		layout.add_theme_constant_override("separation", 20 if _card_art_in_use else 6)
+		stats_cards.add_theme_constant_override("separation", 20)
+		for icon: TextureRect in [depth_icon, beaten_icon, best_icon]:
+			icon.visible = true
+		for card: PanelContainer in [depth_card, beaten_card, best_card]:
+			card.custom_minimum_size = Vector2(0.0, 186.0)
+		_outcome_label.add_theme_font_size_override("font_size", 46)
+		body_label.add_theme_font_size_override("normal_font_size", 44)
+		_fomo_label.add_theme_font_size_override("normal_font_size", 30)
+		_play_again_is_art = false
+		play_again_button.text = Data.text("settle_play_again")
+		UiSkin.apply_button(play_again_button, "settle_primary")
+		play_again_button.offset_left = 0.0
+		play_again_button.offset_top = 177.0
+		play_again_button.offset_right = 1000.0
+		play_again_button.offset_bottom = 307.0
+		leaderboard_button.offset_left = 171.0
+		leaderboard_button.offset_top = 327.0
+		leaderboard_button.offset_right = 813.0
+		leaderboard_button.offset_bottom = 488.0
 
 
 func _build_fomo_label() -> void:
@@ -228,7 +322,19 @@ func _update_fomo_line(state_name: String, snapshot: Dictionary) -> void:
 
 ## 內文金額：粉紅高亮（同字級）
 func _accent(value: int) -> String:
-	return "[color=%s]%d[/color]" % [ACCENT_PINK, value]
+	return "[color=%s]%s[/color]" % [ACCENT_PINK, _format_number(value)]
+
+
+func _format_number(value: int) -> String:
+	var digits := str(value)
+	var grouped := ""
+	var count := 0
+	for index in range(digits.length() - 1, -1, -1):
+		grouped = digits[index] + grouped
+		count += 1
+		if count % 3 == 0 and index > 0:
+			grouped = "," + grouped
+	return grouped
 
 
 ## 統計數字：放大 + 上色（target：數字為視覺主角；2026-07-12 手機可讀性 40→50）
@@ -284,7 +390,8 @@ func _update_leaderboard_stats(state_name: String, snapshot: Dictionary) -> void
 	if not bool(snapshot.get("is_settle", false)):
 		return
 	var loading := Data.text("lb_loading")
-	if state_name == "DEFEAT_SETTLE":
+	var uses_result_cards := state_name == "DEFEAT_SETTLE" or state_name == "CASH_OUT_SETTLE"
+	if uses_result_cards:
 		_center(depth_value, Data.text("lb_stat_depth_value", {
 			"stage": _big(str(int(snapshot.get("run_deepest_stage", 0)))),
 			"max": int(snapshot.get("max_stage", 0))
@@ -308,9 +415,10 @@ func _update_leaderboard_stats(state_name: String, snapshot: Dictionary) -> void
 func _on_rank_loaded(rank: int, beaten_percent: int) -> void:
 	if not bool(_last_snapshot.get("is_settle", false)):
 		return
-	var is_defeat := str(_last_snapshot.get("state_name", "")) == "DEFEAT_SETTLE"
+	var state_name := str(_last_snapshot.get("state_name", ""))
+	var uses_result_cards := state_name == "DEFEAT_SETTLE" or state_name == "CASH_OUT_SETTLE"
 	if _rank_step == "result":
-		if is_defeat:
+		if uses_result_cards:
 			_center(beaten_value, Data.text("lb_stat_beaten_value", {
 				"percent": _big("%d%%" % beaten_percent, ACCENT_TEAL)
 			}))
@@ -325,7 +433,7 @@ func _on_rank_loaded(rank: int, beaten_percent: int) -> void:
 		if _leaderboard_service != null:
 			_leaderboard_service.request_rank_for(int(_last_snapshot.get("best_payout", 0)))
 	elif _rank_step == "best":
-		if is_defeat:
+		if uses_result_cards:
 			_center(best_value, Data.text("lb_stat_best_value", {
 				"rank": _big(str(rank))
 			}))
