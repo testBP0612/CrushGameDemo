@@ -23,7 +23,7 @@
 | `Planning/` | 企劃、AI 工作流策略、人類決策格式、簡報、Git 協作（人類決策區） |
 | `Art/` | **美術同事入口**：Art Contract、Direction、Quickstart、Magnific prompt 樣板、mockup 參考圖 |
 | `Docs/` | Codex 必讀規格（設計/系統/狀態機/UI/動畫/資料/H5）+ `OPEN_QUESTIONS` + `DECISIONS` |
-| `Codex/` | Codex 主提示 + 18 張任務卡（已全數完成）+ 驗收清單（Codex 工作區） |
+| `Codex/` | Codex 主提示 + 27 張任務卡（已全數完成）+ 驗收清單（Codex 工作區） |
 | `Data/` | 數值與設定的**單一真實來源**（JSON，禁止寫死於程式） |
 | `Scenes/` `Scripts/` | Godot 工程（由 Codex 依任務卡建立） |
 | `Assets/` | `placeholders/`(Codex 暫代) · `generated/`(可選暫存) · `final/`(唯一正式入口) + `ART_ASSET_MANIFEST.md` |
@@ -34,7 +34,7 @@
 ## Codex 必讀順序
 1. [`AGENTS.md`](AGENTS.md)（代理協作鐵則**單一正本**；`Codex/00_MASTER_PROMPT.md` 為其轉介）
 2. `Docs/01`→`08`（設計/系統/狀態機/UI/動畫/資料/H5/線上分數）
-3. 當前任務卡 `Codex/01`→`18`（依序，一次一張；現況全數 ✅）
+3. 當前任務卡 `Codex/01`→`27`（依序，一次一張；現況全數 ✅）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
 
 ## 治理機制（本專案重點）
@@ -55,8 +55,9 @@
 ## 已完成 / Future / 不做（摘要，詳見 `Planning/00`；現況以 `git log` 與 `Docs/DECISIONS.md` 為準）
 - **已完成（上線）**：9:16 H5 可玩閉環、下注/倍率/收益、自動戰鬥演出、撤退/戰敗/通關結算、
   BGM（D-014）、**Google 登入 + 雲端分數（Firebase，D-015）**、**排行榜（D-016）**、
-  怪物 1–9 動畫美術（D-017）、正式背景（D-018）、部署至 Firebase Hosting。
-- **Future**：SFX 音檔補齊（事件接口已就緒，見 `Docs/SFX_TODO.md`）、第 10 隻怪物美術、反作弊伺服器驗證、更多特效。
+  怪物 1–10 動畫美術（D-017 後續換裝）、正式背景（D-018）、完整 SFX＋虎爺事件 BGM、
+  虎爺救援與大獎特效（D-022–D-025）、部署至 Firebase Hosting。
+- **Future**：反作弊伺服器驗證、更多內容與特效。
 - **不做**：大型會員/經濟系統、商城、裝備養成、抽卡、大型後端、多人同步、複雜反作弊、真動作戰鬥、複雜怪物 AI、關卡編輯器、Tab Bar、常駐資源列、設定/成就頁。
 
 ## 技術
@@ -66,4 +67,4 @@ Godot 4.6 · GL Compatibility（Web 相容）· GDScript 分層（core/battle/ac
 想看**工作流**：`Planning/01` → `Codex/00` → 任一張任務卡 → `VALIDATION_CHECKLIST`。
 想看**治理**：`Docs/OPEN_QUESTIONS` + `Docs/DECISIONS` + `Art/ART_CONTRACT.md`(Freeze)。
 想**試玩**：直接開 https://crushgamedemo-bloop.web.app （或依 `Docs/07_H5_EXPORT_SPEC.md` 自行匯出）。
-簡報素材：`Planning/07_DEMO_KIT.md`（現況版）；故事線骨架：`Planning/05_PRESENTATION_STORYLINE.md`。
+想看**送件簡報**：`Planning/AI工具使用清單.pptx` + `Planning/AI工作流程圖.pptx`；上台節奏與 Q&A：`Planning/11_JUDGE_DEMO_SCRIPT.md`。

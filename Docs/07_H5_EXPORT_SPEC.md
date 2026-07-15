@@ -15,6 +15,9 @@
 - 匯出範本：Godot 4.6 Web（HTML5）。
 - Export preset 名稱建議：`Web`。
 - 輸出路徑：`export/web/`（已在 `.gitignore` 忽略，不提交輸出物）。
+- 出貨包排除非執行資產：`Art/`、`Assets/generated/`、`Codex/`、`Docs/`、`Planning/`、
+  `Tests/`、`tmp/`、`validation_screenshots/` 等不得進 `.pck`；正式執行仍保留
+  `Assets/final/`、`Assets/placeholders/`、`Data/`、`Scenes/`、`Scripts/` 與 Firebase Web bridge。
 - **Thread support：關閉**（D-015 修訂）。關閉後不需要 SharedArrayBuffer，
   也就**不再需要 COOP/COEP 標頭**——這是為了讓 Google OAuth popup 可用
   （cross-origin isolation 會擋 OAuth popup）。本遊戲輕量，單執行緒足夠。

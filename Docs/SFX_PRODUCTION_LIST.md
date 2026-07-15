@@ -101,13 +101,13 @@
 
 ## 2026-07-13 追加清單（D-023/D-024，素材由人類自行蒐集）
 
-卡 25/26 完成後，以下四檔「放進 `Assets/final/audio/` 同檔名」即接上，零程式改動
-（audio.json 映射由任務卡預登；接檔前缺檔靜音/不切換，遊戲不會壞）。
+以下追加音檔均已放入 `Assets/final/audio/` 並接上；保留本段作為製作與換檔規格。
+日後覆蓋同檔名即可換音，缺檔仍依 D-014 fallback 靜音／不中斷主 BGM。
 
 | event_id | 檔名 | 什麼時候響 | 聲音方向 | 長度 |
 |---|---|---|---|---|
 | `coin_burst` | `sfx_coin_burst.ogg` | 怪物死亡金幣噴出飛向收益欄 | 一把金幣灑落「嘩啦叮鈴」，比 cashout 密集有顆粒感 | 0.8–1.5s |
-| `huye_coin_burst` | `sfx_huye_coin_burst.ogg` | 虎爺事件 Modal 成功彈出 | 盛大的金幣雨＋上揚中獎感，替 Modal 製造第二高潮 | 1.5–2.5s |
+| `huye_coin_burst` | `sfx_huye_coin_burst.ogg` | 虎爺獎勵金幣噴發實際開始 | 盛大的金幣雨＋上揚中獎感，替獎勵噴發製造第二高潮 | 1.5–2.5s |
 | `huye_divine_reveal` | `sfx_huye_divine_reveal.ogg` | 虎爺半透明慢速顯形開始 | 低頻神聖氣流＋反向鑼／鈴光澤，緩慢上揚但不先爆點 | 0.6–1.2s |
 | `huye_appear` | `sfx_huye_appear.ogg` | 虎爺落地衝擊瞬間（震屏+閃白同拍） | 大鼓/太鼓單擊「咚」＋短虎嘯（偏可愛不猙獰），可疊鑼點添神明感 | 0.6–1.0s |
 | （BGM）`event_bgm.huye` | `bgm_huye.ogg` | 虎爺事件全段（慢動作起至金幣飛完），主 BGM 淡出讓位 | 中式喜慶＋中獎感的**可循環 loop**（banner 等點擊、時長不定，必須無縫循環），8–15 秒一圈 | loop |

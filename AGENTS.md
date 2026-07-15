@@ -49,16 +49,16 @@
 15. `15_LEADERBOARD_SERVICE`（排行榜服務層介面+Mock；依 D-016；Codex）✅
 16. `16_LEADERBOARD_UI`（排行榜四接觸點 UI，依 mockup；Codex；需任務 15）✅
 17. `17_LEADERBOARD_FIREBASE`（Phase 2 換真資料源；Claude；需人類明確啟動）✅
-18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex；stage 10 維持 placeholder）✅（人類 2026-07-06 目視驗收；同 commit 併入 hero_attack 序列圖）
+18. `18_MONSTER_ASSET_INTEGRATION`（怪物序列圖 boss1–9 接入；依 D-017/Contract v1.4；Codex）✅（人類 2026-07-06 目視驗收；同 commit 併入 hero_attack 序列圖；boss10 後於 2026-07-15 依既有同檔名換裝機制接入）
 19. `19_COIN_BURST_ON_MONSTER_DEATH`（怪物死亡爆金幣→吸入收益 UI→數字跳動；Tween sprite 路線，數值入 animation_timing.json；Codex）✅（人類 2026-07-07 目視驗收）
 20. `20_DECISION_INFO_REVAMP`（拿血條→危險度、決策賠率語言、FOMO 結算；依 D-019；文案初稿入 ui_text.json、人類保留改句權）✅（人類 2026-07-08 目視驗收）
 21. `21_RANDOM_MULTIPLIER_TABLE`（每局隨機倍率盤，漸進抖動+單調遞增；依 D-019；排在 20 之後）✅（人類 2026-07-08 目視驗收；headless 200 局數值驗證通過）
 22. `22_WIN_BANNER_INTERSTITIAL`（撤退/通關大贏插頁：金色貼紙數字慶祝畫面，點擊任意處繼續；純視覺不動狀態機；數字圖以生成貼紙產出〔D-012 類別〕；Codex）✅（e0ddf6b 出貨，帳面補記 2026-07-11）
 23. `23_UI_REFERENCE_ALIGNMENT`（設計師四張 UI 參考圖對齊；banner 直接接入、其餘畫面目視調整；Codex）✅（2026-07-10 Godot＋H5 實跑驗收）
-24. `24_HUYE_RESCUE_EVENT`（「遇見虎爺」隨機救援事件：敗局強制逆轉＋該關增額翻倍＋FREE GAME 式插頁；依 D-022；Codex）
-25. `25_COIN_BURST_SFX_SPLIT`（金幣噴發音效獨立事件：coin_burst / huye_coin_burst，monster_death 專職死亡聲；依 D-023；Codex；素材人類自蒐）
-26. `26_HUYE_EVENT_BGM`（虎爺事件 BGM 切換：主 BGM 淡出→事件循環 BGM→接續原進度淡回＋huye_appear 命名統一；依 D-024；Codex；排在 25 之後）
-27. `27_HUYE_JACKPOT_PACING_AND_FX`（虎爺四拍節奏重分配＋程式化大獎衝擊特效；依 D-025；Codex；不動玩法/收益/狀態機）
+24. `24_HUYE_RESCUE_EVENT`（「遇見虎爺」隨機救援事件：敗局強制逆轉＋該關增額翻倍＋FREE GAME 式插頁；依 D-022；Codex）✅
+25. `25_COIN_BURST_SFX_SPLIT`（金幣噴發音效獨立事件：coin_burst / huye_coin_burst，monster_death 專職死亡聲；依 D-023；Codex；素材人類自蒐）✅（2026-07-16 維護回歸修正虎爺音效路由）
+26. `26_HUYE_EVENT_BGM`（虎爺事件 BGM 切換：主 BGM 淡出→事件循環 BGM→接續原進度淡回＋huye_appear 命名統一；依 D-024；Codex；排在 25 之後）✅
+27. `27_HUYE_JACKPOT_PACING_AND_FX`（虎爺四拍節奏重分配＋程式化大獎衝擊特效；依 D-025；Codex；不動玩法/收益/狀態機）✅（2026-07-15 Godot＋H5 驗收）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
@@ -84,7 +84,7 @@
 - **D-014** 正式接入音效：BGM + SFX 播放能力，`Assets/final/audio/` 為唯一音訊入口，設定讀 `Data/audio.json`，缺檔靜音不崩，H5 首次互動解鎖；不做音量/靜音 UI。
 - **D-015** 線上身分與分數服務（Firebase BaaS）：僅 Google 登入+自己分數；Web export 關 thread support（免 COOP/COEP、讓 OAuth popup 可用）；未登入/離線退回 LocalScoreService；core 只認 ScoreService 介面。規格見 `Docs/08`。
 - **D-016** 輕量排行榜式非同步競爭：單局流程不變、只加四個 UI 接觸點與資料回饋；指標單一 `best_payout`；Phase 1 用 Mock（NPC 名單 JSON）、Phase 2 換 Firebase；不做每日挑戰/同種子/模式選擇/即時連線/房間。
-- **D-017** 怪物素材＝動畫序列圖 `bossN_idle`（N=1..9，TexturePacker JSON）置於 `Assets/final/boss/`；stage 10 維持 placeholder；Contract v1.4。
+- **D-017** 怪物素材＝動畫序列圖 `bossN_idle`（原定 N=1..9，TexturePacker JSON）置於 `Assets/final/boss/`；stage 10 原裁示維持 placeholder，後於 2026-07-15 依同一素材契約補檔接入；Contract v1.4。
 - **D-018** 不透明全幅背景允許 JPG（`background_battle_00N.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析背景；需透明素材仍限 PNG；Contract v1.5。
 - **D-019** 賭場化體驗改版：血條移除改危險度指示（`danger_display` 資料驅動分級）；每局隨機倍率盤（`multiplier_random`，漸進抖動+單調遞增，success_rate 不連動，只揭示下一關）；不顯示成功率 %，改博奕語言（過關/落袋為安/1 賠 N）+ 結算 FOMO 行；文案一律 `ui_text.json`，人類保留改句權。
 - **D-020** 排行榜 NPC 保底名單正式版保留（修訂 D-016 §6）：`leaderboard_mock.json > keep_in_production` 開啟時 Firebase 版於 client 端合併 NPC 重排名、未登入/失敗退回 Mock 語意；不寫假資料進 Firestore；對評審揭露為模擬資料。

@@ -3,7 +3,7 @@
 > 用途：比賽繳交 PPT「AI 工作流程圖」的內容底稿。每個 `## Slide N` 為一頁投影片。
 > 流程圖以 mermaid 表達邏輯，最終 PPT 可照結構重繪成圖形（節點文字照抄即可）。
 > 事實來源：`Planning/08_COMPETITION_AI_USAGE_AND_WORKFLOW.md`（已逐項對 repo 查證）。
-> 狀態：草稿 v1（2026-07-15），待參賽者審核。
+> 狀態：送件版 v2（2026-07-16），已與 `AI工作流程圖.pptx` 同步並逐頁渲染驗證。
 
 ---
 
@@ -11,13 +11,13 @@
 
 - 標題：**AI 開發工作流程**
 - 副標：CrushGameDemo — 一套可複製的 AI 遊戲開發生產線
-- 核心命題：**每一步都有文件、邊界、決策紀錄與驗收依據**
+- 核心命題：**不是 prompt 技巧，而是一套有煞車、有證據、有驗收的 AI 生產線**
 
 > 講者備註：目標不只是完成一款遊戲，而是驗證「一人＋多個 AI」能以工程化流程穩定出貨。
 
 ---
 
-## Slide 2：核心設計 — 用 repo 文件取代聊天記憶
+## Slide 2：先解決 AI 協作的風險：失憶與漂移
 
 - 問題：只靠聊天上下文協作 AI → 遺忘、誤解、方向漂移
 - 解法：**repo 文件是人類與所有 AI 工具的共同介面**
@@ -33,7 +33,7 @@
 
 ---
 
-## Slide 3：全流程圖（主圖）
+## Slide 3：一張圖看懂：文件如何串起所有 AI
 
 ```mermaid
 flowchart TD
@@ -47,9 +47,13 @@ flowchart TD
 
     C -- "是" --> G["Docs 規格 + Data JSON 單一真實來源"]
     G --> H["Codex：一次執行一張 Godot 任務卡"]
-    G --> I["GPT Image-2 + Magnific：依 Art Contract 平行製作"]
+    G --> I["GPT Image-2：依 Art Contract 產生靜態素材"]
 
-    I --> J["Manifest：檔名、尺寸、透明與路徑檢查"]
+    I --> I1["Photoshop：去背 / Canvas 統一 / 資產標準化"]
+    I1 --> I2["Magnific：角色動畫生成（Idle / Attack / Dead）"]
+    I2 --> I3["AE：動態去背，輸出透明 PNG 序列圖"]
+    I3 --> I4["Claude：批量製作 Sprite Sheet + JSON"]
+    I4 --> J["Manifest：檔名、尺寸、透明與路徑檢查"]
     J --> K["Assets/final 正式素材入口"]
     K --> H
 
@@ -70,7 +74,7 @@ flowchart TD
 
 ---
 
-## Slide 4：關鍵機制一 — AI 不確定就停（Q → D 迴圈）
+## Slide 4：第一道煞車：不確定就停，Q → D 才動工
 
 ```mermaid
 flowchart LR
@@ -85,7 +89,7 @@ flowchart LR
 
 ---
 
-## Slide 5：關鍵機制二 — 每張任務卡的標準閉環
+## Slide 5：第二道煞車：每張任務卡都要閉環
 
 1. 讀 `AGENTS.md`、規格與最新決策
 2. 只做當前一張卡，確認「要做／不做／驗收」邊界
@@ -100,7 +104,7 @@ flowchart LR
 
 ---
 
-## Slide 6：關鍵機制三 — 工程與美術平行、互不阻塞
+## Slide 6：小團隊不互等：工程與美術平行合流
 
 ```mermaid
 flowchart LR
@@ -108,7 +112,7 @@ flowchart LR
         A["Placeholder 素材"] --> B["完整可玩閉環"]
     end
     subgraph 美術線
-        C["GPT Image-2 底圖"] --> D["Magnific 強化統一"]
+        C["GPT Image-2 靜態素材"] --> D["Photoshop→Magnific→AE→Claude<br/>動畫資產管線"]
         D --> E["Manifest 規格檢查"]
     end
     E --> F["Assets/final 同檔名放入"]
@@ -121,7 +125,29 @@ flowchart LR
 
 ---
 
-## Slide 7：人類與 AI 的責任界線
+## Slide 7：AI 圖不是成品：8 步變成遊戲資產
+
+**八階段閉環**：風格版／世界觀 → Style Bible／Prompt 規格 → GPT Image-2 靜態生成 →
+Photoshop 標準化 → Magnific 角色動畫 → AE 序列圖 → Claude Sprite Sheet＋JSON → GitHub 資產管理
+
+| 工具 | 能力邊界 |
+|---|---|
+| GPT Image-2 | 靜態素材生成、風格探索 |
+| Photoshop | 去背、Resize、Canvas 統一 |
+| Magnific | 角色動畫生成（Idle / Attack / Dead） |
+| AE | 動態去背、透明序列圖輸出 |
+| Claude | 批量 Sprite Sheet、JSON |
+| GitHub | 版本管理、素材交付、命名規範 |
+
+- 不讓 AI 直接生 Sprite Sheet（逐幀不一致、比例漂移）——**動畫影片轉序列圖更穩定**
+- 設計擔任 AI Art Director：世界觀、一致性、動畫品質由人判斷
+- 價值：**AI 放大美術產能，並將 AI 產物轉換成 RD 可直接整合的遊戲資產**
+
+> 講者備註：補足了兩人團隊（設計＋Web RD）沒有動畫師與 Technical Artist 的產能缺口。詳見繳交文件第九章。
+
+---
+
+## Slide 8：人類掌方向與煞車；AI 提供槓桿
 
 | 人類負責 | AI 負責 |
 |---|---|
@@ -132,23 +158,21 @@ flowchart LR
 | 敏感登入與憑證親手操作 | 自動測試、截圖、資料驗證 |
 | 實際遊玩最終驗收 | 文件補登與紀錄整理 |
 
-- 一句話：**AI 提供槓桿，人類保有方向盤與煞車**
+- 一句話：**AI 提供槓桿；人類握住方向盤，也握住煞車**
 
 ---
 
-## Slide 8：成果 — 流程跑出來的東西
+## Slide 9：最後交付的不是 Demo，而是可複製的生產線
 
 - 27 張任務卡 → **完整 H5 遊戲上線**（Google 登入＋Firebase 雲端排行榜）
-- 122 commits、25 筆決策、12 筆 Q 全數裁示——**全程可追溯、可查核**
-- 一人下班時間、約三週完成，流程可複製到下一個專案
-- https://crushgamedemo-bloop.web.app
+- 120+ commits、25 筆決策、12 筆 Q 全數裁示——**全程可追溯、可查核**
+- 設計＋RD 兩人小團隊、下班時間、約三週完成，流程可複製到下一個專案
+- 先玩 30 秒：https://crushgamedemo-bloop.web.app
 
 ---
 
-## 待參賽者確認的開放項（不上投影片）
+## 備援裁切方案（不上投影片）
 
-1. 主流程圖（Slide 3）節點較多，若簡報時間短，可只留主幹
-   （企劃 → 規劃 → Q/D 把關 → 任務卡實作 → 人類驗收 → 上線）約 8 節點版本，要嗎？
-2. 關鍵機制三頁（Slide 4–6）若有頁數限制，優先保留哪一個？
-   （建議保 Slide 4「不確定就停」——最能打「AI 應用 40%」評分項）
-3. Slide 8 的「約三週」是 06-27 → 07-15 的推算，實際投入時段以你說法為準。
+1. 簡報時間不足時，Slide 3 只口述主幹：企劃 → 規劃 → Q/D 把關 → 任務卡實作 → 人類驗收 → 上線。
+2. 若必須再減頁，優先保留 Slide 4「不確定就停」；它最直接回答 AI 應用與人類責任邊界。
+3. 「約三週」口徑來自 2026-06-27 起的 repo 紀錄；現場以「下班時間持續迭代」表述最穩妥。
