@@ -94,6 +94,15 @@
 - [x] CoinBurst 壞 config 時兩入口均不碰 payout hold，無 `Hud payout hold missing positive max_hold`；正常 config 仍於飛行期間暫扣並在第一枚到達時放行。
 - [x] H5 匯出實跑首次互動解鎖正常；事件音檔存在／缺失兩條路徑皆符合上述行為。
 
+## 里程碑 — 任務 27（虎爺大獎節奏重分配＋衝擊特效；Codex）
+- [x] 四拍可讀：危機定格／神明降臨／落地爆點／大獎揭曉，無落地後一秒死空氣。
+- [x] 下墜可被眼睛讀到；impact 的震屏、`huye_appear`、閃光與 shockwave 同拍。
+- [x] 金色光屑／拖尾／火花塵霧／banner 紙屑層次清楚，不冒充 CoinBurst 獎勵金幣。
+- [x] 所有節奏與 FX 調校值讀 `animation_timing.json`；`jackpot_fx.enabled=false`／缺 config 回退不崩。
+- [x] 未動狀態機、勝負、收益、x2、RNG 與既有 CoinBurst；未使用 `Engine.time_scale`。
+- [x] 連續 force-trigger 兩關無 Tween、粒子、dimmer、虎爺或怪物 transform 殘留。
+- [x] Godot 與 H5 各實跑至少兩輪；H5 無明顯掉幀、console 無新 error，附前後關鍵幀／錄影。
+
 ## 里程碑 — 任務 11（音效接入，需 D-014 定案後執行）
 - [ ] BGM 開播且 loop；已映射 SFX 事件於對應時機發聲。
 - [ ] 檔名/音量/loop 皆讀 `Data/audio.json`，改參數重啟即生效。

@@ -15,6 +15,7 @@ signal huye_rescue_visual_finished
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 const HitFlash := preload("res://Scripts/effects/hit_flash.gd")
 const ScreenShake := preload("res://Scripts/effects/screen_shake.gd")
+const HuyeJackpotFxScript := preload("res://Scripts/effects/huye_jackpot_fx.gd")
 const BACKGROUND_ASSET_DIR := "res://Assets/final/"
 const BACKGROUND_ASSET_EXTENSIONS := [".jpg", ".jpeg", ".png"]
 const BATTLE_CANVAS_SIZE := Vector2(1080.0, 1920.0)
@@ -44,6 +45,7 @@ var _monster_base_scale := Vector2.ONE
 var _monster_hidden_after_huye := false
 var _huye_coin_origin := Vector2.ZERO
 var _active_huye_visual: Node2D
+var _active_huye_jackpot_fx: Node2D
 var _huye_exit_tween: Tween
 var _intermission_background_active := false
 
@@ -189,21 +191,47 @@ func play_huye_rescue() -> void:
 	var dim_tween := create_tween()
 	dim_tween.tween_property(dimmer, "color:a", float(config.get("dimmer_alpha", 0.0)), float(config.get("dimmer_fade", 0.0)))
 
+	# 先清掉上一輪殘留，再建立本次事件的 FX；若反過來會把剛建立的
+	# 落下尾跡與撞擊粒子一起清除，只剩預告粒子來得及顯示。
+	_clear_active_huye()
+	_setup_huye_jackpot_fx(config)
+	if _active_huye_jackpot_fx != null:
+		_active_huye_jackpot_fx.play_anticipation(monster_canvas_position())
 	await monster.play_huye_counter_slow(hero.global_position, config)
 	# 金幣應從螢幕內的命中位置噴出；不可沿用怪物飛出畫面的終點座標。
 	_huye_coin_origin = monster_canvas_position()
-	_clear_active_huye()
 	var huye := _create_huye_visual(config)
 	_active_huye_visual = huye
 	add_child(huye)
 	var impact_position := monster_canvas_position() + Vector2(0.0, float(config.get("huye_impact_offset_y", 0.0)))
 	huye.position = Vector2(impact_position.x, float(config.get("huye_start_y", 0.0)))
+	if _active_huye_jackpot_fx != null:
+		_active_huye_jackpot_fx.play_descent_trail(huye.position, impact_position)
+	var huye_target_scale := huye.scale
+	var fx_config: Dictionary = config.get("jackpot_fx", {})
+	if bool(fx_config.get("enabled", false)):
+		huye.scale = huye_target_scale * float(fx_config.get("drop_scale_start", 1.0))
 	var drop := create_tween()
 	drop.tween_property(huye, "position", impact_position, float(config.get("huye_drop_duration", 0.0)))\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	if bool(fx_config.get("enabled", false)):
+		drop.parallel().tween_property(
+			huye,
+			"scale",
+			huye_target_scale * float(fx_config.get("drop_scale_end", 1.0)),
+			float(config.get("huye_drop_duration", 0.0))
+		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	await drop.finished
+	if _active_huye_jackpot_fx != null:
+		var impact_fx_position := impact_position + Vector2(0.0, float(fx_config.get("impact_fx_offset_y", 0.0)))
+		_active_huye_jackpot_fx.play_impact(impact_fx_position)
 	_play_huye_impact_feel(config)
 	huye_impact.emit()
+	var scale_settle_duration := float(fx_config.get("drop_scale_settle_duration", 0.0))
+	if bool(fx_config.get("enabled", false)) and scale_settle_duration > 0.0:
+		var scale_settle := create_tween()
+		scale_settle.tween_property(huye, "scale", huye_target_scale, scale_settle_duration)\
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await _play_huye_landing_bounce(huye, config)
 	await get_tree().create_timer(float(config.get("impact_hold", 0.0))).timeout
 	await monster.play_huye_fly_out(config)
@@ -218,6 +246,7 @@ func play_huye_rescue() -> void:
 	var pre_banner_delay := float(config.get("pre_banner_delay", 0.0))
 	if pre_banner_delay > 0.0:
 		await get_tree().create_timer(pre_banner_delay).timeout
+	_clear_active_huye_jackpot_fx()
 	huye_rescue_visual_finished.emit()
 
 
@@ -353,6 +382,23 @@ func _clear_active_huye() -> void:
 	if _active_huye_visual != null and is_instance_valid(_active_huye_visual):
 		_active_huye_visual.queue_free()
 	_active_huye_visual = null
+	_clear_active_huye_jackpot_fx()
+
+
+func _setup_huye_jackpot_fx(config: Dictionary) -> void:
+	_clear_active_huye_jackpot_fx()
+	var fx := HuyeJackpotFxScript.new()
+	if not fx.setup(config):
+		fx.queue_free()
+		return
+	_active_huye_jackpot_fx = fx
+	add_child(fx)
+
+
+func _clear_active_huye_jackpot_fx() -> void:
+	if _active_huye_jackpot_fx != null and is_instance_valid(_active_huye_jackpot_fx):
+		_active_huye_jackpot_fx.queue_free()
+	_active_huye_jackpot_fx = null
 
 
 ## D-019：血條位置改放危險度列（危險度＋爪印等級）。全程式生成，不動 .tscn。

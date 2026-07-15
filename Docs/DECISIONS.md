@@ -354,3 +354,21 @@
   `Data/audio.json`、`Docs/06_DATA_SCHEMA.md`、`Docs/SFX_PRODUCTION_LIST.md`、
   `Codex/VALIDATION_CHECKLIST.md`。
 - **實作**：`Codex/26_HUYE_EVENT_BGM.md`（Codex）。
+
+## D-025：虎爺事件大獎節奏重分配＋程式衝擊特效
+- **問題**：2026-07-15 實跑確認，虎爺事件不是整段一律太短，而是重拍失衡：
+  `slow_hold=0`、下墜僅 `0.12s`、`impact_hold=0`，使虎爺出現到落地過急；
+  相反地 `pre_banner_delay=1.0s` 令爆點後出現死空氣，不像遊戲的大獎事件。
+- **人類決策**（2026-07-15，對話中裁示）：
+  1. 演出重排成「危機定格 → 神明降臨 → 落地爆點 → 大獎揭曉」四拍，
+	 把部分 post-impact 空等搬到下墜前懸念與落地後確認。
+  2. 可新增克制的 jackpot 特效：金色漂浮光屑、下墜拖尾、落地白金閃光、
+	 shockwave、火花／塵霧、banner 紙屑；獎勵金幣仍只由既有 CoinBurst 負責。
+  3. 不用 `Engine.time_scale`，不動狀態機、勝負、收益與 x2；所有調校數值
+	 資料驅動，並提供 `jackpot_fx.enabled=false` 回退。
+  4. 特效以程式元件完成，不新增正式美術；粒子 one-shot、自動釋放、H5 同時
+	 存活量建議不超過 100。
+- **影響**：`Data/animation_timing.json`、`Scripts/battle/battle_presenter.gd`、
+  `Scripts/effects/huye_banner.gd`、新增獨立 jackpot FX script、
+  `Docs/06_DATA_SCHEMA.md`、`Codex/VALIDATION_CHECKLIST.md`。
+- **實作**：`Codex/27_HUYE_JACKPOT_PACING_AND_FX.md`（Codex）。

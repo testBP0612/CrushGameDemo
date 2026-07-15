@@ -75,6 +75,13 @@
 | `effects.coin_burst.*` | 混合 | 任務 19 爆金幣參數：`count_base:int` + `count_per_multiplier:float`（金幣數 = base + 該次擊殺後倍率 × 此值）、`count_max:int`（上限）、噴發/滯空/吸入各時長與物理值（`burst_duration`/`launch_speed`/`spread_degrees`/`gravity`/`hover_time`/`fly_duration`/`fly_stagger`/`spawn_stagger`/`scale_min~max`/`arrive_fade`，float）、`canvas_layer:int`、`max_hold:float(s)`（跳數暫扣保底，時間到數字照跳）。 |
 | `effects.win_banner.*` | float(s/px) | 任務 22 大贏插頁參數：`appear` / `count_up` / `min_show` / `auto_dismiss` / `fade_out` 為秒，`digit_height` 為貼紙數字顯示高度(px)。 |
 | `effects.huye_event.*` | float(s/ratio/px) | 任務 24 虎爺逆轉演出：反擊剎車比例/慢速倍率、暗場、虎爺落下、怪物飛出、插頁顯示與自動關閉等參數。 |
+| `effects.huye_event.jackpot_fx.enabled` | bool | 任務 27 大獎特效總開關；false／缺 config 時回退卡 24 現有視覺。 |
+| `effects.huye_event.jackpot_fx.drop_scale_*` / `banner_scale_*` / `impact_fx_offset_y` | float(s/ratio/px) | 虎爺下墜與 banner overshoot 的縮放比例、回正時長，以及落地粒子相對虎爺中心的垂直位移。 |
+| `effects.huye_event.jackpot_fx.*_colors` | string[] | 金色光屑、塵霧與紙屑色盤（hex）。 |
+| `effects.huye_event.jackpot_fx.anticipation.*` / `descent_trail.*` | 混合 | 危機定格光屑與虎爺下墜拖尾：數量、時長、錯開、範圍、位移、尺寸與旋轉。 |
+| `effects.huye_event.jackpot_fx.impact_flash.*` / `shockwave.*` | 混合 | 落地白金閃光與擴張衝擊環：時長、透明度、顏色、半徑、線寬與圓周點數。 |
+| `effects.huye_event.jackpot_fx.impact_sparks.*` / `impact_dust.*` | 混合 | 落地火花／塵霧的數量、生命期、方向、速度、重力、尺寸與旋轉。 |
+| `effects.huye_event.jackpot_fx.banner_confetti.*` | 混合 | Banner 紙屑：數量、生命期、出生位置比例、速度、重力、尺寸與旋轉。 |
 
 ## ui_text.json
 | 路徑 | 型別 | 說明 |

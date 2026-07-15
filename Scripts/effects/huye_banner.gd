@@ -3,6 +3,7 @@ extends CanvasLayer
 
 const BANNER_PATH := "res://Assets/final/huye_event_banner.png"
 const CANVAS_WIDTH := 1080.0
+const HuyeJackpotFxScript := preload("res://Scripts/effects/huye_jackpot_fx.gd")
 
 signal dismissed
 
@@ -11,6 +12,7 @@ var _modal: Control
 var _config: Dictionary
 var _can_dismiss := false
 var _closing := false
+var _jackpot_fx: Node2D
 
 
 func play() -> bool:
@@ -20,6 +22,7 @@ func play() -> bool:
 		return false
 	layer = int(Data.animation_timing_config().get("effects", {}).get("coin_burst", {}).get("canvas_layer", 2)) + 1
 	_build_tree()
+	_play_jackpot_fx()
 	_play_intro()
 	_arm_dismiss()
 	return true
@@ -79,11 +82,35 @@ func _build_tree() -> void:
 
 func _play_intro() -> void:
 	_root.modulate.a = 0.0
-	_modal.scale = Vector2(0.94, 0.94)
+	var fx_config: Dictionary = _config.get("jackpot_fx", {})
+	var fx_enabled := bool(fx_config.get("enabled", false))
+	# FX 關閉／整組缺失時維持卡 24 的 0.94→1.0 淡入，不套用本卡 overshoot。
+	var scale_start := float(fx_config.get("banner_scale_start", 0.94)) if fx_enabled else 0.94
+	var scale_peak := float(fx_config.get("banner_scale_overshoot", 1.0)) if fx_enabled else 1.0
+	_modal.scale = Vector2.ONE * scale_start
 	var appear := float(_config.get("banner_appear", 0.0))
 	var tween := create_tween()
 	tween.tween_property(_root, "modulate:a", 1.0, appear)
-	tween.parallel().tween_property(_modal, "scale", Vector2.ONE, appear).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(
+		_modal,
+		"scale",
+		Vector2.ONE * scale_peak,
+		appear
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	var settle_duration := float(fx_config.get("banner_scale_settle_duration", 0.0)) if fx_enabled else 0.0
+	if settle_duration > 0.0:
+		tween.tween_property(_modal, "scale", Vector2.ONE, settle_duration)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+func _play_jackpot_fx() -> void:
+	var fx := HuyeJackpotFxScript.new()
+	if not fx.setup(_config):
+		fx.queue_free()
+		return
+	_jackpot_fx = fx
+	_root.add_child(fx)
+	fx.play_banner_confetti(get_viewport().get_visible_rect().size)
 
 
 func _arm_dismiss() -> void:

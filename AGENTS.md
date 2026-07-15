@@ -58,6 +58,7 @@
 24. `24_HUYE_RESCUE_EVENT`（「遇見虎爺」隨機救援事件：敗局強制逆轉＋該關增額翻倍＋FREE GAME 式插頁；依 D-022；Codex）
 25. `25_COIN_BURST_SFX_SPLIT`（金幣噴發音效獨立事件：coin_burst / huye_coin_burst，monster_death 專職死亡聲；依 D-023；Codex；素材人類自蒐）
 26. `26_HUYE_EVENT_BGM`（虎爺事件 BGM 切換：主 BGM 淡出→事件循環 BGM→接續原進度淡回＋huye_appear 命名統一；依 D-024；Codex；排在 25 之後）
+27. `27_HUYE_JACKPOT_PACING_AND_FX`（虎爺四拍節奏重分配＋程式化大獎衝擊特效；依 D-025；Codex；不動玩法/收益/狀態機）
 
 ## 工作流程（每張卡）
 1. 讀本檔 + 任務卡 + 必讀文件。
