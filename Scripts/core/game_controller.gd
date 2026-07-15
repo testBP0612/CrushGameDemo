@@ -402,6 +402,8 @@ func _on_huye_rescue_visual_finished() -> void:
 	if not banner.play():
 		_active_huye_banner = null
 		_start_huye_coin_burst()
+	else:
+		audio_service.play_sfx("huye_coin_burst")
 
 
 func _on_huye_banner_dismissed() -> void:
@@ -428,7 +430,7 @@ func _start_huye_coin_burst() -> void:
 	if started:
 		hold_state["active"] = true
 		vertical_ui.hold_payout_count_up(burst.max_hold())
-		audio_service.play_sfx("huye_coin_burst")
+		audio_service.play_sfx("coin_burst")
 	else:
 		if burst != null and is_instance_valid(burst):
 			burst.queue_free()

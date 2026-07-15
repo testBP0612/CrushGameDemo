@@ -371,6 +371,9 @@
   5. **2026-07-15 人類追加裁示**：慢速顯形起始新增 `huye_divine_reveal`
 	 SFX，映射 `sfx_huye_divine_reveal.ogg`；與落地幀的 `huye_appear` 分工，
 	 缺檔仍依 D-014 靜音略過、不影響演出。
+  6. **2026-07-15 人類追加裁示**：虎爺壓死怪物後、獎勵金幣從怪物位置
+	 噴出時播放既有 `coin_burst`；`huye_coin_burst` 改在虎爺事件 Modal
+	 成功彈出時播放，關閉 Modal 後不得重複播放。
 - **影響**：`Data/animation_timing.json`、`Scripts/battle/battle_presenter.gd`、
   `Scripts/effects/huye_banner.gd`、新增獨立 jackpot FX script、
   `Docs/06_DATA_SCHEMA.md`、`Codex/VALIDATION_CHECKLIST.md`。
