@@ -53,8 +53,8 @@
 
 | 項目 | 內容 |
 |---|---|
-| 主要角色 | AI 美術強化、重繪與風格統一 |
-| 底圖來源 | 以 GPT Image-2 生成底圖，再經 Magnific 強化與風格統一 |
+| 主要角色 | GPT Image-2 負責靜態素材生成；Magnific 負責角色動畫生成 |
+| 流程定位 | GPT Image-2 產生靜態底圖 → Photoshop 去背／Canvas 統一 → Magnific 生成角色動畫影片 → AE 動態去背輸出序列圖 → Claude 批量製作 Sprite Sheet + JSON |
 | 實際用途 | 依 Art Contract、素材規格與 prompt 樣板處理角色、怪物、背景及部分 UI 美術；完成後依 manifest 命名並放入 `Assets/final/` |
 | 協作方式 | 工程先用 placeholder 完成可玩閉環，美術同步製作正式素材；候選稿不作為程式依賴，正式檔案到位後再接入 |
 | 人類把關 | 美術方向與可用素材由人類／美術同事決定；規格不符時走 Q-ART → DECISIONS → Contract 升版流程 |
@@ -109,9 +109,13 @@ flowchart TD
 
     C -- "是" --> G["Docs 規格 + Data JSON 單一真實來源"]
     G --> H["Codex：一次執行一張 Godot 任務卡"]
-    G --> I["Magnific／圖像 AI：依 Art Contract 平行製作"]
+    G --> I["GPT Image-2：依 Art Contract 產生靜態素材"]
 
-    I --> J["Manifest：檔名、尺寸、透明與路徑檢查"]
+    I --> I1["Photoshop：去背 / Canvas 統一 / 資產標準化"]
+    I1 --> I2["Magnific：角色動畫生成（Idle / Attack / Dead）"]
+    I2 --> I3["AE：動態去背，輸出透明 PNG 序列圖"]
+    I3 --> I4["Claude：批量製作 Sprite Sheet + JSON"]
+    I4 --> J["Manifest：檔名、尺寸、透明與路徑檢查"]
     J --> K["Assets/final 正式素材入口"]
     K --> H
 
@@ -254,11 +258,11 @@ RD 匯入遊戲並整合 MVP
 
 Photoshop 在流程中擔任 **Asset Normalization**，負責把 AI 產生的不穩定圖片轉換成動畫工具可接受的標準輸入。GPT 圖片常見問題包含：無法穩定產生透明背景、每張圖尺寸不同、角色比例與位置不同、背景殘留，因此在進入動畫前必須先統一規格。
 
-#### 階段 5：AI 動畫平台生成角色動畫
+#### 階段 5：Magnific 角色動畫生成
 
-工作內容：將標準化後的角色素材丟入 AI 動畫平台，產生 Idle、Walk、Attack、Dead 等動畫，選擇變形較少的版本，避免過度複雜動作。
+工作內容：將 Photoshop 標準化後的靜態角色素材丟入 Magnific，產生 Idle、Walk、Attack、Dead 等動畫影片，選擇變形較少的版本，避免過度複雜動作。
 
-不直接生成 Sprite Sheet 的原因：AI 直接生成 Sprite Sheet 容易出現每幀角色長相不一致、身體比例漂移、手腳道具消失、視角不穩定、動作不連續等問題。因此採用「靜態素材 → 動畫平台 → 序列圖 → Sprite Sheet」的方式更穩定。
+不直接生成 Sprite Sheet 的原因：AI 直接生成 Sprite Sheet 容易出現每幀角色長相不一致、身體比例漂移、手腳道具消失、視角不穩定、動作不連續等問題。因此採用「靜態素材 → Magnific 動畫 → AE 序列圖 → Claude Sprite Sheet」的方式更穩定。
 
 #### 階段 6：AE 動態去背與序列圖輸出
 
@@ -299,11 +303,11 @@ GitHub 在流程中是 **美術資產的 Single Source of Truth**，管理：素
 
 | 工具 | 負責內容 |
 |---|---|
-| GPT | 靜態素材生成、風格探索 |
+| GPT Image-2 | 靜態素材生成、風格探索 |
 | Photoshop | 去背、Resize、Canvas 統一 |
-| AI 動畫平台 | 動作生成 |
-| AE | 動態去背、序列圖輸出 |
-| Claude | Sprite Sheet、JSON、批次整理 |
+| Magnific | 角色動畫生成（Idle / Attack / Dead） |
+| AE | 動態去背、透明序列圖輸出 |
+| Claude | 批量製作 Sprite Sheet、JSON |
 | GitHub | 版本管理、素材交付、命名規範 |
 
 **亮點 3：解決非遊戲團隊的美術與動畫產能不足**
