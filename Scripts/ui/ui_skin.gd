@@ -624,6 +624,26 @@ static func fill_danger_icons(row: HBoxContainer, level: int, max_level: int, ic
 	return true
 
 
+## 設計師版危險度金星：與怪物頭上的 risk_state 顯示一致，只排列 level 顆亮星。
+## 回傳 false = 缺圖，呼叫端可退回既有爪印／文字 fallback（D-004）。
+static func fill_risk_stars(row: HBoxContainer, level: int, icon_px: float) -> bool:
+	if row == null or not is_instance_valid(row):
+		return false
+	for child in row.get_children():
+		child.queue_free()
+	var texture := _load_texture(TEX_RISK_STAR)
+	if texture == null:
+		return false
+	for index in range(maxi(0, level)):
+		var star := TextureRect.new()
+		star.texture = texture
+		star.custom_minimum_size = Vector2(icon_px, icon_px)
+		star.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		star.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(star)
+	return true
+
+
 static func _sticker_box(color: Color, radius: int, border_width: int, border_color: Color, shadow_color: Color) -> StyleBoxFlat:
 	var style := _flat_box(color, radius, border_width, border_color)
 	style.shadow_color = shadow_color

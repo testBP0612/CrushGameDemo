@@ -34,7 +34,7 @@
 | hero_hurt | hero_hurt.png | Assets/final/ | required | PNG32 | yes | right | 主角受擊 | Scenes/Actors | 色塊閃紅 | planned | 美術 | — |
 | hero_defeat | hero_defeat_sheet.png + hero_defeat_sheet.json | Assets/final/ | required | PNG32 | yes | right | 主角戰敗 | Scenes/Actors | 色塊變灰/旋轉 | imported | 美術 | grid 序列圖（768×768、4×3、12 幀）；non-loop，播放時長依 animation_timing.json hero.defeat |
 
-### 怪物（stage 1–9 idle 序列圖；stage 10 placeholder）
+### 怪物（stage 1–10 idle 序列圖）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | boss1_idle | boss1_idle.png + boss1_idle.json | Assets/final/boss/ | required | PNG32 | yes | left | 第1關怪物 idle 序列圖 | Scenes/Actors | 色塊#7ed957 | imported | 美術 | TexturePacker JSON；非像素、linear、mipmaps off |
@@ -46,7 +46,7 @@
 | boss7_idle | boss7_idle.png + boss7_idle.json | Assets/final/boss/ | optional | PNG32 | yes | left | 第7關怪物 idle 序列圖 | Scenes/Actors | 色塊#5e7ad4 | imported | 美術 | TexturePacker JSON；非像素、linear、mipmaps off |
 | boss8_idle | boss8_idle.png + boss8_idle.json | Assets/final/boss/ | optional | PNG32 | yes | left | 第8關怪物 idle 序列圖 | Scenes/Actors | 色塊#9b5ed4 | imported | 美術 | TexturePacker JSON；非像素、linear、mipmaps off |
 | boss9_idle | boss9_idle.png + boss9_idle.json | Assets/final/boss/ | optional | PNG32 | yes | left | 第9關怪物 idle 序列圖 | Scenes/Actors | 色塊#d45e9b | imported | 美術 | TexturePacker JSON；非像素、linear、mipmaps off |
-| monster_010_idle | monster_010_idle.png | Assets/final/ | optional | PNG32 | yes | left | 第10關怪物 | Scenes/Actors | 色塊#c0392b | missing | 美術 | 依 D-017 暫缺，維持 placeholder |
+| boss10_idle | boss10_idle.png + boss10_idle.json | Assets/final/boss/ | optional | PNG32 | yes | left | 第10關怪物 idle 序列圖 | Scenes/Actors | 色塊#c0392b | imported | 美術 | 4×3 grid 已正規化為 TexturePacker JSON；非像素、linear、mipmaps off |
 
 ### 背景（分區，依 game_balance.json `background_zones` 選用）
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
@@ -161,7 +161,5 @@
 | hit_flash_effect | optional | 白閃 | 命中閃光 |
 | cashout_effect | optional | Tween 粒子 | 撤退特效 |
 | defeat_effect | optional | Tween 變灰 | 戰敗特效 |
-| monster_010_idle | optional | placeholder_color | 第 10 隻怪物依 D-017 暫缺，維持 placeholder；未來補檔後再接入 |
-
-> 提醒：`Data/monsters.json` 已定義 10 隻怪物（含 `art_asset_id`）。stage 1–9 對映 `bossN_idle`；
-> stage 10 與任何缺圖情境以 `placeholder_color` 色塊呈現，遊戲照常可玩。
+> 提醒：`Data/monsters.json` 已定義 10 隻怪物（含 `art_asset_id`），stage 1–10 對映
+> `bossN_idle`；任何 PNG／JSON 缺檔或解析失敗時仍以 `placeholder_color` 色塊呈現，遊戲照常可玩。

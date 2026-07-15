@@ -99,7 +99,7 @@
 	  "display_hp": 920,
 	  "attack_hits_range": [5, 5],
 	  "placeholder_color": "#c0392b",
-	  "art_asset_id": "monster_010_idle",
+	  "art_asset_id": "boss10_idle",
 	  "required_for_mvp": false
 	}
   ]
