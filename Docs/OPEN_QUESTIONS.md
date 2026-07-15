@@ -97,7 +97,7 @@
 	- A. 只接 BGM（最小改動，先讓遊戲有聲音）。
 	- B. BGM + 既有 9 個 SFX 事件的播放能力（**有檔才播、缺檔靜音不崩**；SFX 音檔可之後分批補，架構一次到位）。
 	- C. 只接 SFX、不接 BGM。
-  - **(b) 素材路徑與命名**：比照 D-004 的 final 入口原則——`Assets/final/audio/` 為唯一正式音訊入口；BGM 命名 `bgm_main.mp3`（`FishAlleyQuest.mp3` 改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不需 placeholder 音檔**：缺檔的 fallback 就是靜音（遊戲不可壞）。
+  - **(b) 素材路徑與命名**：比照 D-004 的 final 入口原則——`Assets/final/audio/` 為唯一正式音訊入口；BGM 命名 `bgm_main.ogg`（`FishAlleyQuest.mp3` 改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不需 placeholder 音檔**：缺檔的 fallback 就是靜音（遊戲不可壞）。
   - **(c) 資料驅動**：新增 `Data/audio.json`（event_id→檔名映射、各音量、BGM loop 設定），禁止在腳本寫死檔名/音量（AGENTS 鐵則 6）。
   - **(d) H5 音訊解鎖**：依 `Docs/07`——首次使用者互動（點擊/觸碰）時解鎖並開始播 BGM；解鎖前所有播放呼叫靜默略過。
   - **(e) 靜音/音量 UI**：建議本卡**不做**（避免動版面、觸及 D-006 不變量），列 Future。

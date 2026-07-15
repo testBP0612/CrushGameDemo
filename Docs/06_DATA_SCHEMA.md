@@ -76,9 +76,10 @@
 | `effects.win_banner.*` | float(s/px) | 任務 22 大贏插頁參數：`appear` / `count_up` / `min_show` / `auto_dismiss` / `fade_out` 為秒，`digit_height` 為貼紙數字顯示高度(px)。 |
 | `effects.huye_event.*` | float(s/ratio/px) | 任務 24 虎爺逆轉演出：反擊剎車比例/慢速倍率、暗場、虎爺落下、怪物飛出、插頁顯示與自動關閉等參數。 |
 | `effects.huye_event.jackpot_fx.enabled` | bool | 任務 27 大獎特效總開關；false／缺 config 時回退卡 24 現有視覺。 |
-| `effects.huye_event.jackpot_fx.drop_scale_*` / `banner_scale_*` / `impact_fx_offset_y` | float(s/ratio/px) | 虎爺下墜與 banner overshoot 的縮放比例、回正時長，以及落地粒子相對虎爺中心的垂直位移。 |
+| `effects.huye_event.jackpot_fx.reveal_*` / `drop_scale_*` / `banner_scale_*` / `impact_fx_offset_y` | float(s/ratio/px) | 虎爺神明降臨顯形、下墜與 banner overshoot 的位置、透明度、縮放比例、回正時長，以及落地粒子相對虎爺中心的垂直位移。 |
 | `effects.huye_event.jackpot_fx.*_colors` | string[] | 金色光屑、塵霧與紙屑色盤（hex）。 |
 | `effects.huye_event.jackpot_fx.anticipation.*` / `descent_trail.*` | 混合 | 危機定格光屑與虎爺下墜拖尾：數量、時長、錯開、範圍、位移、尺寸與旋轉。 |
+| `effects.huye_event.jackpot_fx.divine_reveal.*` | 混合 | 虎爺慢速顯形時的上升神光屑與擴張光環：數量、時長、範圍、半徑、線寬、透明度與顏色。 |
 | `effects.huye_event.jackpot_fx.impact_flash.*` / `shockwave.*` | 混合 | 落地白金閃光與擴張衝擊環：時長、透明度、顏色、半徑、線寬與圓周點數。 |
 | `effects.huye_event.jackpot_fx.impact_sparks.*` / `impact_dust.*` | 混合 | 落地火花／塵霧的數量、生命期、方向、速度、重力、尺寸與旋轉。 |
 | `effects.huye_event.jackpot_fx.banner_confetti.*` | 混合 | Banner 紙屑：數量、生命期、出生位置比例、速度、重力、尺寸與旋轉。 |
@@ -97,7 +98,7 @@
 ## audio.json（D-014 新增）
 | 路徑 | 型別 | 說明 |
 |---|---|---|
-| `bgm.file` | string | BGM 檔名（相對 `Assets/final/audio/`，如 `bgm_main.mp3`）。 |
+| `bgm.file` | string | BGM 檔名（相對 `Assets/final/audio/`，如 `bgm_main.ogg`）。 |
 | `bgm.loop` | bool | BGM 是否循環。 |
 | `bgm.volume_db` | float | BGM 音量（dB）。 |
 | `event_bgm.<event_id>.file` | string | 事件 BGM 檔名（相對 `Assets/final/audio/`）；缺檔時不切換，主 BGM 照播。 |

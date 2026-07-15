@@ -126,7 +126,7 @@
 - **流程**：`Q-004` 提出（含選項與 AI 建議）→ 人類採納全部 AI 建議。音訊素材不屬 `Art/ART_CONTRACT.md` 鎖定範圍（合約只管視覺素材），不觸發 Freeze 變更程序、不升 Contract 版本。
 - **人類決策**：
   1. **範圍**：BGM + 既有 9 個 SFX 事件的**播放能力**（事件清單見 `Docs/SFX_TODO.md`，不得擅增事件 ID）。SFX 音檔可分批補齊；**有檔才播、缺檔靜音，遊戲不可壞**。
-  2. **素材路徑**：`Assets/final/audio/` 為唯一正式音訊入口（比照 D-004 final 原則）。BGM 命名 `bgm_main.mp3`（由工作區 `Assets/FishAlleyQuest.mp3` 於 Godot 編輯器內改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不設 placeholder 音檔**——缺檔的 fallback 就是靜音。
+  2. **素材路徑**：`Assets/final/audio/` 為唯一正式音訊入口（比照 D-004 final 原則）。BGM 命名 `bgm_main.ogg`（由工作區 `Assets/FishAlleyQuest.mp3` 於 Godot 編輯器內改名移入）；SFX 命名 `sfx_<event_id>.ogg`（或 mp3/wav）。**不設 placeholder 音檔**——缺檔的 fallback 就是靜音。
   3. **資料驅動**：新增 `Data/audio.json`（event_id→檔名映射、音量、BGM loop），schema 見 `Docs/06`；禁止在腳本寫死檔名/音量（AGENTS 鐵則 6）。
   4. **H5 音訊解鎖**：首次使用者互動時解鎖並開始播 BGM；解鎖前所有播放呼叫靜默略過（`Docs/07` §三由 Future 轉正式）。
   5. **不做靜音/音量 UI**：避免動版面（D-006 不變量），列 Future。
@@ -368,6 +368,9 @@
 	 資料驅動，並提供 `jackpot_fx.enabled=false` 回退。
   4. 特效以程式元件完成，不新增正式美術；粒子 one-shot、自動釋放、H5 同時
 	 存活量建議不超過 100。
+  5. **2026-07-15 人類追加裁示**：慢速顯形起始新增 `huye_divine_reveal`
+	 SFX，映射 `sfx_huye_divine_reveal.ogg`；與落地幀的 `huye_appear` 分工，
+	 缺檔仍依 D-014 靜音略過、不影響演出。
 - **影響**：`Data/animation_timing.json`、`Scripts/battle/battle_presenter.gd`、
   `Scripts/effects/huye_banner.gd`、新增獨立 jackpot FX script、
   `Docs/06_DATA_SCHEMA.md`、`Codex/VALIDATION_CHECKLIST.md`。

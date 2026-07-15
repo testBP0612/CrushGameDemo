@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "bgm": {
-    "file": "bgm_main.mp3",
+    "file": "bgm_main.ogg",
     "loop": true,
     "volume_db": -8.0
   },
@@ -27,6 +27,7 @@
     "defeat": "sfx_defeat.ogg",
     "huye_appear": "sfx_huye_appear.ogg",
     "huye_coin_burst": "sfx_huye_coin_burst.ogg",
+    "huye_divine_reveal": "sfx_huye_divine_reveal.ogg",
     "monster_death": "sfx_monster_death.ogg"
   }
 }

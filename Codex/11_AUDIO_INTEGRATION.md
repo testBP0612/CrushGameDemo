@@ -12,7 +12,7 @@
 1. **`Data/audio.json`（新增）**，schema 如下（定案後由規劃端同步至 `Docs/06`）：
    ```json
    {
-	 "bgm": { "file": "bgm_main.mp3", "loop": true, "volume_db": -8.0 },
+	 "bgm": { "file": "bgm_main.ogg", "loop": true, "volume_db": -8.0 },
 	 "sfx_volume_db": -4.0,
 	 "sfx_events": {
 	   "button_click": "sfx_button_click.ogg",
@@ -23,7 +23,7 @@
    - `sfx_events` 只列**已有音檔**的事件；未列出的 event_id 一律靜音略過。
    - 事件 ID 全集見 `Docs/SFX_TODO.md`，不得新增未在該清單的事件 ID（要加先開 Q）。
 2. **`Assets/final/audio/`（新增資料夾）**：唯一正式音訊入口。
-   - 將工作區的 `Assets/FishAlleyQuest.mp3` 於 Godot 內改名移入為 `Assets/final/audio/bgm_main.mp3`（在編輯器內搬移以正確處理 `.import`）。
+   - 將工作區的 `Assets/FishAlleyQuest.mp3` 於 Godot 內改名移入為 `Assets/final/audio/bgm_main.ogg`（在編輯器內搬移以正確處理 `.import`）。
    - SFX 音檔命名 `sfx_<event_id>.ogg`（或 mp3/wav），可分批補齊，本卡不要求備齊。
 3. **`Scripts/services/audio_service.gd`（空殼→實作）**：
    - 啟動時讀 `Data`（autoload）的 audio 設定，預載可用音檔；檔案不存在→記 warning、該事件靜音，**不得報錯中斷**。

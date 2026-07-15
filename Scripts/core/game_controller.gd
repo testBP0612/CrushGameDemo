@@ -95,6 +95,7 @@ func _connect_battle_presenter() -> void:
 	battle_presenter.monster_counter_finished.connect(_on_monster_counter_finished)
 	battle_presenter.player_hurt_finished.connect(_on_player_hurt_finished)
 	battle_presenter.hit_landed.connect(_on_hit_landed)
+	battle_presenter.huye_divine_reveal.connect(_on_huye_divine_reveal)
 	battle_presenter.huye_impact.connect(_on_huye_impact)
 	battle_presenter.huye_rescue_visual_finished.connect(_on_huye_rescue_visual_finished)
 
@@ -387,6 +388,10 @@ func _on_player_hurt_finished() -> void:
 func _on_huye_impact() -> void:
 	audio_service.play_sfx("huye_appear")
 	state_machine.reveal_huye_result()
+
+
+func _on_huye_divine_reveal() -> void:
+	audio_service.play_sfx("huye_divine_reveal")
 
 
 func _on_huye_rescue_visual_finished() -> void:

@@ -9,6 +9,7 @@ signal transition_finished
 signal monster_counter_finished
 signal player_hurt_finished
 signal hit_landed
+signal huye_divine_reveal
 signal huye_impact
 signal huye_rescue_visual_finished
 
@@ -205,16 +206,36 @@ func play_huye_rescue() -> void:
 	add_child(huye)
 	var impact_position := monster_canvas_position() + Vector2(0.0, float(config.get("huye_impact_offset_y", 0.0)))
 	huye.position = Vector2(impact_position.x, float(config.get("huye_start_y", 0.0)))
-	if _active_huye_jackpot_fx != null:
-		_active_huye_jackpot_fx.play_descent_trail(huye.position, impact_position)
 	var huye_target_scale := huye.scale
 	var fx_config: Dictionary = config.get("jackpot_fx", {})
-	if bool(fx_config.get("enabled", false)):
+	var fx_enabled := bool(fx_config.get("enabled", false))
+	var reveal_duration := float(fx_config.get("reveal_duration", 0.0)) if fx_enabled else 0.0
+	if reveal_duration > 0.0:
+		var reveal_position := Vector2(impact_position.x, float(fx_config.get("reveal_y", huye.position.y)))
+		huye.modulate.a = clampf(float(fx_config.get("reveal_alpha_start", 0.0)), 0.0, 1.0)
+		huye.scale = huye_target_scale * float(fx_config.get("reveal_scale_start", 1.0))
+		huye_divine_reveal.emit()
+		if _active_huye_jackpot_fx != null:
+			_active_huye_jackpot_fx.play_divine_reveal(reveal_position)
+		var reveal := create_tween()
+		reveal.tween_property(huye, "position", reveal_position, reveal_duration)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		reveal.parallel().tween_property(huye, "modulate:a", 1.0, reveal_duration)
+		reveal.parallel().tween_property(
+			huye,
+			"scale",
+			huye_target_scale * float(fx_config.get("drop_scale_start", 1.0)),
+			reveal_duration
+		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		await reveal.finished
+	elif fx_enabled:
 		huye.scale = huye_target_scale * float(fx_config.get("drop_scale_start", 1.0))
+	if _active_huye_jackpot_fx != null:
+		_active_huye_jackpot_fx.play_descent_trail(huye.position, impact_position)
 	var drop := create_tween()
 	drop.tween_property(huye, "position", impact_position, float(config.get("huye_drop_duration", 0.0)))\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	if bool(fx_config.get("enabled", false)):
+	if fx_enabled:
 		drop.parallel().tween_property(
 			huye,
 			"scale",
@@ -228,7 +249,7 @@ func play_huye_rescue() -> void:
 	_play_huye_impact_feel(config)
 	huye_impact.emit()
 	var scale_settle_duration := float(fx_config.get("drop_scale_settle_duration", 0.0))
-	if bool(fx_config.get("enabled", false)) and scale_settle_duration > 0.0:
+	if fx_enabled and scale_settle_duration > 0.0:
 		var scale_settle := create_tween()
 		scale_settle.tween_property(huye, "scale", huye_target_scale, scale_settle_duration)\
 			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)

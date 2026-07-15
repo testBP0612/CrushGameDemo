@@ -64,7 +64,7 @@
       "slow_hold": 0.28,
       "dimmer_fade": 0.22,
       "dimmer_alpha": 0.58,
-      "huye_drop_duration": 0.28,
+      "huye_drop_duration": 0.34,
       "huye_start_y": -520.0,
       "huye_impact_offset_y": -170.0,
       "huye_display_width": 610.0,
@@ -91,6 +91,10 @@
       "jackpot_fx": {
         "enabled": true,
         "z_index": 80,
+        "reveal_duration": 0.62,
+        "reveal_y": 150.0,
+        "reveal_alpha_start": 0.0,
+        "reveal_scale_start": 0.68,
         "drop_scale_start": 0.86,
         "drop_scale_end": 1.05,
         "drop_scale_settle_duration": 0.12,
@@ -112,6 +116,26 @@
           "size_min": 5.0,
           "size_max": 12.0,
           "rotation_turns": 0.45
+        },
+        "divine_reveal": {
+          "count": 24,
+          "duration": 0.82,
+          "stagger": 0.014,
+          "radius_x": 250.0,
+          "radius_y": 150.0,
+          "rise_distance": 180.0,
+          "drift_x": 64.0,
+          "size_min": 8.0,
+          "size_max": 19.0,
+          "rotation_turns": 0.75,
+          "halo_duration": 0.78,
+          "halo_point_count": 40,
+          "halo_radius_start": 90.0,
+          "halo_radius_end": 310.0,
+          "halo_width_start": 16.0,
+          "halo_width_end": 2.0,
+          "halo_alpha": 0.82,
+          "halo_color": "#FFF2A8"
         },
         "descent_trail": {
           "count": 16,
@@ -166,20 +190,20 @@
           "rotation_turns": 0.45
         },
         "banner_confetti": {
-          "count": 28,
-          "duration": 1.15,
-          "stagger": 0.012,
+          "count": 64,
+          "duration": 1.48,
+          "stagger": 0.006,
           "origin_x_ratio": 0.50,
-          "origin_y_ratio": 0.20,
-          "spread_x_ratio": 0.38,
-          "speed_x": 180.0,
-          "speed_y_min": 30.0,
-          "speed_y_max": 150.0,
-          "gravity": 520.0,
-          "size_min": 8.0,
-          "size_max": 18.0,
-          "rotation_turns_min": -1.8,
-          "rotation_turns_max": 1.8
+          "origin_y_ratio": 0.24,
+          "spread_x_ratio": 0.48,
+          "speed_x": 360.0,
+          "speed_y_min": -280.0,
+          "speed_y_max": 90.0,
+          "gravity": 720.0,
+          "size_min": 10.0,
+          "size_max": 24.0,
+          "rotation_turns_min": -2.8,
+          "rotation_turns_max": 2.8
         }
       }
     }

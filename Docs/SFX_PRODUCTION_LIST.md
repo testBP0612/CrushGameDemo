@@ -62,7 +62,7 @@
 | `clear` | `victory fanfare short`、`level complete jingle cute` | 1 秒出頭的小號角/鈴鐺；比 cashout 更隆重但別拖 |
 | `balance_reset` | `notification ding neutral`、`soft chime single` | 中性單音，不能有失敗感 |
 
-**BGM 備註**：現行 `bgm_main.mp3`（FishAlleyQuest）已接好會循環；只有音量還沒人耳確認
+**BGM 備註**：現行 `bgm_main.ogg`（FishAlleyQuest）已接好會循環；只有音量還沒人耳確認
 （`Data/audio.json > bgm.volume_db: -8.0`，覺得吵改負更多、太小聲往 0 靠）。
 
 ## 找齊後的完整接入（複製貼上）
@@ -108,6 +108,7 @@
 |---|---|---|---|---|
 | `coin_burst` | `sfx_coin_burst.ogg` | 怪物死亡金幣噴出飛向收益欄 | 一把金幣灑落「嘩啦叮鈴」，比 cashout 密集有顆粒感 | 0.8–1.5s |
 | `huye_coin_burst` | `sfx_huye_coin_burst.ogg` | 虎爺獎勵金幣噴發（banner 點掉後） | coin_burst 的盛大加長版：金幣雨＋上揚中獎感 | 1.5–2.5s |
+| `huye_divine_reveal` | `sfx_huye_divine_reveal.ogg` | 虎爺半透明慢速顯形開始 | 低頻神聖氣流＋反向鑼／鈴光澤，緩慢上揚但不先爆點 | 0.6–1.2s |
 | `huye_appear` | `sfx_huye_appear.ogg` | 虎爺落地衝擊瞬間（震屏+閃白同拍） | 大鼓/太鼓單擊「咚」＋短虎嘯（偏可愛不猙獰），可疊鑼點添神明感 | 0.6–1.0s |
 | （BGM）`event_bgm.huye` | `bgm_huye.ogg` | 虎爺事件全段（慢動作起至金幣飛完），主 BGM 淡出讓位 | 中式喜慶＋中獎感的**可循環 loop**（banner 等點擊、時長不定，必須無縫循環），8–15 秒一圈 | loop |
 
@@ -117,6 +118,7 @@
 |---|---|---|
 | `sfx_coin_burst` | `coin shower`、`coins pouring`、`slot machine coin payout` | 多枚金幣顆粒感；與 monster_death 的 poof 疊播要聽得開 |
 | `sfx_huye_coin_burst` | `coins pouring jackpot`、`big win coins`、`treasure coins long` | 比 coin_burst 明顯更長更密；結尾上揚的優先 |
+| `sfx_huye_divine_reveal` | `divine reveal riser`、`reverse gong shimmer`、`mystical wind chime swell` | 要有神明逐漸顯形的吸氣感，結尾留給落地 `huye_appear` 爆點 |
 | `sfx_huye_appear` | `taiko drum hit`、`big cartoon impact thud`、`tiger roar short`、`gong hit short` | 要夠「重」撐得起 0.42s 震屏；虎嘯挑卡通短吼 |
 | `bgm_huye` | `chinese festival loop`、`taiko percussion loop`、`lion dance drum loop`、`jackpot free spins music loop` | 首尾無縫循環是硬條件；能量要壓過主 BGM 一截 |
 

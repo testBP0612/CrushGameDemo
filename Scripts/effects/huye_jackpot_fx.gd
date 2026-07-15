@@ -67,6 +67,32 @@ func play_descent_trail(from: Vector2, to: Vector2) -> void:
 		)
 
 
+func play_divine_reveal(center: Vector2) -> void:
+	var config: Dictionary = _fx_config.get("divine_reveal", {})
+	var count := maxi(int(config.get("count", 0)), 0)
+	var duration := maxf(float(config.get("duration", 0.0)), 0.0)
+	if count > 0 and duration > 0.0:
+		for index in range(count):
+			var start := center + Vector2(
+				_rng.randf_range(-float(config.get("radius_x", 0.0)), float(config.get("radius_x", 0.0))),
+				_rng.randf_range(-float(config.get("radius_y", 0.0)), float(config.get("radius_y", 0.0)))
+			)
+			var end := start + Vector2(
+				_rng.randf_range(-float(config.get("drift_x", 0.0)), float(config.get("drift_x", 0.0))),
+				-float(config.get("rise_distance", 0.0))
+			)
+			_spawn_linear_fleck(
+				start,
+				end,
+				duration,
+				float(config.get("stagger", 0.0)) * float(index),
+				_random_size(config),
+				_random_color(_fx_config.get("gold_colors", [])),
+				_rng.randf_range(-float(config.get("rotation_turns", 0.0)), float(config.get("rotation_turns", 0.0)))
+			)
+	_play_reveal_halo(center, config)
+
+
 func play_impact(center: Vector2) -> void:
 	_play_impact_flash()
 	_play_shockwave(center)
@@ -151,6 +177,33 @@ func _play_shockwave(center: Vector2) -> void:
 	tween.parallel().tween_property(line, "width", float(config.get("width_end", 0.0)), duration)
 	tween.parallel().tween_property(line, "modulate:a", 0.0, duration)
 	tween.tween_callback(line.queue_free)
+
+
+func _play_reveal_halo(center: Vector2, config: Dictionary) -> void:
+	var duration := maxf(float(config.get("halo_duration", 0.0)), 0.0)
+	var point_count := maxi(int(config.get("halo_point_count", 0)), 0)
+	if duration <= 0.0 or point_count < 3:
+		return
+	var halo := Line2D.new()
+	halo.name = "DivineRevealHalo"
+	halo.position = center
+	halo.width = float(config.get("halo_width_start", 0.0))
+	var color := Color.from_string(str(config.get("halo_color", "")), Color.WHITE)
+	color.a = clampf(float(config.get("halo_alpha", 0.0)), 0.0, 1.0)
+	halo.default_color = color
+	halo.antialiased = true
+	_set_shockwave_radius(float(config.get("halo_radius_start", 0.0)), halo, point_count)
+	add_child(halo)
+	var tween := create_tween()
+	tween.tween_method(
+		_set_shockwave_radius.bind(halo, point_count),
+		float(config.get("halo_radius_start", 0.0)),
+		float(config.get("halo_radius_end", 0.0)),
+		duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(halo, "width", float(config.get("halo_width_end", 0.0)), duration)
+	tween.parallel().tween_property(halo, "modulate:a", 0.0, duration)
+	tween.tween_callback(halo.queue_free)
 
 
 func _set_shockwave_radius(radius: float, line: Line2D, point_count: int) -> void:
