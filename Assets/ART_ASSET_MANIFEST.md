@@ -63,9 +63,7 @@
 | asset_id | file_name | target_path | required | format | transparent | orientation | purpose | used_by_scene | fallback | status | owner | notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | game_logo | logo.png | Assets/final/ | optional | PNG32 | yes | n/a | 標題 Logo（標題畫面大圖＋遊戲中右上角） | TitleScreen / VerticalUi TopBar | 文字標題 | imported | 美術 | 實際交付檔名 logo.png（Meow 準快跑！）；2026-07-12 換新版 |
-| title_banner | title_banner.jpg | Assets/final/ | optional | JPG | no | n/a | 任務 23 標題畫面滿版背景（設計師交付） | TitleScreen | background_battle_001＋文字標題 | imported | 設計師 | 1080×1920；圖上已含遊戲 Logo；2026-07-12 起被 intro_splash 影片蓋過，僅作缺影片 fallback |
-| intro_splash | intro_splash.ogv | Assets/final/ | optional | OGV 影片 | n/a | n/a | 標題畫面片頭影片（播畢定格末幀） | TitleScreen | title_banner → 戰鬥背景＋文字標題（逐級退） | imported | 設計師 | 2026-07-12 交付；音訊素材另走 Data/audio.json（D-014），不入本清單 |
-| intro_splash_last_frame | intro_splash_last_frame.png | Assets/final/ | optional | PNG | no | n/a | 片頭影片播畢的定格幀 | TitleScreen | 影片停在最後解碼幀 | imported | 設計師 | 與 intro_splash.ogv 成對交付 |
+| title_banner | title_banner.jpg | Assets/final/ | optional | JPG | no | n/a | 標題畫面滿版主視覺（設計師交付） | TitleScreen | background_battle_001＋文字標題 | imported | 設計師 | 1080×1920；圖上已含遊戲 Logo，直接顯示、不再疊獨立 Logo |
 | intermission_background | intermission.jpg | Assets/final/ | optional | JPG | no | n/a | 挑戰失敗／撤退成功結算畫面滿版背景 | BattlePresenter | 當前關卡背景 | imported | 設計師 | DEFEAT_SETTLE／CASH_OUT_SETTLE 顯示；下一局進入 BETTING 時強制恢復關卡背景 |
 | ui_panel_style_reference | ui_panel_style_reference.png | Assets/final/ | optional | PNG32 | yes | n/a | UI 風格參考 | （參考用） | 內建樣式 | planned | 美術 | 非必接入 |
 
@@ -73,6 +71,9 @@
 | asset_id | file_name | target_path | required | transparent | purpose | fallback | status | notes |
 |---|---|---|---|---|---|---|---|---|
 | ui_board | board.png | Assets/final/ui/ | optional | yes | HUD 單板木質看板（取代三欄卡） | 程式 StyleBoxFlat 底板 | imported | 欄位標題由 Label 疊字（ui_text.json） |
+| ui_title_start | title_start.png | Assets/final/ui/ | optional | yes | 標題畫面「喵準開始 Go!」整圖按鈕 | 程式 primary 文字按鈕 | imported | 642×160，標題畫面 1:1 顯示 |
+| ui_login_google | login_google.png | Assets/final/ui/ | optional | yes | 標題畫面 Google 登入整圖按鈕 | 程式 login 文字按鈕 | imported | 642×161；登入後切回可辨識的登出文字狀態 |
+| ui_best_record_bg | best_record_bg.png | Assets/final/ui/ | optional | yes | 標題畫面最佳紀錄背板 | 程式 ribbon 樣式 | imported | 644×83，動態紀錄文案仍讀 ui_text.json |
 | ui_bet_ribbon | bet_info.png | Assets/final/ui/ | optional | yes | 下注面板「下注內容」緞帶（含烤字） | 粉紅程式緞帶＋文字 | retired | **已停用並刪檔（2026-07-12）**：緞帶與文字已烙進新版 skin_panel.png |
 | ui_bet_context | bet_context.png | Assets/final/ui/ | optional | yes | 下注面板中央貓糧插圖 | 自動隱藏 | imported | 裝飾用 |
 | ui_btn_next | next.png | Assets/final/ui/ | optional | yes | 決策畫面續戰按鈕（烤字「繼續挑戰」，2026-07-12 換版） | 文字按鈕 primary 樣式 | imported | 烤字素材，改字需重出圖 |

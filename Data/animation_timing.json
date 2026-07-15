@@ -28,8 +28,7 @@
     "panel_slide_offset": 24.0,
     "entrance_stagger": 0.05,
     "message_appear": 0.18,
-    "message_hold": 0.60,
-    "title_logo_fade_in": 0.60
+    "message_hold": 0.60
   },
   "effects": {
     "coin_burst": {

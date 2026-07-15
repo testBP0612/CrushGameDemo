@@ -50,6 +50,9 @@ const TEX_RANKING_BTN := "res://Assets/final/ui/ranking_btn.png"
 const TEX_MONEY_CARD := "res://Assets/final/ui/money_card.png"
 const TEX_BET_INPUT := "res://Assets/final/ui/bet_input.png"
 const TEX_REPLAY := "res://Assets/final/ui/replay.png"
+const TEX_TITLE_START := "res://Assets/final/ui/title_start.png"
+const TEX_LOGIN_GOOGLE := "res://Assets/final/ui/login_google.png"
+const TEX_BEST_RECORD_BG := "res://Assets/final/ui/best_record_bg.png"
 const TEX_ICON_PLUS_BUTTON := "res://Assets/final/ui/icon_plus.png"
 const TEX_ICON_MINUS_BUTTON := "res://Assets/final/ui/icon_minus.png"
 
@@ -95,6 +98,12 @@ static func art_texture(name: String) -> Texture2D:
 			path = TEX_BET_INPUT
 		"replay":
 			path = TEX_REPLAY
+		"title_start":
+			path = TEX_TITLE_START
+		"login_google":
+			path = TEX_LOGIN_GOOGLE
+		"best_record_bg":
+			path = TEX_BEST_RECORD_BG
 		"icon_plus":
 			path = TEX_ICON_PLUS_BUTTON
 		"icon_minus":
@@ -486,6 +495,26 @@ static func apply_ribbon_label(label: Label) -> void:
 	label.add_theme_color_override("font_color", CREAM)
 	label.add_theme_color_override("font_outline_color", DEEP_NAVY)
 	label.add_theme_constant_override("outline_size", 10)
+
+
+## 標題畫面的最佳紀錄背板；缺圖時沿用既有 ribbon 樣式。
+static func apply_title_record_label(label: Label) -> void:
+	if label == null or not is_instance_valid(label):
+		return
+	var texture := art_texture("best_record_bg")
+	if texture == null:
+		apply_ribbon_label(label)
+		return
+	var style := StyleBoxTexture.new()
+	style.texture = texture
+	style.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	style.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	style.draw_center = true
+	_set_content_margins(style, 24.0, 8.0, 24.0, 8.0)
+	label.add_theme_stylebox_override("normal", style)
+	label.add_theme_color_override("font_color", Color.WHITE)
+	label.add_theme_color_override("font_outline_color", DEEP_NAVY)
+	label.add_theme_constant_override("outline_size", 4)
 
 
 static func apply_number_display(label: Label) -> void:

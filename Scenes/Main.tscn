@@ -103,7 +103,7 @@ offset_right = 440.0
 offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 20
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="UILayer/TitleScreen/TitleLayout" unique_id=1424243166]
@@ -113,19 +113,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BestRecordLabel" type="Label" parent="UILayer/TitleScreen/TitleLayout" unique_id=1820815663]
+custom_minimum_size = Vector2(644, 83)
 layout_mode = 2
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StartButton" type="Button" parent="UILayer/TitleScreen/TitleLayout" unique_id=1574974623]
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(642, 160)
 layout_mode = 2
 theme_override_font_sizes/font_size = 44
 
 [node name="LoginButton" type="Button" parent="UILayer/TitleScreen/TitleLayout"]
 visible = false
-custom_minimum_size = Vector2(0, 92)
+custom_minimum_size = Vector2(642, 161)
 layout_mode = 2
 theme_override_font_sizes/font_size = 38
 

@@ -11,8 +11,6 @@ const CoinBurstScript := preload("res://Scripts/effects/coin_burst.gd")
 const WinBannerScript := preload("res://Scripts/effects/win_banner.gd")
 const HuyeBannerScript := preload("res://Scripts/effects/huye_banner.gd")
 const TITLE_BANNER_PATH := "res://Assets/final/title_banner.jpg"
-const TITLE_VIDEO_PATH := "res://Assets/final/intro_splash.ogv"
-const TITLE_VIDEO_LAST_FRAME_PATH := "res://Assets/final/intro_splash_last_frame.png"
 
 @onready var title_screen: Control = $UILayer/TitleScreen
 @onready var battle_presenter = $BattleScene
@@ -105,26 +103,23 @@ func _apply_static_text() -> void:
 	_update_best_record_text()
 	start_button.text = Data.text("title_tap_to_start")
 	_update_auth_ui()
-	UiSkin.apply_button(login_button, "login")
 	_style_title_screen()
 
 
-## 標題影片優先；缺檔才退回任務 23 banner、原戰鬥背景與文字 Logo（D-004）。
+## 標題主視覺優先使用設計師交付的 banner；缺檔才退回戰鬥背景與文字 Logo（D-004）。
 func _style_title_screen() -> void:
 	var backdrop: Control = title_screen.get_node("TitleBackground")
-	var video_in_use := _add_title_video(backdrop)
-	if not video_in_use:
-		var background := _title_background_texture()
-		if background != null:
-			var bg_rect := TextureRect.new()
-			bg_rect.name = "TitleArtBackground"
-			bg_rect.texture = background
-			bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			bg_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-			bg_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
-			bg_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			backdrop.add_child(bg_rect)
-	if video_in_use or backdrop.get_node_or_null("TitleArtBackground") != null:
+	var background := _title_background_texture()
+	if background != null:
+		var bg_rect := TextureRect.new()
+		bg_rect.name = "TitleArtBackground"
+		bg_rect.texture = background
+		bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		bg_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+		bg_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.add_child(bg_rect)
+	if backdrop.get_node_or_null("TitleArtBackground") != null:
 		# 輕壓底部，讓疊放的紀錄與互動鈕在插畫上仍可讀。
 		var vignette := ColorRect.new()
 		vignette.name = "TitleVignette"
@@ -136,12 +131,12 @@ func _style_title_screen() -> void:
 	var layout := title_label.get_parent() as VBoxContainer
 	if layout != null:
 		layout.alignment = BoxContainer.ALIGNMENT_CENTER
-		layout.add_theme_constant_override("separation", 18)
-		layout.offset_top = 430.0
-		layout.offset_bottom = 810.0
+		layout.add_theme_constant_override("separation", 20)
+		layout.offset_top = 448.0
+		layout.offset_bottom = 892.0
 
 	var logo_texture: Texture2D = UiSkin.art_texture("logo")
-	var banner_in_use := video_in_use or ResourceLoader.exists(TITLE_BANNER_PATH, "Texture2D")
+	var banner_in_use := ResourceLoader.exists(TITLE_BANNER_PATH, "Texture2D")
 	if banner_in_use:
 		title_label.visible = false
 	elif logo_texture != null and layout != null:
@@ -158,75 +153,17 @@ func _style_title_screen() -> void:
 		UiSkin.apply_title_label(title_label)
 
 	best_record_label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	UiSkin.apply_ribbon_label(best_record_label)
-	for entry_button: Button in [start_button, login_button]:
-		entry_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		entry_button.custom_minimum_size = Vector2(560.0, entry_button.custom_minimum_size.y)
-	UiSkin.apply_button(start_button, "settle_primary")
-
-
-func _add_title_video(backdrop: Control) -> bool:
-	if not ResourceLoader.exists(TITLE_VIDEO_PATH, "VideoStream"):
-		return false
-	var stream := load(TITLE_VIDEO_PATH) as VideoStream
-	if stream == null:
-		return false
-	var player := VideoStreamPlayer.new()
-	player.name = "TitleVideo"
-	player.stream = stream
-	player.autoplay = true
-	player.loop = false
-	player.expand = true
-	player.set_anchors_preset(Control.PRESET_FULL_RECT)
-	player.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	backdrop.add_child(player)
-
-	var last_frame: TextureRect
-	if ResourceLoader.exists(TITLE_VIDEO_LAST_FRAME_PATH, "Texture2D"):
-		last_frame = TextureRect.new()
-		last_frame.name = "TitleVideoLastFrame"
-		last_frame.texture = load(TITLE_VIDEO_LAST_FRAME_PATH) as Texture2D
-		last_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		last_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		last_frame.set_anchors_preset(Control.PRESET_FULL_RECT)
-		last_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		last_frame.visible = false
-		backdrop.add_child(last_frame)
-
-	var end_logo: TextureRect
-	var logo_texture := UiSkin.art_texture("logo")
-	if logo_texture != null:
-		end_logo = TextureRect.new()
-		end_logo.name = "TitleVideoEndLogo"
-		end_logo.texture = logo_texture
-		end_logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		end_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		end_logo.set_anchors_preset(Control.PRESET_CENTER_TOP)
-		end_logo.offset_left = -540.0
-		end_logo.offset_top = 300.0
-		end_logo.offset_right = 540.0
-		end_logo.offset_bottom = 810.0
-		end_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		end_logo.modulate.a = 0.0
-		end_logo.visible = false
-		backdrop.add_child(end_logo)
-
-	player.finished.connect(_on_title_video_finished.bind(last_frame, end_logo))
-	return true
-
-
-func _on_title_video_finished(last_frame: TextureRect, end_logo: TextureRect) -> void:
-	if is_instance_valid(last_frame):
-		last_frame.visible = true
-	if not is_instance_valid(end_logo):
-		return
-	end_logo.visible = true
-	var fade_duration := float(Data.animation_timing_config().get("ui", {}).get("title_logo_fade_in", 0.0))
-	if fade_duration <= 0.0:
-		end_logo.modulate.a = 1.0
-		return
-	var tween := create_tween()
-	tween.tween_property(end_logo, "modulate:a", 1.0, fade_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	best_record_label.custom_minimum_size = Vector2(644.0, 83.0)
+	UiSkin.apply_title_record_label(best_record_label)
+	start_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	start_button.custom_minimum_size = Vector2(642.0, 160.0)
+	if UiSkin.apply_art_button(start_button, "title_start"):
+		start_button.text = ""
+	else:
+		UiSkin.apply_button(start_button, "settle_primary")
+	login_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	login_button.custom_minimum_size = Vector2(642.0, 161.0)
+	_update_auth_ui()
 
 
 func _title_background_texture() -> Texture2D:
@@ -589,7 +526,11 @@ func _update_auth_ui() -> void:
 	var online_available := score_service.is_online_available()
 	var signed_in := score_service.is_signed_in()
 	login_button.visible = online_available
-	login_button.text = Data.text("logout_button" if signed_in else "login_button")
+	if not signed_in and UiSkin.apply_art_button(login_button, "login_google"):
+		login_button.text = ""
+	else:
+		UiSkin.apply_button(login_button, "login")
+		login_button.text = Data.text("logout_button" if signed_in else "login_button")
 	vertical_ui.set_profile_auth_state(signed_in, score_service.online_display_name())
 
 
