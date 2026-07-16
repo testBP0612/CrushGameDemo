@@ -198,3 +198,18 @@
 - [ ] 接入後動畫時序不變。
 - [ ] 未修改 Art Contract；不符 Contract 的素材未硬接，已登記 Q-ART。
 - [ ] manifest `status` 已更新為 imported（僅資料欄位）。
+
+## 里程碑 — 任務 28（一頁式介紹網站＋內嵌遊戲；Codex）
+- [x] 六大區塊齊全；怪物 10 隻與倍率 10 階由 build 後 JSON 執行期渲染，改資料重建即同步。
+- [x] 桌機為左內容＋右 sticky 手機殼；click-to-load 後才建立無 sandbox iframe。
+- [ ] Google 登入 popup 可由桌機 Chrome 在 iframe 內真實點擊開啟（自動驗收瀏覽器不呈現 popup，待人類 Chrome 實點）。
+- [x] 手機不建立 iframe、不下載遊戲 wasm/pck；首屏與浮動「開始遊戲」同分頁導頁，返回介紹頁正常。
+- [x] 怪物預設載 512px 預裁圖；完整 sheet 僅桌機進視口 lazy 載、離開暫停、reduced-motion 停第一格；手機完全不載 sheet。
+- [x] 缺 boss 素材時顯示 placeholder_color 色塊＋名稱；頁面其餘區塊與遊戲入口不壞。
+- [x] 全站無成功率百分比；CSS 色值可回溯 DESIGN.md 色票，反樣板與手作感清單逐條通過。
+- [x] 手機 Lighthouse Performance >= 90、CLS < 0.1；初載 Network 無完整 boss sheet。
+- [x] OG／Twitter 分享資訊完整；專用 `1200×630` 分享圖可公開存取，標題、描述與替代文字一致。
+- [x] 手機實機預覽使用四張真實遊戲畫面、4:5 緊湊輪播；`prefers-reduced-motion` 時固定第一張，不以生成圖冒充遊戲畫面。
+- [x] 原生分享支援 Web Share API，無支援時退回複製介紹頁網址；僅發出本頁 `landing:conversion` 事件，不接外部追蹤服務。
+- [x] 非公開比賽頁同時設定 `robots` meta 與 Hosting `X-Robots-Tag`；OG 分享預覽不受影響。
+- [x] 桌機與 375px 手機全頁截圖齊備；線上 `/intro/` 與遊戲根網址皆回歸通過。

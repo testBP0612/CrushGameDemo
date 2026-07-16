@@ -47,3 +47,6 @@ Firebase/.firebase/
 
 # Codex task evidence scratch
 tmp/
+
+# Task 28 landing page generated assets
+/Web/landing/assets/

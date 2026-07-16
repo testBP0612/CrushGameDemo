@@ -1,6 +1,17 @@
 {
   "hosting": {
     "public": "export/web",
-    "ignore": ["**/.*"]
+    "ignore": ["**/.*"],
+    "headers": [
+      {
+        "source": "/intro/**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow, noarchive, nosnippet"
+          }
+        ]
+      }
+    ]
   }
 }
