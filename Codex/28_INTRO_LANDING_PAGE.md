@@ -11,7 +11,7 @@
 
 | 來源 | 用途 | 權限 |
 |---|---|---|
-| `Web/landing/DESIGN.md` | **視覺規範（必讀必遵守）**：標準色票（取自 `ui_skin.gd`）、字體、元件語彙、素材使用、調性 | 已由 Claude 建立；有異議寫 OPEN_QUESTIONS，不得自行改色 |
+| `Web/landing/DESIGN.md` | **視覺規範（必讀必遵守）**：標準色票 v2（正本＝`Art/art_prompt_style_guide.md`＋素材取樣）、字體、元件語彙、素材使用、調性 | 已由 Claude 建立；有異議寫 OPEN_QUESTIONS，不得自行改色 |
 | `Planning/11_GAME_CONCEPT_AND_GAMEPLAY.md` | 文案主來源：理念、玩法、四層樂趣、未來擴充 | **唯讀**（AGENTS.md 鐵則 10：不動 Planning，本卡只授權讀取） |
 | `Data/monsters.json` | 怪物 id/stage/HP/`placeholder_color`/`art_asset_id` | 唯讀，經 build script 複製 |
 | `Data/ui_text.json` | 怪物中文名（`monster_00N_name`）、遊戲語彙（落袋為安、過關…） | 唯讀，經 build script 複製 |
@@ -169,8 +169,17 @@ Codex/VALIDATION_CHECKLIST.md   補本卡驗收段
 **人類裁決（已寫入 DESIGN.md，照改）**
 4. 按鈕/貼紙元件對比度**豁免**（沿遊戲原生配色；正文仍須 4.5:1）——
    現行按鈕配色**保留不改**。見 DESIGN.md §十-4。
-5. Hero 遮罩**調亮統一**：桌機改 `rgba(27,42,74,.85) → .5` 漸層基準
-   （現行 .94/.72 太暗），桌機/手機亮度一致。見 DESIGN.md §五。
+5. Hero 遮罩**調亮統一**——本條已被同日稍晚的 v2 遮罩規則取代：走「亮處理」，
+   可讀性靠 cream 底板/描邊，遮罩只准 `--violet`/`--ink-blue` ≤0.45。
+   見 DESIGN.md §五 v2。
+
+**設計師配色修訂（2026-07-16 稍晚，優先於上述所有色值）**
+6. **色票整組換 v2**：配色正本改為 `Art/art_prompt_style_guide.md`
+   （明亮高彩度、粉紅/桃紅/水藍/青綠、**藍紫陰影**、避免黑暗厚重）。
+   `:root` 換成 DESIGN.md §一 v2 色票（hex 取樣自 logo/bg001）；
+   `--deep-navy`/`--teal`/`--chip-pink`/`--step-blue`/`--board-brown` 全退場，
+   深色大面積禁止、陰影一律藍紫系。階段一成品的版面**人類已認可不動**，
+   只換色票與受影響的深底/遮罩/陰影處理。
 
 **驗證工具**：`.claude/launch.json` 已有 `landing-preview`（repo root、port 8061），
 開 `http://localhost:8061/Web/landing/index.html` 即可預覽；截圖可用
