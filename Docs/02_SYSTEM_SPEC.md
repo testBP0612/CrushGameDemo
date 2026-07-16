@@ -11,9 +11,10 @@
 
 ## 二、收益計算
 ```
-current_payout = floor(bet * multiplier_at_stage(stage))
+stage == 0 ? 0 : floor(bet * multiplier_at_stage(stage))
 ```
-- `stage = 0`（尚未擊敗任何怪物）時 `multiplier = 1.0`，`current_payout = bet`。
+- `stage = 0`（新局、尚未擊敗任何怪物）時 `multiplier = 1.0`，但尚無已獲得收益，`current_payout = 0`。
+- 擊敗第一隻怪物後才依該 `stage` 倍率計算 `current_payout`。
 - `multiplier_at_stage` 從 `Data/game_balance.json > multiplier_curve` 查表。
 - `rounding` 依 `payout.rounding`（預設 `floor`）。
 

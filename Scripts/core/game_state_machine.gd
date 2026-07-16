@@ -434,7 +434,8 @@ func _roll_run_multiplier_table() -> void:
 
 func _update_payout() -> void:
 	current_multiplier = run_multiplier_at(stage) * huye_payout_factor
-	current_payout = _payout_calculator.current_payout(bet, current_multiplier)
+	# 新局尚未擊敗任何怪物，stage 0 倍率只作為倍率盤基準，不是已獲得收益。
+	current_payout = 0 if stage == 0 else _payout_calculator.current_payout(bet, current_multiplier)
 	if stage < max_stage():
 		next_stage_multiplier = run_multiplier_at(stage + 1) * huye_payout_factor
 		next_stage_payout = _payout_calculator.current_payout(bet, next_stage_multiplier)

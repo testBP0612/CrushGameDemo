@@ -242,6 +242,12 @@ func _on_root_gui_input(event: InputEvent) -> void:
 		_request_dismiss()
 
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		get_viewport().set_input_as_handled()
+		_request_dismiss()
+
+
 func _request_dismiss() -> void:
 	if not _can_dismiss:
 		return
