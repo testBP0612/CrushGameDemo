@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8060", "--directory", "export/web"],
       "port": 8060
+    },
+    {
+      "name": "landing-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8061"],
+      "port": 8061
     }
   ]
 }

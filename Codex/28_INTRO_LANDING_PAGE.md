@@ -151,6 +151,31 @@ Codex/VALIDATION_CHECKLIST.md   補本卡驗收段
 2. **階段二：人類點頭後**才展開全頁、互動與部署。階段一被退件不算失敗，
    算流程正常運作；不得跳過階段一直接交全頁。
 
+## 六之二、階段一打樣 Review 結果（2026-07-16，Claude review＋人類裁決）
+
+**判定：通過，放行階段二。** 色票/tokens/反樣板/手作感/a11y 骨架全數合格，
+桌機 hero 與虎爺卡質感獲人類方肯定。展開全頁前必須先處理：
+
+**必修（階段二第一批改動）**
+1. **雙 logo bug**：`background_battle_001.jpg` 素材頂部烙有遊戲 logo，
+   手機版（`background-position: 56% center`）頂部會露出半顆裁切 logo。
+   修正 `background-position` 確保圖片頂部被裁掉（DESIGN.md §四已補警示）。
+2. **素材路徑**：現行 `../../Assets/final/...` 部署後全 404。階段二必須建
+   build.ps1 並全面改用 `assets/` 相對路徑（favicon、preload、og 皆含）。
+3. **手機 hero 高度**：`min-height: 812px` 固定值＋`justify-content: flex-end`
+   會讓矮螢幕（667px 級）CTA 掉出首屏。改回 `100svh` 邏輯（`min()` 封頂可），
+   並清掉 token 表外的魔術高度（760/664/724/616px 等）。
+
+**人類裁決（已寫入 DESIGN.md，照改）**
+4. 按鈕/貼紙元件對比度**豁免**（沿遊戲原生配色；正文仍須 4.5:1）——
+   現行按鈕配色**保留不改**。見 DESIGN.md §十-4。
+5. Hero 遮罩**調亮統一**：桌機改 `rgba(27,42,74,.85) → .5` 漸層基準
+   （現行 .94/.72 太暗），桌機/手機亮度一致。見 DESIGN.md §五。
+
+**驗證工具**：`.claude/launch.json` 已有 `landing-preview`（repo root、port 8061），
+開 `http://localhost:8061/Web/landing/index.html` 即可預覽；截圖可用
+headless Chrome `--screenshot`（錨點截圖加 `--force-prefers-reduced-motion`）。
+
 ## 七、驗收方式
 
 1. 本機 `firebase serve` 全頁走查：六大區塊齊全、無 console error、
