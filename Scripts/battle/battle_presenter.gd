@@ -8,6 +8,7 @@ signal advance_walk_finished
 signal transition_finished
 signal monster_counter_finished
 signal player_hurt_finished
+signal player_defeat_frame_changed(frame_number: int)
 signal hit_landed
 signal huye_divine_reveal
 signal huye_impact
@@ -52,6 +53,7 @@ var _intermission_background_active := false
 
 
 func _ready() -> void:
+	hero.defeat_frame_changed.connect(_on_hero_defeat_frame_changed)
 	UiSkin.style_monster_status(monster_name_label, monster_hp_bar)
 	_build_danger_display()
 	_configure_background_image()
@@ -337,6 +339,10 @@ func play_player_hurt() -> void:
 	player_hurt_finished.emit()
 
 
+func _on_hero_defeat_frame_changed(frame_number: int) -> void:
+	player_defeat_frame_changed.emit(frame_number)
+
+
 func reset_for_betting() -> void:
 	_clear_active_huye()
 	hero.reset_pose()
@@ -437,7 +443,7 @@ func _build_danger_display() -> void:
 
 
 ## 美術版：骷髏橫條 1:1 原尺寸（447x112），金星由 _update_danger_display 疊上；
-## 怪物名改白字置於橫條上方（骷髏右側），對齊設計稿。
+## 怪物名改白字置於橫條上方，與危險度橫條整體置中。
 func _build_risk_art_display(state_texture: Texture2D) -> void:
 	# 血條僅供錨定/內部演出，美術路線也必須藏（舊路線在 _build_danger_pill_display 藏）
 	monster_hp_bar.visible = false
@@ -471,8 +477,9 @@ func _build_risk_art_display(state_texture: Texture2D) -> void:
 	monster_name_label.add_theme_color_override("font_color", Color.WHITE)
 	monster_name_label.add_theme_color_override("font_outline_color", UiSkin.DEEP_NAVY)
 	monster_name_label.add_theme_constant_override("outline_size", 10)
-	monster_name_label.offset_left = 690.0
-	monster_name_label.offset_right = 1007.0
+	var name_visual_offset_x := 10.0
+	monster_name_label.offset_left = root.position.x + name_visual_offset_x
+	monster_name_label.offset_right = root.position.x + root.size.x + name_visual_offset_x
 	monster_name_label.offset_top = 694.0
 	monster_name_label.offset_bottom = 746.0
 

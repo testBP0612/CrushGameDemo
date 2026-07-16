@@ -52,6 +52,7 @@ const TEX_BET_INPUT := "res://Assets/final/ui/bet_input.png"
 const TEX_REPLAY := "res://Assets/final/ui/replay.png"
 const TEX_TITLE_START := "res://Assets/final/ui/title_start.png"
 const TEX_LOGIN_GOOGLE := "res://Assets/final/ui/login_google.png"
+const TEX_LOGOUT := "res://Assets/final/ui/logout.png"
 const TEX_BEST_RECORD_BG := "res://Assets/final/ui/best_record_bg.png"
 const TEX_ICON_PLUS_BUTTON := "res://Assets/final/ui/icon_plus.png"
 const TEX_ICON_MINUS_BUTTON := "res://Assets/final/ui/icon_minus.png"
@@ -102,6 +103,8 @@ static func art_texture(name: String) -> Texture2D:
 			path = TEX_TITLE_START
 		"login_google":
 			path = TEX_LOGIN_GOOGLE
+		"logout":
+			path = TEX_LOGOUT
 		"best_record_bg":
 			path = TEX_BEST_RECORD_BG
 		"icon_plus":

@@ -12,7 +12,7 @@
 ## 一、機制契約（這部分是定案，不可自行變更）
 
 1. **觸發擲骰**：每次發起挑戰（下注確認與續戰各算一次）擲一次，機率讀
-   `game_balance.json > random_events.huye.trigger_probability`（初值 0.05）。
+   `game_balance.json > random_events.huye.trigger_probability`（2026-07-17 人類調整為 0.16）。
    **用專屬 `RandomNumberGenerator`**（仿卡 21 的 `_rng`，`game_state_machine.gd:65`），
    不得共用 risk_resolver 的全域 `randf()` 流、也不得共用倍率盤 `_rng`——
    三條隨機流互不影響是硬需求。
@@ -110,7 +110,7 @@ state_machine finish_xxx），新增虎爺演出 signal 照同 pattern 接。
 
 ## 五、鐵則提醒（其餘手法自定）
 
-1. 數值/文案/時長一律 json，禁寫死（含 5%、x2、所有 tween 秒數）。
+1. 數值/文案/時長一律 json，禁寫死（含 16%、x2、所有 tween 秒數）。
 2. 不改既有勝負骰與倍率盤的隨機流；`enabled=false` 時行為與現況 bit 級相同。
 3. 每張新圖都有缺圖 fallback；H5 匯出版驗一次（ResourceLoader 陷阱）。
 4. 版面/演出視覺需實跑目視確認並附截圖（D-006；`tmp/ui_capture` harness 與
@@ -124,7 +124,7 @@ state_machine finish_xxx），新增虎爺演出 signal 照同 pattern 接。
 - 數值驗證（headless 腳本，仿卡 21 `tmp/test_multiplier.tscn` 慣例）：
   (a) 觸發關收益 = 前關收益 + 2×增額；(b) 後續各關 = floor(bet×倍率)+bonus；
   (c) 決策畫面「過關可得」與結算含 bonus 同源；(d) 戰死歸零；
-  (e) `enabled=false` 回歸現況；(f) 機率統計近 5%（±抽樣誤差）。
+  (e) `enabled=false` 回歸現況；(f) 機率統計近 16%（±抽樣誤差）。
 - 下一關怪物 transform 無殘留（觸發後續戰一關，截圖確認怪物正常站位）。
 - 缺圖 fallback 抽驗：改壞 huye.png 路徑 → 事件照常可玩、不崩。
 - H5 匯出實跑一次（含 force_trigger 演出）。

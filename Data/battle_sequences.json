@@ -24,6 +24,7 @@
     "lose_branch": {
       "monster_counter_duration": 0.35,
       "player_hurt_duration": 0.35,
+      "player_death_sfx_frame": 3,
       "defeat_settle_delay": 1.00
     }
   },

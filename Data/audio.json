@@ -28,6 +28,7 @@
     "huye_appear": "sfx_huye_appear.ogg",
     "huye_coin_burst": "sfx_huye_coin_burst.ogg",
     "huye_divine_reveal": "sfx_huye_divine_reveal.ogg",
-    "monster_death": "sfx_monster_death.ogg"
+    "monster_death": "sfx_monster_death.ogg",
+    "player_death": "sfx_player_death.ogg"
   }
 }

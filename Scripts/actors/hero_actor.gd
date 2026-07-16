@@ -1,6 +1,8 @@
 class_name HeroActor
 extends Node2D
 
+signal defeat_frame_changed(frame_number: int)
+
 const HERO_IDLE_SHEET_PATH := "res://Assets/final/hero_idle_sheet.png"
 const HERO_IDLE_SHEET_META_PATH := "res://Assets/final/hero_idle_sheet.json"
 const HERO_IDLE_ANIMATION := &"idle"
@@ -32,6 +34,7 @@ var _has_defeat_animation := false
 
 func _ready() -> void:
 	_home_position = position
+	idle_sprite.frame_changed.connect(_on_idle_sprite_frame_changed)
 	_configure_idle_visual()
 	play_idle()
 
@@ -99,6 +102,11 @@ func play_defeat() -> Signal:
 	tween.tween_property(self, "rotation_degrees", -18.0, duration)
 	tween.parallel().tween_property(self, "modulate", Color(0.55, 0.55, 0.55, 1.0), duration)
 	return tween.finished
+
+
+func _on_idle_sprite_frame_changed() -> void:
+	if idle_sprite.animation == HERO_DEFEAT_ANIMATION:
+		defeat_frame_changed.emit(idle_sprite.frame + 1)
 
 
 func play_walk() -> Signal:

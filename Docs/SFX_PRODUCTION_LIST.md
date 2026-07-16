@@ -123,3 +123,9 @@
 | `bgm_huye` | `chinese festival loop`、`taiko percussion loop`、`lion dance drum loop`、`jackpot free spins music loop` | 首尾無縫循環是硬條件；能量要壓過主 BGM 一截 |
 
 授權注意照舊：CC0 最省事，CC-BY 記得在簡報/README 附署名。
+
+## 2026-07-17 維護追加
+
+| event_id | 檔名 | 什麼時候響 | 聲音方向 | 長度 |
+|---|---|---|---|---|
+| `player_death` | `sfx_player_death.ogg` | 主角先播放受擊音效，死亡序列到第 3 格時播放；早於既有敗北結算 `defeat` | 可愛、短促的倒下／消氣聲，不要寫實血腥，並避免與稍後的敗北結算音重複 | 0.4–1.0s |

@@ -13,6 +13,7 @@ signal cashout_requested
 signal advance_requested
 signal settle_acknowledged
 signal balance_reset_requested
+signal leaderboard_requested
 
 @onready var hud: Hud = $Hud
 @onready var top_bar: Control = $TopBar
@@ -177,4 +178,5 @@ func _on_leaderboard_requested() -> void:
 			or bool(_last_snapshot.get("is_reward_decision", false)) \
 			or bool(_last_snapshot.get("is_settle", false))):
 		return
+	leaderboard_requested.emit()
 	_leaderboard_panel.open(_last_snapshot.get("leaderboard_service", null))

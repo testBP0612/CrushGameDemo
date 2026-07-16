@@ -89,7 +89,7 @@
 - **D-018** 不透明全幅背景允許 JPG（`background_battle_00N.jpg`，1080×1920）；程式依 `.jpg`→`.jpeg`→`.png` 優先序解析背景；需透明素材仍限 PNG；Contract v1.5。
 - **D-019** 賭場化體驗改版：血條移除改危險度指示（`danger_display` 資料驅動分級）；每局隨機倍率盤（`multiplier_random`，漸進抖動+單調遞增，success_rate 不連動，只揭示下一關）；不顯示成功率 %，改博奕語言（過關/落袋為安/1 賠 N）+ 結算 FOMO 行；文案一律 `ui_text.json`，人類保留改句權。
 - **D-020** 排行榜 NPC 保底名單正式版保留（修訂 D-016 §6）：`leaderboard_mock.json > keep_in_production` 開啟時 Firebase 版於 client 端合併 NPC 重排名、未登入/失敗退回 Mock 語意；不寫假資料進 Firestore；對評審揭露為模擬資料。
-- **D-022** 「遇見虎爺」隨機救援事件（含 2026-07-11 修訂）：發起挑戰時獨立 RNG 擲 5%（`game_balance.json > random_events.huye`），骰中則本關強制逆轉勝（蓋過勝負骰），**本局收益倍率整體翻倍**（`payout_factor` 乘進倍率、顯示與計算同源，延續到結算，多次觸發疊乘）；含 `force_trigger` demo 開關（F4 快捷鍵已裁示可出貨）與 `enabled` 回退路徑；虎爺骰不得污染 risk_resolver 與倍率盤的隨機流。
+- **D-022** 「遇見虎爺」隨機救援事件（含 2026-07-11 修訂、2026-07-17 機率調整）：發起挑戰時獨立 RNG 擲 16%（`game_balance.json > random_events.huye`），骰中則本關強制逆轉勝（蓋過勝負骰），**本局收益倍率整體翻倍**（`payout_factor` 乘進倍率、顯示與計算同源，延續到結算，多次觸發疊乘）；含 `force_trigger` demo 開關（F4 快捷鍵已裁示可出貨）與 `enabled` 回退路徑；虎爺骰不得污染 risk_resolver 與倍率盤的隨機流。
 
 ## 完成回報格式（每張卡完成後必附）
 ```md

@@ -33,6 +33,7 @@ var _defeat_payout_before_loss := 0
 var _last_settlement_payout := 0
 var _active_win_banner: WinBanner
 var _active_huye_banner: HuyeBanner
+var _player_death_sfx_played := false
 
 
 func _ready() -> void:
@@ -82,6 +83,7 @@ func _connect_buttons() -> void:
 	vertical_ui.advance_requested.connect(_on_advance_pressed)
 	vertical_ui.settle_acknowledged.connect(_on_settle_pressed)
 	vertical_ui.balance_reset_requested.connect(_on_balance_reset_pressed)
+	vertical_ui.leaderboard_requested.connect(_on_leaderboard_pressed)
 
 
 func _connect_battle_presenter() -> void:
@@ -92,6 +94,7 @@ func _connect_battle_presenter() -> void:
 	battle_presenter.transition_finished.connect(_on_transition_finished)
 	battle_presenter.monster_counter_finished.connect(_on_monster_counter_finished)
 	battle_presenter.player_hurt_finished.connect(_on_player_hurt_finished)
+	battle_presenter.player_defeat_frame_changed.connect(_on_player_defeat_frame_changed)
 	battle_presenter.hit_landed.connect(_on_hit_landed)
 	battle_presenter.huye_divine_reveal.connect(_on_huye_divine_reveal)
 	battle_presenter.huye_impact.connect(_on_huye_impact)
@@ -243,6 +246,10 @@ func _on_balance_reset_pressed() -> void:
 	_update_view()
 
 
+func _on_leaderboard_pressed() -> void:
+	audio_service.play_sfx("button_click")
+
+
 func _on_state_changed(state_name: String) -> void:
 	if state_name == "BETTING":
 		_reset_run_stats()
@@ -322,6 +329,17 @@ func _on_player_hurt_finished() -> void:
 	state_machine.finish_player_hurt()
 
 
+func _on_player_defeat_frame_changed(frame_number: int) -> void:
+	if _player_death_sfx_played:
+		return
+	var lose_config: Dictionary = Data.battle_sequence_config().get("result_resolution", {}).get("lose_branch", {})
+	var cue_frame := maxi(1, int(lose_config.get("player_death_sfx_frame", 3)))
+	if frame_number != cue_frame:
+		return
+	_player_death_sfx_played = true
+	audio_service.play_sfx("player_death")
+
+
 func _on_huye_impact() -> void:
 	audio_service.play_sfx("huye_appear")
 	state_machine.reveal_huye_result()
@@ -392,6 +410,8 @@ func _play_presentation_for_state(state_name: String) -> void:
 			audio_service.play_event_bgm("huye")
 			battle_presenter.play_huye_rescue()
 		"PLAYER_HURT":
+			_player_death_sfx_played = false
+			audio_service.play_sfx("attack_hit")
 			battle_presenter.play_player_hurt()
 
 
@@ -524,7 +544,8 @@ func _update_auth_ui() -> void:
 	var online_available := score_service.is_online_available()
 	var signed_in := score_service.is_signed_in()
 	login_button.visible = online_available
-	if not signed_in and UiSkin.apply_art_button(login_button, "login_google"):
+	var auth_button_art := "logout" if signed_in else "login_google"
+	if UiSkin.apply_art_button(login_button, auth_button_art):
 		login_button.text = ""
 	else:
 		UiSkin.apply_button(login_button, "login")

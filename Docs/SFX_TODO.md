@@ -15,6 +15,7 @@
 | `button_click` | 所有可按按鈕的觸覺式點擊回饋 | `sfx_button_click.ogg` | ✅ 已接檔（2026-07-12，b680c88） |
 | `attack_hit` | 主角每次命中怪物 | `sfx_attack_hit.ogg` | ✅ 已接檔（2026-07-12，b680c88） |
 | `monster_death` | 怪物死亡縮小淡出 | `sfx_monster_death.ogg` | ✅ 已接檔（2026-07-12，b680c88） |
+| `player_death` | 主角受擊後，死亡序列播放到第 3 格（與敗北結算音效分離） | `sfx_player_death.ogg` | ✅ 已接檔（2026-07-17） |
 | `cashout` | 玩家成功撤退並結算收益 | `sfx_cashout.ogg` | ✅ 已接檔（2026-07-12，b680c88） |
 | `defeat` | 玩家戰敗進入結算 | `sfx_defeat.ogg` | ✅ 已接檔（2026-07-12，b680c88） |
 | `clear` | 玩家通關結算 | `sfx_clear.ogg` | ✅ 已接檔（2026-07-12，b680c88） |
