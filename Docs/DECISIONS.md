@@ -378,3 +378,30 @@
   `Scripts/effects/huye_banner.gd`、新增獨立 jackpot FX script、
   `Docs/06_DATA_SCHEMA.md`、`Codex/VALIDATION_CHECKLIST.md`。
 - **實作**：`Codex/27_HUYE_JACKPOT_PACING_AND_FX.md`（Codex）。
+
+## D-026：一頁式遊戲介紹網站（landing page，內嵌遊戲）
+- **問題**：比賽準備階段需要對外介紹頁：說明遊戲理念、玩法、機制與怪物圖鑑，
+  並把已上線的遊戲內嵌進頁面，讓評審/訪客一頁看完即可直接試玩。
+- **人類決策**（2026-07-16，對話中裁示）：做一頁式介紹網站＋內嵌遊戲，
+  開任務卡交 Codex 實作；內容涵蓋玩法、怪物、機制。
+- **人類追加確認**（2026-07-16 同日）：對外名稱《Meow準快跑》正確；`/intro/`
+  子路徑部署可行；**視覺必須以專案素材為美術標準色**——已落地為
+  `Web/landing/DESIGN.md`（色票取自 `Scripts/ui/ui_skin.gd` 程式常數換算 hex，
+  素材限 `Assets/final/`），卡 28 列為必讀必遵守。
+- **人類追加裁示**（2026-07-16 稍後）：內嵌採**折衷案**——手機（<1024px）
+  不內嵌、「開始遊戲」同分頁導頁到遊戲根路徑（原生體驗較佳且省掉 overlay
+  複雜度）；桌機（≥1024px）保留 sticky 手機殼 iframe 內嵌（邊看介紹邊玩
+  是本站簽名）。手機版不得建立 iframe、不得載入遊戲資源。
+- **Claude 代定執行細節**（人類未逐項裁示，開發中有異議可推翻）：
+  1. **同站子路徑部署**：網站放 `Web/landing/`（repo 新頂層目錄），隨
+	 `Firebase/deploy_game.ps1` 複製到 `export/web/intro/` 一起部署，
+	 上線於 `https://crushgamedemo-bloop.web.app/intro/`；**遊戲本體 URL 不變**。
+  2. **純靜態 vanilla**：單頁 HTML/CSS/JS，無框架、無打包工具鏈。
+  3. **延續資料驅動原則**：怪物名、倍率、危險度等由 build script 從
+	 `Data/*.json` 複製進網站 assets，頁面執行期 fetch 渲染，不寫死。
+  4. **對外名稱**用《Meow準快跑》（Planning/11 比賽名）；遊戲內 `title_game_name`
+	 仍為「勇者撤離戰」，頁面文案句子人類保留改句權。
+  5. 頁面**不顯示成功率百分比**（沿 D-019 語言），只用危險度星級與倍率語言。
+- **影響**：新增 `Web/landing/`；`Firebase/deploy_game.ps1`、`.gitignore`、
+  `AGENTS.md`（任務順序）、`Codex/VALIDATION_CHECKLIST.md`。
+- **實作**：`Codex/28_INTRO_LANDING_PAGE.md`（Codex）。

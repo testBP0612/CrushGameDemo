@@ -1,0 +1,137 @@
+# DESIGN.md — 《Meow準快跑》介紹網站視覺規範
+
+> 卡 28 的美術標準。**單一原則：網站是遊戲的延伸，不自創視覺語言。**
+> 所有顏色取自遊戲實際使用的程式色票（`Scripts/ui/ui_skin.gd`，換算為 hex），
+> 所有插圖素材取自 `Assets/final/`（經 build.ps1 複製，唯讀）。
+> 不確定某元件長怎樣時，先開 https://crushgamedemo-bloop.web.app 看遊戲內同類元件。
+
+## 一、標準色票（正本＝ui_skin.gd，本表為換算值）
+
+### 主色
+
+| Token | Hex | 來源常數（ui_skin.gd） | 用途 |
+|---|---|---|---|
+| `--deep-navy` | `#1B2A4A` | `DEEP_NAVY` :9 | 主文字色、描邊、深色底、頁尾底 |
+| `--cream` | `#FFF6E6` | `CREAM` :10 | 卡片/面板底色、深底上的文字 |
+| `--pink` | `#F5406B` | `PINK` :12 | 主強調色：標題、重點字、danger/撤退語彙 |
+| `--teal` | `#14AB9E` | `TEAL` :11 | 次強調色：正向動作（CTA「立即遊玩」）、成功語彙 |
+
+### 元件色（貼紙/籌碼系，成對使用：底色＋深一階邊框）
+
+| Token | Hex | 來源常數 | 用途 |
+|---|---|---|---|
+| `--chip-pink` / border | `#EF567E` / `#C7335C` | `CHIP_PINK`(:62) / `_BORDER`(:63) | 粉色按鈕、章節標籤、圖鑑卡名牌 |
+| `--chip-gold` / border | `#FCC230` / `#D9801A` | `CHIP_GOLD`(:64) / `_BORDER`(:65) | 金幣/收益/倍率/虎爺——所有「錢」的語彙 |
+| `--step-blue` / border | `#41B5E8` / `#2180B8` | `STEP_BLUE`(:66) / `_BORDER`(:67) | 資訊型元件、流程圖步驟節點 |
+| `--board-brown` / ink | `#784729` / `#4D3D30` | `BOARD_BROWN`(:60) / `BOARD_INK`(:61) | 木板質感區塊（對應遊戲內 HUD 木板）|
+
+### 危險度漸層
+
+| Token | Hex | 來源常數 | 用途 |
+|---|---|---|---|
+| `--danger-low` | `#4DB859` | `DANGER_LOW` :585 | 危險度 1 星端 |
+| `--danger-high` | `#E62940` | `DANGER_HIGH` :586 | 危險度 5 星端 |
+
+危險度星級配色：星星本體用 `--chip-gold`（遊戲戰場用金星）；若做等級底色/文字
+再用 low→high 線性插值（遊戲內 `fill_danger_icons` 同邏輯）。
+
+**規則**：頁面上任何顏色都必須出自本表（含透明度變化）；需要表外顏色＝先停下問，
+不自行取色。
+
+## 二、字體與文字風格（沿 D-009）
+
+- 標題／數字：**Baloo 2**（Google Fonts 外連，OFL）——遊戲主字型，圓潤厚重。
+- 中文內文：系統字型堆疊（`"jf-openhuninn", "Noto Sans TC", "Microsoft JhengHei", sans-serif`；
+  若要外連 openhuninn 亦可，OFL 授權）。
+- **貼紙字**（大標題專用，仿遊戲怪物名牌樣式）：`--pink` 填色＋`--cream` 粗描邊
+  ＋`--deep-navy` 偏移陰影。CSS 可用多層 `text-shadow` 模擬。
+- 金額/倍率數字一律 `--chip-gold` 系；正文深底用 `--cream`、淺底用 `--deep-navy`。
+
+## 三、元件語彙（仿遊戲 StyleBoxFlat 慣例）
+
+- **卡片/面板**：`--cream` 底＋粗圓角＋`--deep-navy` 或 chip 系 border 粗描邊
+  （遊戲慣例約 6–8px，網頁縮放後 3–4px 視覺等值）＋輕微下沉陰影。方角禁止。
+- **按鈕**：籌碼/貼紙風——chip 底色＋深一階 border＋圓角大 padding；
+  hover 輕微放大（scale 1.03–1.06），呼應遊戲按鈕 punch 感。
+  主 CTA 用 `--teal`（遊戲「再來一局」同色），次要用 `--chip-pink`。
+- **對比卡**（落袋為安 vs 挑戰下一隻）：撤退側 `--teal` 語彙、續戰側 `--chip-pink`
+  →高倍率處染 `--chip-gold`。
+- **內嵌遊戲手機殼**：`--deep-navy` 殼身＋圓角，置於淺色區塊上。
+
+## 四、素材使用（全部來自 Assets/final/，經 build.ps1 複製）
+
+| 素材 | 用途 |
+|---|---|
+| `logo.png` | 內嵌遊戲區裝飾／頁尾（遊戲內 logo，字樣為遊戲內標題） |
+| `title_banner.jpg` | 內嵌區 click-to-load 海報、OG image |
+| `background_battle_001~003.jpg` | 區塊背景（加 `--deep-navy` 半透明遮罩壓字）；001=前期 002=中期 003=後期，圖鑑分區可對應 |
+| `boss1~10_idle.png(+json)` | 怪物圖鑑（序列圖裁格，見卡 28 §三-5） |
+| `huye.png` | 虎爺機制卡插圖 |
+| `ui/icon_*.png` | 機制卡小圖示（coin/multiplier/stage/paw/cat_can 等），不夠用時用 emoji 級簡單 SVG 補，配色守本表 |
+
+**禁止**：自行 AI 生成新美術、對素材重上色/翻轉角色面向（契約：主角朝右、怪物朝左）、
+使用任何外部圖庫圖片。
+
+## 五、整體調性
+
+- **高彩度、可愛、街頭**——是休閒街機冒險，不是賭場。禁止深綠賭桌絨布、
+  撲克/輪盤意象、暗黑金碧輝煌風。
+- 金色只給「收益/獎勵/虎爺」，別讓整頁都是金色，否則重點失焦。
+- 大量留白＋大圓角＋貼紙感，段落間可用爪印/虛線分隔。
+- 深淺交替的區塊節奏：cream 底區塊與 navy/背景圖遮罩區塊交錯，避免整頁單色疲勞。
+
+## 六、版面藍圖（定案，不是建議）
+
+- **簽名版面**：桌機（≥1024px）hero 之後採雙欄——**右欄 sticky 手機殼（內嵌遊戲）
+  常駐視口**，左欄玩法/機制/圖鑑內容捲動。「讀介紹時遊戲一直在手邊」是本站的
+  記憶點。手機版：hero 之後第一位放**海報卡＋「開始遊戲」鈕（同分頁導頁到
+  遊戲，不內嵌、不 overlay——人類 2026-07-16 裁示）**，其餘內容單欄。
+- 內容最大寬 1200px；中文正文行寬上限約 36–40 字（`max-width` 控制，不靠置中救）。
+- **對齊原則：靠左為主**。只有 hero 主標與區塊大標可置中；正文/卡片內容禁止全置中。
+- 圖鑑：**橫向 scroll-snap 卡列**（桌機露出約 4.5 張暗示可捲，手機同機制），
+  每卡帶大號 stage 序號（Baloo 2、`--chip-gold`）。不做 10 格等寬網格。
+- 區塊垂直 padding：桌機 96–128px、手機 56–72px，全站統一取一組值。
+
+## 七、Design tokens（全站只用這些值）
+
+- **字級**（clamp 響應）：h1 `clamp(2.5rem, 6vw, 4.5rem)`、h2 `clamp(1.75rem, 4vw, 2.75rem)`、
+  正文 17–18px / line-height 1.75 / 中文 `letter-spacing: 0.02em`。標題行高 1.15–1.25。
+- **間距**：8px 基數 token（8 / 16 / 24 / 40 / 64 / 96 / 128），不出現表外魔術數字。
+- **圓角**只有三種：卡片 24px、按鈕 999px（籌碼形）、手機殼 48px。
+- **陰影**只有一種語彙：navy 色硬影貼紙感（如 `0 6px 0 rgba(27,42,74,.18)`），
+  hover 時元素上移、影子拉長。**禁用灰黑柔影預設值**（`0 4px 6px rgba(0,0,0,.1)` 類）。
+
+## 八、反樣板清單（出現任一項＝退件重做）
+
+1. emoji 當 icon 或裝飾（🚀✨🎮 之類）。icon 只用 `Assets/final/ui/` 貼紙。
+2. 紫藍漸層、glassmorphism、blob／波浪 SVG 區塊分隔、粒子/星空背景。
+3. 「icon＋標題＋兩行說明」三欄等寬 feature card 樣板——機制四卡必須各有
+   專屬插圖與不同視覺重量（虎爺卡就該比其他卡大）。
+4. 每個區塊都掛 fade-in-up 進場；AOS 式全場動效。
+5. 空話文案（「開啟你的冒險之旅」「無與倫比的體驗」）；頁面上的數字一律
+   來自 JSON 或 repo 事實，不得編造。
+6. 假評價、假頭像、假合作 logo 牆、假下載數。
+7. 連續三個以上結構完全相同的區塊（複製貼上感）。
+
+## 九、手作感細節（全部落實）
+
+1. 貼紙類元素帶 ±2–3° 旋轉（每個角度不同，寫死在 CSS 不用隨機）。
+2. 至少兩處元素**突破容器邊界**：如怪物 sprite 探出圖鑑卡頂、虎爺壓在機制卡角上。
+3. 爪印或虛線分隔線（用 `ui/icon_paw.png`），不用 `<hr>` 素線。
+4. 圖鑑卡 idle 動畫為**正式需求**（非加分項）：進入視口才開始播、離開暫停；
+   `prefers-reduced-motion` 時停第一格。
+5. 動效克制：全站滾動觸發動畫至多兩處（hero 一次＋圖鑑卡進場一次），
+   其餘互動只做 hover/active 微反饋。
+
+## 十、效能與工程品質門檻（驗收硬指標）
+
+1. **boss 序列圖很重（3072×2304/張×10）**：build.ps1 必須用 System.Drawing
+   預裁每隻第一格存 `bossN_card.png`（約 512px），圖鑑預設只載小圖；
+   完整 sheet 供 idle 動畫用，**進入視口才 lazy 載**，不得隨頁面全載。
+2. Lighthouse（手機模擬）Performance ≥ 90、CLS < 0.1（所有圖片定
+   width/height 或 aspect-ratio）、LCP 元素（hero 背景或海報）加 preload。
+3. 字體：Baloo 2 只 subset latin、`display=swap`；中文走系統堆疊，
+   不外連整包中文字型（openhuninn 全字檔數 MB，非 subset 不准連）。
+4. a11y：文字對比 ≥ 4.5:1（`--pink` on `--cream` 只准用於大字/粗體）、
+   `:focus-visible` 樣式、iframe 有 title、所有圖片有 alt、標題階層不跳級。
+5. 語意化 HTML（`header/section/nav/footer`），不做 div 湯。
