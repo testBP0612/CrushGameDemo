@@ -121,7 +121,7 @@ function setMonsterFallback(card, monster, name) {
   card.classList.remove("is-animated");
   card.classList.add("is-fallback");
   const fallback = card.querySelector(".monster-fallback");
-  fallback.style.backgroundColor = monster.placeholder_color || "var(--chip-pink)";
+  fallback.style.backgroundColor = "var(--hot-pink)";
   fallback.textContent = name;
 }
 
