@@ -4,6 +4,10 @@ extends Control
 const ButtonFeedback := preload("res://Scripts/effects/button_feedback.gd")
 const UiSkin := preload("res://Scripts/ui/ui_skin.gd")
 
+const QUICK_BET_COLUMN_WIDTH := 200.0
+const BET_ROW_HORIZONTAL_GAP := 20.0
+const QUICK_BET_VERTICAL_GAP := 15
+
 signal decrease_requested
 signal increase_requested
 signal confirm_requested
@@ -12,6 +16,7 @@ signal balance_reset_requested
 
 @onready var panel: PanelContainer = $Panel
 @onready var title_label: Label = $TitleLabel
+@onready var content: Control = $Panel/Content
 @onready var context_rect: TextureRect = $Panel/Content/ContextRect
 @onready var chips_left: VBoxContainer = $Panel/Content/ChipsLeft
 @onready var chips_right: VBoxContainer = $Panel/Content/ChipsRight
@@ -49,7 +54,7 @@ func _ready() -> void:
 	if not UiSkin.apply_art_icon_button(increase_button, "icon_plus"):
 		UiSkin.apply_button(increase_button, "step_increase")
 	var bet_input_ok := UiSkin.apply_art_texture(bet_input_rect, "bet_input")
-	# bet_input 延伸至兩顆按鈕下方，按鈕保持在上層，形成設計稿的一體式金額列。
+	# 金額底框與兩顆按鈕分開排版，水平間距由 BET_ROW_HORIZONTAL_GAP 統一控制。
 	bet_label.get_parent().move_child(bet_label, decrease_button.get_index())
 	UiSkin.apply_number_display(bet_label)
 	if bet_input_ok:
@@ -57,22 +62,27 @@ func _ready() -> void:
 		bet_label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
 	# 對齊設計稿：金額字級 68（原 80 會被中央插圖壓到）
 	bet_label.add_theme_font_size_override("font_size", 68)
-	# 8 檔籌碼（左右各 4）要塞進原本 3 檔的欄高，縮 separation
+	# 左右欄永遠貼齊 Content 的兩側，避免面板寬度變更後只剩右欄漂移。
+	# 依本輪版面規格，快捷籌碼的垂直間距固定為 15 px。
 	for chip_column: VBoxContainer in [chips_left, chips_right]:
-		chip_column.add_theme_constant_override("separation", 8)
+		chip_column.add_theme_constant_override("separation", QUICK_BET_VERTICAL_GAP)
+	content.resized.connect(_align_quick_bet_columns)
+	_align_quick_bet_columns()
 	# 新版 ± 圖已含完整外框，以 124×124 原尺寸對稱排列於金額底圖兩端。
 	decrease_button.offset_left = 158.0
 	decrease_button.offset_right = 282.0
 	decrease_button.offset_top = 240.0
 	decrease_button.offset_bottom = 364.0
-	bet_label.offset_left = 225.0
-	bet_label.offset_right = 655.0
 	bet_label.offset_top = 237.0
 	bet_label.offset_bottom = 367.0
 	increase_button.offset_left = 598.0
 	increase_button.offset_right = 722.0
 	increase_button.offset_top = 240.0
 	increase_button.offset_bottom = 364.0
+	bet_input_rect.offset_left = decrease_button.offset_right + BET_ROW_HORIZONTAL_GAP
+	bet_input_rect.offset_right = increase_button.offset_left - BET_ROW_HORIZONTAL_GAP
+	bet_label.offset_left = bet_input_rect.offset_left
+	bet_label.offset_right = bet_input_rect.offset_right
 	UiSkin.apply_icon(insufficient_icon, "warning")
 	# 夜間 UI 輪：警示列原本貼齊面板下緣（26px 字＋34px icon 被下注框陰影壓住），
 	# 上移到插圖下緣、加大、標籤加奶油底板——警示出現時要一眼可見
@@ -178,6 +188,14 @@ func _build_quick_buttons() -> void:
 			chips_right.add_child(button)
 			chips_right.move_child(button, 0)
 		_quick_buttons.append(button)
+
+
+func _align_quick_bet_columns() -> void:
+	var content_width := content.size.x
+	chips_left.offset_left = 0.0
+	chips_left.offset_right = QUICK_BET_COLUMN_WIDTH
+	chips_right.offset_left = content_width - QUICK_BET_COLUMN_WIDTH
+	chips_right.offset_right = content_width
 
 
 func _on_quick_button_pressed(amount: int) -> void:

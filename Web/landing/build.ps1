@@ -292,6 +292,7 @@ foreach ($fileName in $gameplayAssets) {
 
 $uiAssets = @(
     "icon_paw.png",
+    "icon_cloud.png",
     "icon_backpack.png",
     "icon_warning.png",
     "icon_multiplier.png",

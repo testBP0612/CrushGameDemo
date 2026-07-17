@@ -21,8 +21,8 @@
   <title>Meow準快跑｜流浪貓的街頭冒險</title>
   <link rel="preload" href="assets/hero_cover.jpg" as="image">
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="stylesheet" href="style.css?v=28-palette-v2-1">
-  <script src="main.js?v=28-palette-v2-1" defer></script>
+  <link rel="stylesheet" href="style.css?v=28-icons-v3-1">
+  <script src="main.js?v=28-icons-v3-1" defer></script>
 </head>
 <body>
   <header class="hero" id="top">
@@ -35,11 +35,16 @@
 
     <div class="hero__content site-container">
       <div class="hero__copy">
-        <p class="eyebrow">手機直式 H5 · 風險撤離型街頭冒險</p>
+        <p class="eyebrow"><img class="eyebrow__icon" src="assets/ui/icon_paw.png" width="32" height="32" alt="">手機直式 H5 · 風險撤離型街頭冒險</p>
         <h1 class="hero__headline">小貓開跑，<br><span>你敢追到第幾關？</span></h1>
         <p class="hero__tagline">
           跟著流浪貓穿梭城市街角。每打贏一隻怪物，都要決定：現在帶走戰利品，還是再冒一次險？
         </p>
+        <ul class="hero__feature-pills" aria-label="遊戲特色">
+          <li><img src="assets/ui/icon_stage.png" width="40" height="40" alt="">自動戰鬥</li>
+          <li><img src="assets/ui/icon_warning.png" width="40" height="40" alt="">撤退抉擇</li>
+          <li><img src="assets/ui/icon_trophy.png" width="40" height="40" alt="">排行競逐</li>
+        </ul>
         <div class="hero__actions" aria-label="遊玩選項">
           <a class="button button--primary" href="https://crushgamedemo-bloop.web.app/" data-conversion="hero_start">立即開始遊戲</a>
           <a class="button button--secondary" href="#gameplay">先看玩法</a>
@@ -64,7 +69,7 @@
 
     <section class="mobile-play site-container" id="mobile-play" aria-labelledby="mobile-play-title">
       <div class="section-heading section-heading--centered">
-        <p class="eyebrow eyebrow--blue">實機片段</p>
+        <p class="eyebrow eyebrow--blue"><img class="eyebrow__icon" src="assets/ui/icon_paw.png" width="32" height="32" alt="">實機片段</p>
         <h2 id="mobile-play-title">八秒看懂一局</h2>
         <p>每次勝利都要決定：現在收手，還是把戰利品再押一次？</p>
       </div>
@@ -102,17 +107,17 @@
             <span></span>
           </div>
           <div class="section-heading">
-            <p class="eyebrow eyebrow--pink">怎麼玩</p>
+            <p class="eyebrow eyebrow--pink"><img class="eyebrow__icon" src="assets/ui/icon_stage.png" width="32" height="32" alt="">怎麼玩</p>
             <h2 id="gameplay-title">不是比手速，<br>是判斷何時收手</h2>
             <p>投入虛擬金幣後，戰鬥會自動演出。你真正要做的，是在每次勝利後選擇安全撤退或繼續挑戰。</p>
           </div>
 
           <ol class="game-flow" aria-label="遊戲流程">
-            <li><span class="flow-number">01</span><strong data-text-key="bet_panel_title">下注金額</strong></li>
-            <li><span class="flow-number">02</span><strong data-text-key="bet_confirm">開始挑戰</strong></li>
-            <li><span class="flow-number">03</span><strong>擊敗怪物</strong></li>
-            <li><span class="flow-number">04</span><strong>撤退或續戰</strong></li>
-            <li><span class="flow-number">05</span><strong>結算與排名</strong></li>
+            <li><span class="flow-number">01</span><img class="flow-icon" src="assets/ui/icon_coin.png" width="48" height="48" loading="lazy" alt=""><strong data-text-key="bet_panel_title">下注金額</strong></li>
+            <li><span class="flow-number">02</span><img class="flow-icon" src="assets/ui/icon_stage.png" width="48" height="48" loading="lazy" alt=""><strong data-text-key="bet_confirm">開始挑戰</strong></li>
+            <li><span class="flow-number">03</span><img class="flow-icon" src="assets/ui/icon_paw.png" width="48" height="48" loading="lazy" alt=""><strong>擊敗怪物</strong></li>
+            <li><span class="flow-number">04</span><img class="flow-icon" src="assets/ui/icon_warning.png" width="48" height="48" loading="lazy" alt=""><strong>撤退或續戰</strong></li>
+            <li><span class="flow-number">05</span><img class="flow-icon" src="assets/ui/icon_trophy.png" width="48" height="48" loading="lazy" alt=""><strong>結算與排名</strong></li>
           </ol>
 
           <div class="decision-pair" aria-label="勝利後的兩種選擇">
@@ -133,7 +138,7 @@
 
         <section class="mechanics-section content-section" id="mechanics" aria-labelledby="mechanics-title">
           <div class="section-heading">
-            <p class="eyebrow eyebrow--blue">四層張力</p>
+            <p class="eyebrow eyebrow--blue"><img class="eyebrow__icon" src="assets/ui/icon_multiplier.png" width="32" height="32" alt="">四層張力</p>
             <h2 id="mechanics-title">每一次選擇，<br>都多一個不確定</h2>
           </div>
 
@@ -181,7 +186,7 @@
 
         <section class="bestiary-section content-section" id="bestiary" aria-labelledby="bestiary-title">
           <div class="section-heading">
-            <p class="eyebrow eyebrow--pink">街頭怪物圖鑑</p>
+            <p class="eyebrow eyebrow--pink"><img class="eyebrow__icon" src="assets/ui/icon_paw.png" width="32" height="32" alt="">街頭怪物圖鑑</p>
             <h2 id="bestiary-title">下一個街角，<br>會撞見誰？</h2>
             <p>前三個街頭對手先讓你看見。第 4 關開始，怪物身分與危險度全部保密——想知道下一個街角藏著什麼，只能親自跑一局。</p>
           </div>
@@ -200,13 +205,16 @@
             <h2 id="desktop-play-title">邊看介紹，邊直接玩</h2>
           </div>
           <div class="phone-shell">
+            <img class="phone-shell__ornament phone-shell__ornament--coin" src="assets/ui/icon_coin.png" width="96" height="96" loading="lazy" alt="" aria-hidden="true">
+            <img class="phone-shell__ornament phone-shell__ornament--stage" src="assets/ui/icon_stage.png" width="96" height="96" loading="lazy" alt="" aria-hidden="true">
+            <img class="phone-shell__ornament phone-shell__ornament--cloud" src="assets/ui/icon_cloud.png" width="112" height="112" loading="lazy" alt="" aria-hidden="true">
             <span class="phone-shell__speaker" aria-hidden="true"></span>
             <div class="game-stage" id="game-stage">
               <button class="game-poster" id="load-game" type="button" aria-label="載入並開始遊戲" data-conversion="desktop_embed_start">
                 <img src="assets/title_banner.jpg" width="1080" height="1920" loading="lazy" alt="Meow準快跑遊戲開始畫面">
                 <span class="game-poster__play">
                   <img src="assets/ui/icon_paw.png" width="64" height="64" loading="lazy" alt="">
-                  點擊開始遊戲
+                  開始遊戲
                 </span>
               </button>
             </div>
@@ -224,9 +232,12 @@
 
   <footer class="site-footer">
     <div class="site-footer__inner site-container">
-      <div>
-        <p>本作為 AI 遊戲開發工作流展示專案。</p>
-        <p>排行榜含模擬 NPC 資料 · <span id="copyright-year">2026</span></p>
+      <div class="site-footer__about">
+        <img src="assets/logo.png" width="640" height="380" loading="lazy" alt="Meow準快跑">
+        <div>
+          <p>本作為 AI 遊戲開發工作流展示專案。</p>
+          <p>排行榜含模擬 NPC 資料 · <span id="copyright-year">2026</span></p>
+        </div>
       </div>
       <div class="site-footer__actions">
         <button class="footer-share" type="button" data-share-game data-share-status="desktop-share-status">分享介紹頁</button>
