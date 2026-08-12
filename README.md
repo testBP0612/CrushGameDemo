@@ -23,7 +23,7 @@
 | `Planning/` | 企劃、AI 工作流策略、人類決策格式、簡報、Git 協作（人類決策區） |
 | `Art/` | **美術同事入口**：Art Contract、Direction、Quickstart、Magnific prompt 樣板、mockup 參考圖 |
 | `Docs/` | Codex 必讀規格（設計/系統/狀態機/UI/動畫/資料/H5）+ `OPEN_QUESTIONS` + `DECISIONS` |
-| `Codex/` | Codex 主提示 + 27 張任務卡（已全數完成）+ 驗收清單（Codex 工作區） |
+| `Codex/` | Codex 主提示 + 28 張任務卡（已全數完成）+ 驗收清單（Codex 工作區） |
 | `Data/` | 數值與設定的**單一真實來源**（JSON，禁止寫死於程式） |
 | `Scenes/` `Scripts/` | Godot 工程（由 Codex 依任務卡建立） |
 | `Assets/` | `placeholders/`(Codex 暫代) · `generated/`(可選暫存) · `final/`(唯一正式入口) + `ART_ASSET_MANIFEST.md` |
@@ -34,7 +34,7 @@
 ## Codex 必讀順序
 1. [`AGENTS.md`](AGENTS.md)（代理協作鐵則**單一正本**；`Codex/00_MASTER_PROMPT.md` 為其轉介）
 2. `Docs/01`→`08`（設計/系統/狀態機/UI/動畫/資料/H5/線上分數）
-3. 當前任務卡 `Codex/01`→`27`（依序，一次一張；現況全數 ✅）
+3. 當前任務卡 `Codex/01`→`28`（依序，一次一張；現況全數 ✅）
 4. 需要美術時：`Assets/ART_ASSET_MANIFEST.md` + `Art/ART_CONTRACT.md`
 
 ## 治理機制（本專案重點）
